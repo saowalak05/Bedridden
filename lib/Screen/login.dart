@@ -9,8 +9,6 @@ import 'package:bedridden/utility/dialog.dart';
 // ignore: unused_import
 import 'signup.dart';
 
-
-
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
   @override
@@ -20,7 +18,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final formkey = GlobalKey<FormState>();
   bool statusRedEye = true;
-  String? email, password;
+  String? email, password,value;
   
 
   @override
@@ -73,6 +71,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: Column(
                     children: <Widget>[
                       TextFormField(
+                        onChanged:(value)=> email = value.trim(),
                           keyboardType: TextInputType.emailAddress,
                           decoration: InputDecoration(
                             labelText: "Email",
@@ -97,6 +96,7 @@ class _LoginPageState extends State<LoginPage> {
                         height: 20,
                       ),
                       TextFormField(
+                          onChanged:(value)=> password = value.trim(),
                           obscureText: statusRedEye,
                           keyboardType: TextInputType.emailAddress,
                           decoration: InputDecoration(
@@ -196,13 +196,22 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<Null> checkAuthen() async {
-    await Firebase.initializeApp().then((value) async {
-      await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: (email as String), password: (password as String))
-          .then((value) => Navigator.pushNamedAndRemoveUntil(context, '/myService', (route) => false))
-          .catchError((value) => normalDialog(context, value.message));
+    final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+    firebaseAuth
+        .signInWithEmailAndPassword(
+            email: (email as String), password: (password as String))
+        .then((result) async {
+      Navigator.pushNamedAndRemoveUntil(
+          context, '/myService', (route) => false);
     });
+    // await Firebase.initializeApp().then((value) async {
+    //   await FirebaseAuth.instance
+    //       .signInWithEmailAndPassword(email: (email as String), password: (password as String))
+    //       .then((value) => Navigator.pushNamedAndRemoveUntil(context, '/myService', (route) => false))
+    //       .catchError((value) => normalDialog(context, value.message));
+    // });
   }
+
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
