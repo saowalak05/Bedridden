@@ -9,6 +9,6 @@ import 'Screen/my_service.dart';
 final Map<String, WidgetBuilder> routes = {
  '/Homepage':(BuildContext context) => Homepage(),
   '/LoginPage': (BuildContext context) => LoginPage(),
-  '/myService': (BuildContext context) => myService(),
+  '/myService': (BuildContext context) => MyService(),
   '/SignupPage': (BuildContext context) => SignupPage(),
 };
