@@ -160,7 +160,7 @@ class _HomeState extends State<Home> {
     return sickmodelsLevel1.length == 0
         ? ShowProgress()
         : Container(
-            height: 200,
+            height: 270,
             child: Expanded(
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
@@ -168,51 +168,55 @@ class _HomeState extends State<Home> {
                 physics: ScrollPhysics(),
                 itemCount: sickmodelsLevel1.length,
                 itemBuilder: (context, index) => Container(
-                  width: 150,
+                  width: 160,
                   child: Card(
-                    child: Column(
-                      children: [
-                        Container(
-                          width: 100,
-                          height: 80,
-                          child: Image.network(
-                            sickmodelsLevel1[index].urlImage,
-                            fit: BoxFit.cover,
+                    color: Color(0xffFFD1BB),
+                    child: Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Column(
+                        children: [
+                          Container(
+                            width: 100,
+                            height: 80,
+                            child: Image.network(
+                              sickmodelsLevel1[index].urlImage,
+                              fit: BoxFit.cover,
+                            ),
                           ),
-                        ),
-                        Row(
-                          children: [
-                            Container(
-                              margin: EdgeInsets.symmetric(vertical: 8),
-                              width: 140,
-                              child: Text(
-                                sickmodelsLevel1[index].name,
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
+                          Row(
+                            children: [
+                              Container(
+                                margin: EdgeInsets.symmetric(vertical: 8),
+                                width: 140,
+                                child: Text(
+                                  sickmodelsLevel1[index].name,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Container(
-                              width: 140,
-                              child: Text(sickmodelsLevel1[index].address),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Container(
-                              width: 140,
-                              child: Text(
-                                  'ระดับที่ ${sickmodelsLevel1[index].level}'),
-                            ),
-                          ],
-                        ),
-                      ],
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Container(
+                                width: 140,
+                                child: Text(sickmodelsLevel1[index].address),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Container(
+                                width: 140,
+                                child: Text(
+                                    'ระดับที่ ${sickmodelsLevel1[index].level}'),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -258,7 +262,7 @@ class _HomeState extends State<Home> {
     return sickmodels.length == 0
         ? ShowProgress()
         : Container(
-            height: 200,
+            height: 270,
             child: Expanded(
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
@@ -273,13 +277,13 @@ class _HomeState extends State<Home> {
                       showSickDialog(sickmodels[index], index);
                     },
                     child: Card(
-                      color: Colors.grey.shade300,
+                      color: Color(0xffFFD1BB),
                       child: Padding(
                         padding: const EdgeInsets.all(4.0),
                         child: Column(
                           children: [
                             Container(
-                              margin: EdgeInsets.symmetric(vertical:8),
+                              margin: EdgeInsets.symmetric(vertical: 8),
                               width: 100,
                               height: 80,
                               child: Image.network(
@@ -295,7 +299,7 @@ class _HomeState extends State<Home> {
                                   child: Text(
                                     sickmodels[index].name,
                                     style: TextStyle(
-                                      fontSize: 18,
+                                      fontSize: 16,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
