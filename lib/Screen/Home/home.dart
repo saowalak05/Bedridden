@@ -121,7 +121,10 @@ class _HomeState extends State<Home> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => EditSick(sickModel: model, docId: docIds[index],),
+                        builder: (context) => EditSick(
+                          sickModel: model,
+                          docId: docIds[index],
+                        ),
                       )).then((value) => readAllSick());
                 },
                 child: Text(
@@ -255,7 +258,7 @@ class _HomeState extends State<Home> {
     return sickmodels.length == 0
         ? ShowProgress()
         : Container(
-            height: 220,
+            height: 200,
             child: Expanded(
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
@@ -276,7 +279,7 @@ class _HomeState extends State<Home> {
                         child: Column(
                           children: [
                             Container(
-                              margin: EdgeInsets.symmetric(vertical: 8),
+                              margin: EdgeInsets.symmetric(vertical:8),
                               width: 100,
                               height: 80,
                               child: Image.network(

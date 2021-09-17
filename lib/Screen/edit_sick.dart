@@ -3,6 +3,7 @@ import 'package:bedridden/utility/dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 
 class EditSick extends StatefulWidget {
@@ -32,6 +33,9 @@ class _EditSickState extends State<EditSick> {
   String? docId;
 
   bool typeSexBol = true;
+  bool typeStatusBol = false;
+  bool bondDateTimebol = false;
+  bool bondDateTimeStrbol = false;
 
   @override
   void initState() {
@@ -46,7 +50,10 @@ class _EditSickState extends State<EditSick> {
     _typestatus = sickModel!.typeStatus;
     bondDateTime = sickModel!.bond.toDate();
 
-    DateFormat dateFormat = DateFormat('dd MMMM yyyy');
+    Intl.defaultLocale = 'th';
+    initializeDateFormatting();
+
+    DateFormat dateFormat = DateFormat('dd MMMM yyyy', 'th');
     bondDateTimeStr = dateFormat.format(bondDateTime!);
 
     docId = widget.docId;
@@ -105,6 +112,14 @@ class _EditSickState extends State<EditSick> {
   }
 
   Future<Null> processEditData() async {
+    if (typeSexBol) {
+      map['typeSex'] = typeSex;
+    }
+
+    if (typeStatusBol) {
+      map['typeStatus'] = _typestatus;
+    }
+
     print('### map ==>> $map');
     if (map.isEmpty) {
       normalDialog(context, 'ไม่มีการเปลี่ยนแปลง');
@@ -140,6 +155,7 @@ class _EditSickState extends State<EditSick> {
             setState(
               () {
                 _typestatus = value as String?;
+                typeStatusBol = true;
               },
             );
           },
@@ -152,6 +168,7 @@ class _EditSickState extends State<EditSick> {
             setState(
               () {
                 _typestatus = value as String?;
+                typeStatusBol = true;
               },
             );
           },
@@ -164,6 +181,7 @@ class _EditSickState extends State<EditSick> {
             setState(
               () {
                 _typestatus = value as String?;
+                typeStatusBol = true;
               },
             );
           },
@@ -176,6 +194,7 @@ class _EditSickState extends State<EditSick> {
             setState(
               () {
                 _typestatus = value as String?;
+                typeStatusBol = true;
               },
             );
           },
