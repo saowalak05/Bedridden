@@ -62,7 +62,7 @@ class _AddState extends State<Add> {
         child: Form(
           key: formkey,
           child: ListView(
-            padding: EdgeInsets.all(20),
+            padding: EdgeInsets.only(top: 16, left: 16, right: 16),
             children: [
               buildSaveBedridden(), //'บันทึก'
               buildBedriddenTitle(), //'ข้อมูลผู้ป่วย'
@@ -451,36 +451,41 @@ class _AddState extends State<Add> {
     });
   }
 
-  MaterialButton buildSaveBedridden() {
-    return MaterialButton(
-      padding: EdgeInsets.all(8),
-      minWidth: 0.50,
-      height: 30,
-      onPressed: () {
-        if (file == null) {
-          normalDialog(context, 'กรุณาใส่รูปภาพ');
-        } else if (_typesex == null) {
-          normalDialog(context, 'กรุณาเลือก เพศ');
-        } else if (_typestatus == null) {
-          normalDialog(context, 'กรุณาเลือก สถานะ');
-        } else if (bondStatus) {
-          normalDialog(context, 'กรุณาเลือก วันเกิด');
-        } else if (level == null) {
-          normalDialog(context, 'กรุณาเลือก ระดับการป่วย');
-        } else if (formkey.currentState!.validate()) {
-          processUploadImageAndInsertValue();
-        }
-      },
-      shape: RoundedRectangleBorder(
-          side: BorderSide(
-            color: const Color(0xffffede5),
+  Container buildSaveBedridden() {
+    return Container(
+
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          MaterialButton(
+            onPressed: () {
+              if (file == null) {
+                normalDialog(context, 'กรุณาใส่รูปภาพ');
+              } else if (_typesex == null) {
+                normalDialog(context, 'กรุณาเลือก เพศ');
+              } else if (_typestatus == null) {
+                normalDialog(context, 'กรุณาเลือก สถานะ');
+              } else if (bondStatus) {
+                normalDialog(context, 'กรุณาเลือก วันเกิด');
+              } else if (level == null) {
+                normalDialog(context, 'กรุณาเลือก ระดับการป่วย');
+              } else if (formkey.currentState!.validate()) {
+                processUploadImageAndInsertValue();
+              }
+            },
+           shape: RoundedRectangleBorder(
+                  side: BorderSide(
+                    color: const Color(0xffffede5),
+                  ),
+                  borderRadius: BorderRadius.circular(50)),
+            child: Text(
+              "บันทึก",
+              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+            ),
+            color: const Color(0xffdfad98),
           ),
-          borderRadius: BorderRadius.circular(50)),
-      child: Text(
-        "บันทึก",
-        style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+        ],
       ),
-      color: const Color(0xffdfad98),
     );
   }
 
