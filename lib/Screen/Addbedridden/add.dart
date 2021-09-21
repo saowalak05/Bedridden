@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:math';
+import 'package:bedridden/Screen/Addbedridden/add_family.dart';
 import 'package:bedridden/models/sick_model.dart';
 import 'package:bedridden/utility/dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -20,10 +21,13 @@ class Add extends StatefulWidget {
 
 String? _typesex;
 String? _typestatus;
+String? typeeducation_level;
+String? typeposition;
 
 class _AddState extends State<Add> {
   late DateTime pickedDate;
   bool bondStatus = true; // true => ยังไม่ได้เลือกวันเกิด
+  bool typeeducation_levelbol = false;
 
   File? file;
 
@@ -35,6 +39,20 @@ class _AddState extends State<Add> {
 
   String? level;
   List<String> levels = ['1', '2', '3'];
+  String? race;
+  List<String> races = ['ไทย'];
+  String? nationality;
+  List<String> nationalitys = [
+    'ไทย',
+  ];
+  String? religion;
+  List<String> religions = [
+    'พุทธ',
+    'อิสลาม',
+    'พราหมณ์-ฮินดู',
+    'คริสต์',
+    'ซิกข์',
+  ];
 
   @override
   void initState() {
@@ -65,36 +83,32 @@ class _AddState extends State<Add> {
             padding: EdgeInsets.only(top: 16, left: 16, right: 16),
             children: [
               buildSaveBedridden(), //'บันทึก'
+              Container(
+                child: Center(
+                  child: Text(
+                    ' ส่วนที่1 ข้อมูลของผู้ป่วย ',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
               buildBedriddenTitle(), //'ข้อมูลผู้ป่วย'
               buildImageBedridden(context), //'รูปภาพ'
               buildNameNumBersexBedridden(), //'ชื่อ-นามสุกม,เลขบัตรประจำตัวประชาชน,เพศ'
-              buildAddressPhonenumberBedridden(), //'ที่อยู่เ,บอร์โทร์'
               buildDatePickerBedridden(), //'วัน/เดือน/ปีเกิด'
-              buildTitleStatus(),
-              groupStatus(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  buildTitleLevel(),
-                  DropdownButton<String>(
-                    onChanged: (value) {
-                      setState(() {
-                        level = value as String;
-                      });
-                    },
-                    value: level,
-                    hint: Text('level'),
-                    items: levels
-                        .map(
-                          (e) => DropdownMenuItem(
-                            value: e,
-                            child: Text(e),
-                          ),
-                        )
-                        .toList(),
-                  ),
-                ],
-              ),
+              buildrace(), //'เชื้อชาติ'
+              buildnationality(), //'สัญชาติ'
+              buildreligion(), //'ศาสนา'
+              buildTitleStatus(), //'สถานภาพสมรส'
+              groupStatus(), //'ตัวเลือกสถานภาพสมรส'
+              groupTypeeducation(), //'ระดับการศึกษา'
+              buildOccupationTalent(), //'อาชีพ,ความสามารถพิเศษ'
+              buildAddressPhonenumberBedridden(), //'ที่อยู่เ,บอร์โทร์'
+              groupPosition(), //'ฐานะ'
+              buildlevel(),//'ระดับกการเจ็บป่วย'
+              buildNext1(context), //'หน้าถัดไป'
             ],
           ),
         ),
@@ -102,56 +116,622 @@ class _AddState extends State<Add> {
     );
   }
 
+  Column groupPosition() {
+    return Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const SizedBox(
+                  height: 16,
+                ),
+                Container(
+                  // width: 120,
+                  child: Row(
+                    children: <Widget>[
+                      Text(
+                        'ฐานะของผู้ป่วยและครอบครัวเป็นอย่างไร :',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                Row(
+                  children: [
+                    Container(
+                      width: 140,
+                      child: RadioListTile(
+                        title: const Text(
+                          'ขัดสน',
+                          style: TextStyle(fontSize: 12),
+                        ),
+                        value: 'ขัดสน',
+                        groupValue: typeposition,
+                        onChanged: (value) {
+                          setState(
+                            () {
+                              typeposition = value as String?;
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                    Container(
+                      width: 150,
+                      child: RadioListTile(
+                        title: const Text(
+                          'พออยู่พอกิน',
+                          style: TextStyle(fontSize: 12),
+                        ),
+                        value: 'พออยู่พอกิน',
+                        groupValue: typeposition,
+                        onChanged: (value) {
+                          setState(
+                            () {
+                              typeposition = value as String?;
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Container(
+                      width: 140,
+                      child: RadioListTile(
+                        title: const Text(
+                          'มีเหลือเก็บ',
+                          style: TextStyle(fontSize: 12),
+                        ),
+                        value: 'มีเหลือเก็บ',
+                        groupValue: typeposition,
+                        onChanged: (value) {
+                          setState(
+                            () {
+                              typeposition = value as String?;
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            );
+  }
+
+  Column buildNext1(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        MaterialButton(
+          onPressed: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => Addfamily()));
+          },
+          shape: RoundedRectangleBorder(
+              side: BorderSide(
+                color: const Color(0xffffede5),
+              ),
+              borderRadius: BorderRadius.circular(50)),
+          child: Text(
+            "หน้าถัดไป",
+            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+          ),
+          color: const Color(0xffdfad98),
+        ),
+        const SizedBox(
+          height: 32,
+        )
+      ],
+    );
+  }
+
+  Column buildOccupationTalent() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        const SizedBox(height: 16.0),
+        TextFormField(
+          validator: (value) {
+            if (value!.isEmpty) {
+              return 'กรุณากรอก อาชีพ';
+            } else {
+              return null;
+            }
+          },
+          controller: nameController,
+          textCapitalization: TextCapitalization.words,
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            filled: true,
+            hintText: 'อาชีพ',
+            labelText: 'ก่อนป่วยติดเตียงผู้ป่วยมีอาชีพอะไร *',
+            fillColor: const Color(0xfff7e4db),
+          ),
+        ),
+        const SizedBox(height: 16.0),
+        TextFormField(
+          validator: (value) {
+            if (value!.isEmpty) {
+              return 'กรุณากรอก ความสามารถพิเศษ';
+            } else {
+              return null;
+            }
+          },
+          controller: nameController,
+          textCapitalization: TextCapitalization.words,
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            filled: true,
+            hintText: 'ความสามารถพิเศษ',
+            labelText: 'ความสามารถพิเศษ *',
+            fillColor: const Color(0xfff7e4db),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Column groupTypeeducation() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Container(
+          // width: 120,
+          child: Row(
+            children: <Widget>[
+              Text(
+                'ระดับการศึกษา :',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
+              )
+            ],
+          ),
+        ),
+        Row(
+          children: [
+            Container(
+              width: 170,
+              child: RadioListTile(
+                title: const Text(
+                  'ไม่ได้รับการศึกษา',
+                  style: TextStyle(fontSize: 12),
+                ),
+                value: 'ไม่ได้รับการศึกษา',
+                groupValue: typeeducation_level,
+                onChanged: (value) {
+                  setState(
+                    () {
+                      typeeducation_level = value as String?;
+                    },
+                  );
+                },
+              ),
+            ),
+            Container(
+              width: 170,
+              child: RadioListTile(
+                title: const Text(
+                  'ประถมศึกษาตอนต้น',
+                  style: TextStyle(fontSize: 12),
+                ),
+                value: 'ประถมศึกษาตอนต้น',
+                groupValue: typeeducation_level,
+                onChanged: (value) {
+                  setState(
+                    () {
+                      typeeducation_level = value as String?;
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            Container(
+              width: 170,
+              child: RadioListTile(
+                title: const Text(
+                  'ประถมศึกษาตอนปลาย',
+                  style: TextStyle(fontSize: 12),
+                ),
+                value: 'ประถมศึกษาตอนปลาย',
+                groupValue: typeeducation_level,
+                onChanged: (value) {
+                  setState(
+                    () {
+                      typeeducation_level = value as String?;
+                    },
+                  );
+                },
+              ),
+            ),
+            Container(
+              width: 170,
+              child: RadioListTile(
+                title: const Text(
+                  'มัธยมศึกษาตอนต้น',
+                  style: TextStyle(fontSize: 12),
+                ),
+                value: 'มัธยมศึกษาตอนต้น',
+                groupValue: typeeducation_level,
+                onChanged: (value) {
+                  setState(
+                    () {
+                      typeeducation_level = value as String?;
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            Container(
+              width: 170,
+              child: RadioListTile(
+                title: const Text(
+                  'มัธยมศึกษาตอนปลาย',
+                  style: TextStyle(fontSize: 12),
+                ),
+                value: 'มัธยมศึกษาตอนปลาย',
+                groupValue: typeeducation_level,
+                onChanged: (value) {
+                  setState(
+                    () {
+                      typeeducation_level = value as String?;
+                    },
+                  );
+                },
+              ),
+            ),
+            Container(
+              width: 170,
+              child: RadioListTile(
+                title: const Text(
+                  'ปวช',
+                  style: TextStyle(fontSize: 12),
+                ),
+                value: 'ปวช',
+                groupValue: typeeducation_level,
+                onChanged: (value) {
+                  setState(
+                    () {
+                      typeeducation_level = value as String?;
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            Container(
+              width: 170,
+              child: RadioListTile(
+                title: const Text(
+                  'ปวส',
+                  style: TextStyle(fontSize: 12),
+                ),
+                value: 'ปวส',
+                groupValue: typeeducation_level,
+                onChanged: (value) {
+                  setState(
+                    () {
+                      typeeducation_level = value as String?;
+                    },
+                  );
+                },
+              ),
+            ),
+            Container(
+              width: 170,
+              child: RadioListTile(
+                title: const Text(
+                  'ปริญญาตรี',
+                  style: TextStyle(fontSize: 12),
+                ),
+                value: 'ปริญญาตรี',
+                groupValue: typeeducation_level,
+                onChanged: (value) {
+                  setState(
+                    () {
+                      typeeducation_level = value as String?;
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Row buildreligion() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        buildtitlereligion(),
+        DropdownButton<String>(
+          onChanged: (value) {
+            setState(() {
+              religion = value as String;
+            });
+          },
+          value: religion,
+          // hint: Text('nationality'),
+          items: religions
+              .map(
+                (e) => DropdownMenuItem(
+                  value: e,
+                  child: Text(e),
+                ),
+              )
+              .toList(),
+        ),
+      ],
+    );
+  }
+
+  Container buildtitlereligion() {
+    return Container(
+      width: 120,
+      child: Row(
+        children: <Widget>[
+          Text(
+            'ศาสนา :',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Row buildnationality() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        buildTitlenationality(),
+        DropdownButton<String>(
+          onChanged: (value) {
+            setState(() {
+              nationality = value as String;
+            });
+          },
+          value: nationality,
+          // hint: Text('nationality'),
+          items: nationalitys
+              .map(
+                (e) => DropdownMenuItem(
+                  value: e,
+                  child: Text(e),
+                ),
+              )
+              .toList(),
+        ),
+      ],
+    );
+  }
+
+  Container buildTitlenationality() {
+    return Container(
+      width: 120,
+      child: Row(
+        children: <Widget>[
+          Text(
+            'สัญชาติ :',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Row buildrace() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        buildTitlerace(),
+        DropdownButton<String>(
+          onChanged: (value) {
+            setState(() {
+              race = value as String;
+            });
+          },
+          value: race,
+          // hint: Text('เลือก'),
+          items: races
+              .map(
+                (e) => DropdownMenuItem(
+                  value: e,
+                  child: Text(e),
+                ),
+              )
+              .toList(),
+        ),
+      ],
+    );
+  }
+
+  Container buildTitlerace() {
+    return Container(
+      width: 120,
+      child: Row(
+        children: <Widget>[
+          Text(
+            'เชื้อชาติ :',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Row buildlevel() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        buildTitleLevel(),
+        DropdownButton<String>(
+          onChanged: (value) {
+            setState(() {
+              level = value as String;
+            });
+          },
+          value: level,
+          hint: Text('level :'),
+          items: levels
+              .map(
+                (e) => DropdownMenuItem(
+                  value: e,
+                  child: Text(e),
+                ),
+              )
+              .toList(),
+        ),
+      ],
+    );
+  }
+
   Column groupStatus() {
     return Column(
       children: [
-        RadioListTile(
-          title: const Text('โสด'),
-          value: 'single',
-          groupValue: _typestatus,
-          onChanged: (value) {
-            setState(
-              () {
-                _typestatus = value as String?;
-              },
-            );
-          },
+        Row(
+          children: [
+            Container(
+              width: 170,
+              child: RadioListTile(
+                title: const Text('โสด'),
+                value: 'โสด',
+                groupValue: _typestatus,
+                onChanged: (value) {
+                  setState(
+                    () {
+                      _typestatus = value as String?;
+                    },
+                  );
+                },
+              ),
+            ),
+            Container(
+              width: 170,
+              child: RadioListTile(
+                title: const Text(
+                  'สมรสอยู่ด้วยกัน',
+                  style: TextStyle(fontSize: 12),
+                ),
+                value: 'สมรสอยู่ด้วยกัน',
+                groupValue: _typestatus,
+                onChanged: (value) {
+                  setState(
+                    () {
+                      _typestatus = value as String?;
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
         ),
-        RadioListTile(
-          title: const Text('สมรส'),
-          value: 'marital',
-          groupValue: _typestatus,
-          onChanged: (value) {
-            setState(
-              () {
-                _typestatus = value as String?;
-              },
-            );
-          },
+        Row(
+          children: [
+            Container(
+              width: 170,
+              child: RadioListTile(
+                title: const Text(
+                  'อยู่ด้วยกันโดยไม่จดทะเบียน',
+                  style: TextStyle(fontSize: 12),
+                ),
+                value: 'อยู่ด้วยกันโดยไม่จดทะเบียน',
+                groupValue: _typestatus,
+                onChanged: (value) {
+                  setState(
+                    () {
+                      _typestatus = value as String?;
+                    },
+                  );
+                },
+              ),
+            ),
+            Container(
+              width: 170,
+              child: RadioListTile(
+                title: const Text(
+                  'อย่าร้าง',
+                  style: TextStyle(fontSize: 12),
+                ),
+                value: 'อย่าร้าง',
+                groupValue: _typestatus,
+                onChanged: (value) {
+                  setState(
+                    () {
+                      _typestatus = value as String?;
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
         ),
-        RadioListTile(
-          title: const Text('หม้าย'),
-          value: 'widow',
-          groupValue: _typestatus,
-          onChanged: (value) {
-            setState(
-              () {
-                _typestatus = value as String?;
-              },
-            );
-          },
-        ),
-        RadioListTile(
-          title: const Text('อย่าร้าง'),
-          value: 'divorce',
-          groupValue: _typestatus,
-          onChanged: (value) {
-            setState(
-              () {
-                _typestatus = value as String?;
-              },
-            );
-          },
+        Row(
+          children: [
+            Container(
+              width: 170,
+              child: RadioListTile(
+                title: const Text(
+                  'หม้ายคู่สมรสเสียชีวิต',
+                  style: TextStyle(fontSize: 12),
+                ),
+                value: 'หม้ายคู่สมรสเสียชีวิต',
+                groupValue: _typestatus,
+                onChanged: (value) {
+                  setState(
+                    () {
+                      _typestatus = value as String?;
+                    },
+                  );
+                },
+              ),
+            ),
+            Container(
+              width: 170,
+              child: RadioListTile(
+                title: const Text(
+                  'สมรสแยกกันอยู่',
+                  style: TextStyle(fontSize: 12),
+                ),
+                value: 'สมรสแยกกันอยู่',
+                groupValue: _typestatus,
+                onChanged: (value) {
+                  setState(
+                    () {
+                      _typestatus = value as String?;
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
         ),
       ],
     );
@@ -162,7 +742,7 @@ class _AddState extends State<Add> {
       child: Row(
         children: <Widget>[
           Text(
-            'สถานภาพสมรส',
+            'สถานภาพสมรส :',
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
@@ -178,7 +758,7 @@ class _AddState extends State<Add> {
       child: Row(
         children: <Widget>[
           Text(
-            'ระดับการป่วย',
+            'ระดับการป่วย :',
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
@@ -207,6 +787,7 @@ class _AddState extends State<Add> {
   Column buildAddressPhonenumberBedridden() {
     return Column(
       children: [
+        const SizedBox(height: 16.0),
         TextFormField(
           validator: (value) {
             if (value!.isEmpty) {
@@ -280,10 +861,10 @@ class _AddState extends State<Add> {
         TextFormField(
           validator: (value) {
             if (value!.isEmpty) {
-              return 'กรุณากรอก เลขบัตรประชาชน';
+              return 'กรุณากรอก เลขบัตรประจำตัวชาชน';
             } else {
               if (value.length != 13) {
-                return 'กรุณากรอกเลขให้ครบ 13 หลัก';
+                return 'กรุณากรอกเลขบัตรประจำตัวชาชน 13 หลัก';
               } else {
                 return null;
               }
@@ -305,7 +886,7 @@ class _AddState extends State<Add> {
         Container(
           child: Row(
             children: <Widget>[
-              Text('เพศ',
+              Text('เพศ :',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
@@ -316,29 +897,39 @@ class _AddState extends State<Add> {
 
         //"เพศ"
 
-        RadioListTile(
-          title: const Text('ชาย'),
-          value: 'man',
-          groupValue: _typesex,
-          onChanged: (value) {
-            setState(
-              () {
-                _typesex = value as String?;
-              },
-            );
-          },
-        ),
-        RadioListTile(
-          title: const Text('หญิง'),
-          value: 'female',
-          groupValue: _typesex,
-          onChanged: (value) {
-            setState(
-              () {
-                _typesex = value as String?;
-              },
-            );
-          },
+        Row(
+          children: [
+            Container(
+              width: 120,
+              child: RadioListTile(
+                title: const Text('ชาย'),
+                value: 'man',
+                groupValue: _typesex,
+                onChanged: (value) {
+                  setState(
+                    () {
+                      _typesex = value as String?;
+                    },
+                  );
+                },
+              ),
+            ),
+            Container(
+              width: 120,
+              child: RadioListTile(
+                title: const Text('หญิง'),
+                value: 'female',
+                groupValue: _typesex,
+                onChanged: (value) {
+                  setState(
+                    () {
+                      _typesex = value as String?;
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
         ),
       ],
     );
@@ -393,23 +984,14 @@ class _AddState extends State<Add> {
     return Container(
       child: Row(
         children: <Widget>[
+          const SizedBox(height: 16.0),
           Text(
-            'ข้อมูลของผู้ป่วย',
+            'ข้อมูลของผู้ป่วย :',
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
             ),
           ),
-          // IconButton(
-          //   icon: const Icon(Icons.photo_camera),
-          //   onPressed: () async => _pickImageFromCamera(),
-          //   tooltip: 'Shoot picture',
-          // ),
-          // IconButton(
-          //   icon: const Icon(Icons.photo),
-          //   onPressed: () async => _pickImageFromGallery(),
-          //   tooltip: 'Pick from gallery',
-          // ),
         ],
       ),
     );
@@ -453,7 +1035,6 @@ class _AddState extends State<Add> {
 
   Container buildSaveBedridden() {
     return Container(
-
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
@@ -473,11 +1054,11 @@ class _AddState extends State<Add> {
                 processUploadImageAndInsertValue();
               }
             },
-           shape: RoundedRectangleBorder(
-                  side: BorderSide(
-                    color: const Color(0xffffede5),
-                  ),
-                  borderRadius: BorderRadius.circular(50)),
+            shape: RoundedRectangleBorder(
+                side: BorderSide(
+                  color: const Color(0xffffede5),
+                ),
+                borderRadius: BorderRadius.circular(50)),
             child: Text(
               "บันทึก",
               style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),

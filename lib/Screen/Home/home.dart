@@ -81,6 +81,19 @@ class _HomeState extends State<Home> {
     final IconThemeData data;
     return Scaffold(
       appBar: AppBar(
+        // leading: Padding(
+        //     padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+        //     child: Image.asset(
+        //       'assets/images/bedridden.png',
+        //       fit: BoxFit.fitWidth,
+        //     ),
+        //   ),
+        title: Text(
+          'Home',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         backgroundColor: const Color(0xffdfad98),
         toolbarHeight: 90,
         shape: RoundedRectangleBorder(
@@ -89,7 +102,7 @@ class _HomeState extends State<Home> {
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30.0),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
           child: SingleChildScrollView(
             child: Column(
               children: [
@@ -101,7 +114,7 @@ class _HomeState extends State<Home> {
                 buildtTtleListNameAllBedriddenLevel2(), //'รายชื่อผู้ป่วยติดเตียง ระดับที่ 2,โชว์ทั้งหมด'
                 buildtListNameAllBedriddenLevel2(), //'รายชื่อผู้ป่วยติดเตียง ระดับที่ 2'
                 buildtTtleListNameAllBedriddenLevel3(), //'รายชื่อผู้ป่วยติดเตียง ระดับที่ 3,โชว์ทั้งหมด'
-                buildtListNameAllBedriddenLevel3(),//'รายชื่อผู้ป่วยติดเตียง ระดับที่ 3'
+                buildtListNameAllBedriddenLevel3(), //'รายชื่อผู้ป่วยติดเตียง ระดับที่ 3'
               ],
             ),
           ),
@@ -110,7 +123,7 @@ class _HomeState extends State<Home> {
     );
   }
 
-Future<Null> showSickDialog(SickModel model, int index) async {
+  Future<Null> showSickDialog(SickModel model, int index) async {
     DateTime dateTime = model.bond.toDate();
     DateFormat dateFormat = DateFormat('dd-MMMM-yyyy', 'th');
     String bondStr = dateFormat.format(dateTime);
@@ -183,86 +196,85 @@ Future<Null> showSickDialog(SickModel model, int index) async {
     );
   }
 
-
-
   Widget buildtListNameAllBedriddenLevel3() {
     return sickmodelsLevel3.length == 0
         ? ShowProgress()
-        :Container(
-          height: 270,
-          child: Expanded(
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              shrinkWrap: true,
-              physics: ScrollPhysics(),
-              itemCount: sickmodelsLevel3.length,
-              itemBuilder: (context, index) => Container(
-                width: 175,
-                child: GestureDetector(
-                  onTap: () {
-                    print('## You Click index = $index');
-                    showSickDialog(sickmodelsLevel3[index], index);
-                  },
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.all(Radius.circular(28)),
-                    child: Card(
-                      color: Color(0xffFFD1BB),
-                      child: Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: Column(
-                          children: [
-                            Container(
-                              margin: EdgeInsets.symmetric(vertical: 12),
-                              width: 130,
-                              height: 80,
-                              child: ClipRRect(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10)),
-                                child: Image.network(
-                                  sickmodelsLevel3[index].urlImage,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                            Row(
-                              children: [
-                                Container(
-                                  margin: EdgeInsets.symmetric(
-                                      vertical: 5, horizontal: 8),
-                                  width: 140,
-                                  child: Text(
-                                    sickmodelsLevel3[index].name,
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+        : Container(
+            height: 270,
+            child: Expanded(
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                shrinkWrap: true,
+                physics: ScrollPhysics(),
+                itemCount: sickmodelsLevel3.length,
+                itemBuilder: (context, index) => Container(
+                  width: 175,
+                  child: GestureDetector(
+                    onTap: () {
+                      print('## You Click index = $index');
+                      showSickDialog(sickmodelsLevel3[index], index);
+                    },
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.all(Radius.circular(28)),
+                      child: Card(
+                        color: Color(0xffFFD1BB),
+                        child: Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: Column(
+                            children: [
+                              Container(
+                                margin: EdgeInsets.symmetric(vertical: 12),
+                                width: 130,
+                                height: 80,
+                                child: ClipRRect(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10)),
+                                  child: Image.network(
+                                    sickmodelsLevel3[index].urlImage,
+                                    fit: BoxFit.cover,
                                   ),
                                 ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Container(
-                                  margin: EdgeInsets.symmetric(
-                                      vertical: 5, horizontal: 8),
-                                  width: 140,
-                                  child:
-                                      Text(sickmodelsLevel3[index].address),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Container(
-                                  margin: EdgeInsets.symmetric(
-                                      vertical: 5, horizontal: 8),
-                                  width: 140,
-                                  child: Text(
-                                      'ระดับที่ ${sickmodelsLevel3[index].level}'),
-                                ),
-                              ],
-                            ),
-                          ],
+                              ),
+                              Row(
+                                children: [
+                                  Container(
+                                    margin: EdgeInsets.symmetric(
+                                        vertical: 5, horizontal: 8),
+                                    width: 140,
+                                    child: Text(
+                                      sickmodelsLevel3[index].name,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Container(
+                                    margin: EdgeInsets.symmetric(
+                                        vertical: 5, horizontal: 8),
+                                    width: 140,
+                                    child:
+                                        Text(sickmodelsLevel3[index].address),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Container(
+                                    margin: EdgeInsets.symmetric(
+                                        vertical: 5, horizontal: 8),
+                                    width: 140,
+                                    child: Text(
+                                        'ระดับที่ ${sickmodelsLevel3[index].level}'),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -270,42 +282,39 @@ Future<Null> showSickDialog(SickModel model, int index) async {
                 ),
               ),
             ),
-          ),
-        );
+          );
   }
 
   Row buildtTtleListNameAllBedriddenLevel3() {
     return Row(
-    crossAxisAlignment: CrossAxisAlignment.center,
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: [
-      Text(
-        "รายชื่อผู้ป่วย ระดับที่ 3",
-        style: TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.w600,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          "รายชื่อผู้ป่วย ระดับที่ 3",
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+          ),
         ),
-      ),
-      TextButton(
-          style: TextButton.styleFrom(primary: Colors.black87),
-          onPressed: () {
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //       builder: (context) => LoginPage()),
-            // );
-          },
-          child: Text(
-            "ทั้งหมด",
-            style: TextStyle(
-              color: Colors.black54,
-            ),
-          )),
-    ],
-  );
+        TextButton(
+            style: TextButton.styleFrom(primary: Colors.black87),
+            onPressed: () {
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //       builder: (context) => LoginPage()),
+              // );
+            },
+            child: Text(
+              "ทั้งหมด",
+              style: TextStyle(
+                color: Colors.black54,
+              ),
+            )),
+      ],
+    );
   }
-
-  
 
   Widget buildtListNameAllBedriddenLevel2() {
     return sickmodelsLevel2.length == 0
