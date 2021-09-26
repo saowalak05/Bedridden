@@ -1,3 +1,4 @@
+import 'package:bedridden/Screen/Addbedridden/add_environment.dart';
 import 'package:flutter/material.dart';
 
 class Addhealth extends StatefulWidget {
@@ -7,27 +8,33 @@ class Addhealth extends StatefulWidget {
   _AddhealthState createState() => _AddhealthState();
 }
 
-String? typeexamination_results;
 
 class _AddhealthState extends State<Addhealth> {
   final formkey = GlobalKey<FormState>();
   TextEditingController diseaseController = TextEditingController();
   TextEditingController medicineController = TextEditingController();
   TextEditingController correctController = TextEditingController();
+  TextEditingController other_drugsController = TextEditingController();
+  TextEditingController HerbController = TextEditingController();
+
+String? typeexamination_results;
+String? typecorrect_drug_use;
+
 
   List<Widget> widgets = [];
   int index = 0;
-
+  List<Widget> widgets2 = [];
+  int index2 = 2;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    widgets.add(buildcorrect());
-    widgets.add(buildother1());
     widgets.add(buildincorrect());
+    widgets.add(buildother1());
+    widgets2.add(buildcorrect());
   }
 
-  @override
+    @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
@@ -49,79 +56,277 @@ class _AddhealthState extends State<Addhealth> {
                 buildTitle3(), //'ส่วนที่ 2 ข้อมูลด้านสุขภาพ '
                 buildDisease(), //'โรคประจำตัวหรือปัญหาสุขภาพ '
                 buildmedicine(), //'ยาที่แพทย์สั่ง '
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Container(
-                      child: Row(
-                        children: <Widget>[
-                          Text(
-                            'ผลการตรวจสอบ :',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    Container(
-                      child: RadioListTile(
-                        title: const Text(
-                          'ตรงกับการรับรู้ของผู้ป่วย/ผู้ดูแล',
-                          style: TextStyle(fontSize: 12),
-                        ),
-                        value: 0,
-                        groupValue: index,
-                        onChanged: (value) {
-                          setState(
-                            () {
-                              // index = ;
-                            },
-                          );
-                        },
-                      ),
-                    ),
-                    Container(
-                      child: RadioListTile(
-                        title: const Text(
-                          'ไม่ตรง',
-                          style: TextStyle(fontSize: 12),
-                        ),
-                        value: 1,
-                        groupValue: index,
-                        onChanged: (value) {
-                          setState(
-                            () {
-                              // index = value!;
-                            },
-                          );
-                        },
-                      ),
-                    ),
-                    Container(
-                      child: RadioListTile(
-                        title: const Text(
-                          'อื่น ๆ ',
-                          style: TextStyle(fontSize: 12),
-                        ),
-                        value: 'อื่น ๆ ',
-                        groupValue: typeexamination_results,
-                        onChanged: (value) {
-                          setState(
-                            () {
-                              typeexamination_results = value as String?;
-                            },
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
+                buildtypeexamination_results(), //'ผลการตรวจสอบ '
+                widgets[index],
+                builddrug_use(), //'การใช้ยา '
+                widgets2[index],
+                buildOHF(), //'ยาอื่นๆ สมุนไพร อาหารเสริม '
+                buildNext3(context),
               ],
             ),
           ),
         ));
+  }
+
+  Column buildNext3(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        MaterialButton(
+          onPressed: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => Addenvironment()));
+          },
+          shape: RoundedRectangleBorder(
+              side: BorderSide(
+                color: const Color(0xffffede5),
+              ),
+              borderRadius: BorderRadius.circular(50)),
+          child: Text(
+            "หน้าถัดไป",
+            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+          ),
+          color: const Color(0xffdfad98),
+        ),
+        const SizedBox(
+          height: 32,
+        )
+      ],
+    );
+  }
+
+  Column buildOHF() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Container(
+          child: Row(
+            children: <Widget>[
+              Text(
+                'ยาอื่น ๆ :',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
+              )
+            ],
+          ),
+        ),
+        const SizedBox(height: 16.0),
+        TextFormField(
+          validator: (value) {
+            if (value!.isEmpty) {
+              return 'กรุณากรอก ระบุยาอื่น ๆ';
+            } else {
+              return null;
+            }
+          },
+          controller: other_drugsController,
+          textCapitalization: TextCapitalization.words,
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            filled: true,
+            hintText: 'ระบุ ยาอื่น ๆ ',
+            labelText: 'ระบุ ยาอื่น ๆ *',
+            fillColor: const Color(0xfff7e4db),
+          ),
+        ),
+        const SizedBox(height: 16.0),
+        Container(
+          child: Row(
+            children: <Widget>[
+              const SizedBox(height: 16.0),
+              Text(
+                'สมุนไพร :',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
+              )
+            ],
+          ),
+        ),
+        const SizedBox(height: 16.0),
+        TextFormField(
+          validator: (value) {
+            if (value!.isEmpty) {
+              return 'กรุณากรอก ระบุสมุนไพร';
+            } else {
+              return null;
+            }
+          },
+          controller: HerbController,
+          textCapitalization: TextCapitalization.words,
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            filled: true,
+            hintText: 'ระบุ สมุนไพร ',
+            labelText: 'ระบุ สมุนไพร *',
+            fillColor: const Color(0xfff7e4db),
+          ),
+        ),
+        const SizedBox(height: 16.0),
+        Container(
+          child: Row(
+            children: <Widget>[
+              Text(
+                'อาหารเสริมและอื่น ๆ :',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
+              )
+            ],
+          ),
+        ),
+        const SizedBox(height: 16.0),
+        TextFormField(
+          validator: (value) {
+            if (value!.isEmpty) {
+              return 'กรุณากรอก อาหารเสริมและอื่น ๆ';
+            } else {
+              return null;
+            }
+          },
+          controller: HerbController,
+          textCapitalization: TextCapitalization.words,
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            filled: true,
+            hintText: 'อาหารเสริมและอื่น ๆ ',
+            labelText: 'อาหารเสริมและอื่น ๆ *',
+            fillColor: const Color(0xfff7e4db),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Column builddrug_use() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Container(
+          child: Row(
+            children: <Widget>[
+              Text(
+                'การใช้ยา :',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
+              )
+            ],
+          ),
+        ),
+        Container(
+          child: RadioListTile(
+            title: const Text(
+              'ถูกต้อง',
+              style: TextStyle(fontSize: 12),
+            ),
+            value: 'ถูกต้อง',
+            groupValue: typecorrect_drug_use,
+            onChanged: (value) {
+              setState(
+                () {
+                  typecorrect_drug_use = value as String;
+                },
+              );
+            },
+          ),
+        ),
+        Container(
+          child: RadioListTile(
+            title: const Text(
+              'ไม่ถูกต้อง',
+              style: TextStyle(fontSize: 12),
+            ),
+            value: 0,
+            groupValue: index2,
+            onChanged: (value) {
+              setState(
+                () {
+                  index2 = value as int;
+                },
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Column buildtypeexamination_results() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Container(
+          child: Row(
+            children: <Widget>[
+              Text(
+                'ผลการตรวจสอบ :',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
+              )
+            ],
+          ),
+        ),
+        Container(
+          child: RadioListTile(
+            title: const Text(
+              'ตรงกับการรับรู้ของผู้ป่วย/ผู้ดูแล',
+              style: TextStyle(fontSize: 12),
+            ),
+            value: 'ตรงกับการรับรู้ของผู้ป่วย/ผู้ดูแล',
+            groupValue: typeexamination_results,
+            onChanged: (value) {
+              setState(
+                () {
+                  typeexamination_results = value as String?;
+                },
+              );
+            },
+          ),
+        ),
+        Container(
+          child: RadioListTile(
+            title: const Text(
+              'ไม่ตรง',
+              style: TextStyle(fontSize: 12),
+            ),
+            value: 0,
+            groupValue: index,
+            onChanged: (value) {
+              setState(
+                () {
+                  index = value as int;
+                },
+              );
+            },
+          ),
+        ),
+        Container(
+          child: RadioListTile(
+            title: const Text(
+              'อื่น ๆ ',
+              style: TextStyle(fontSize: 12),
+            ),
+            value: 1,
+            groupValue: index,
+            onChanged: (value) {
+              setState(
+                () {
+                  index = value as int;
+                },
+              );
+            },
+          ),
+        ),
+      ],
+    );
   }
 
   Column buildmedicine() {
