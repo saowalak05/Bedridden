@@ -1,3 +1,4 @@
+import 'package:bedridden/Screen/Addbedridden/add.dart';
 import 'package:bedridden/Screen/Addbedridden/add_environment.dart';
 import 'package:flutter/material.dart';
 
@@ -8,7 +9,6 @@ class Addhealth extends StatefulWidget {
   _AddhealthState createState() => _AddhealthState();
 }
 
-
 class _AddhealthState extends State<Addhealth> {
   final formkey = GlobalKey<FormState>();
   TextEditingController diseaseController = TextEditingController();
@@ -17,24 +17,42 @@ class _AddhealthState extends State<Addhealth> {
   TextEditingController other_drugsController = TextEditingController();
   TextEditingController HerbController = TextEditingController();
 
-String? typeexamination_results;
-String? typecorrect_drug_use;
-
+  String? typeexamination_results;
+  String? typecorrect_drug_use;
 
   List<Widget> widgets = [];
-  int index = 0;
+  int _radioGroupA = 0;
   List<Widget> widgets2 = [];
-  int index2 = 2;
+  int _radioGroupB = 0;
+
+  void _handleRadioValueChanged(value) {
+    setState(() {
+      _radioGroupA = value! as int;
+    });
+  }
+
+  void _handleRadioValueChanged2(value) {
+    setState(() {
+      _radioGroupB = value! as int;
+    });
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    widgets.add(buildtext());
     widgets.add(buildincorrect());
     widgets.add(buildother1());
+    widgets2.add(buildtext2());
     widgets2.add(buildcorrect());
   }
 
-    @override
+  Text buildtext2() => Text('');
+
+  Text buildtext() => Text('');
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
@@ -57,9 +75,9 @@ String? typecorrect_drug_use;
                 buildDisease(), //'โรคประจำตัวหรือปัญหาสุขภาพ '
                 buildmedicine(), //'ยาที่แพทย์สั่ง '
                 buildtypeexamination_results(), //'ผลการตรวจสอบ '
-                widgets[index],
+                widgets[_radioGroupA],
                 builddrug_use(), //'การใช้ยา '
-                widgets2[index],
+                widgets2[_radioGroupB],
                 buildOHF(), //'ยาอื่นๆ สมุนไพร อาหารเสริม '
                 buildNext3(context),
               ],
@@ -74,8 +92,10 @@ String? typecorrect_drug_use;
       children: [
         MaterialButton(
           onPressed: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => Addenvironment()));
+            MaterialPageRoute route = MaterialPageRoute(
+                    builder: (BuildContext context) => Addenvironment(),
+                  );
+                  Navigator.push(context, route);
           },
           shape: RoundedRectangleBorder(
               side: BorderSide(
@@ -220,37 +240,29 @@ String? typecorrect_drug_use;
           ),
         ),
         Container(
-          child: RadioListTile(
-            title: const Text(
-              'ถูกต้อง',
-              style: TextStyle(fontSize: 12),
-            ),
-            value: 'ถูกต้อง',
-            groupValue: typecorrect_drug_use,
-            onChanged: (value) {
-              setState(
-                () {
-                  typecorrect_drug_use = value as String;
-                },
-              );
-            },
-          ),
-        ),
-        Container(
-          child: RadioListTile(
-            title: const Text(
-              'ไม่ถูกต้อง',
-              style: TextStyle(fontSize: 12),
-            ),
-            value: 0,
-            groupValue: index2,
-            onChanged: (value) {
-              setState(
-                () {
-                  index2 = value as int;
-                },
-              );
-            },
+          child: Column(
+            children: [
+              RadioListTile(
+                title: const Text(
+                  'ถูกต้อง',
+                  style: TextStyle(fontSize: 12),
+                ),
+                value: 0,
+                groupValue: _radioGroupB,
+                selected: _radioGroupB == 0,
+                onChanged: _handleRadioValueChanged2,
+              ),
+              RadioListTile(
+                title: const Text(
+                  'ไม่ถูกต้อง',
+                  style: TextStyle(fontSize: 12),
+                ),
+                value: 1,
+                groupValue: _radioGroupB,
+                selected: _radioGroupB == 1,
+                onChanged: _handleRadioValueChanged2,
+              ),
+            ],
           ),
         ),
       ],
@@ -275,56 +287,65 @@ String? typecorrect_drug_use;
           ),
         ),
         Container(
-          child: RadioListTile(
-            title: const Text(
-              'ตรงกับการรับรู้ของผู้ป่วย/ผู้ดูแล',
-              style: TextStyle(fontSize: 12),
-            ),
-            value: 'ตรงกับการรับรู้ของผู้ป่วย/ผู้ดูแล',
-            groupValue: typeexamination_results,
-            onChanged: (value) {
-              setState(
-                () {
-                  typeexamination_results = value as String?;
-                },
-              );
-            },
+          child: Column(
+            children: [
+              RadioListTile(
+                title: const Text(
+                  'ตรงกับการรับรู้ของผู้ป่วย/ผู้ดูแล',
+                  style: TextStyle(fontSize: 12),
+                ),
+                value: 0,
+                groupValue: _radioGroupA,
+                selected: _radioGroupA == 0,
+                onChanged: _handleRadioValueChanged,
+              ),
+              RadioListTile(
+                title: const Text(
+                  'ไม่ตรง',
+                  style: TextStyle(fontSize: 12),
+                ),
+                value: 1,
+                groupValue: _radioGroupA,
+                selected: _radioGroupA == 1,
+                onChanged: _handleRadioValueChanged,
+              ),
+              RadioListTile(
+                title: const Text(
+                  'อื่น ๆ ',
+                  style: TextStyle(fontSize: 12),
+                ),
+                value: 2,
+                selected: _radioGroupA == 2,
+                groupValue: _radioGroupA,
+                onChanged: _handleRadioValueChanged,
+              ),
+            ],
           ),
         ),
-        Container(
-          child: RadioListTile(
-            title: const Text(
-              'ไม่ตรง',
-              style: TextStyle(fontSize: 12),
-            ),
-            value: 0,
-            groupValue: index,
-            onChanged: (value) {
-              setState(
-                () {
-                  index = value as int;
-                },
-              );
-            },
-          ),
-        ),
-        Container(
-          child: RadioListTile(
-            title: const Text(
-              'อื่น ๆ ',
-              style: TextStyle(fontSize: 12),
-            ),
-            value: 1,
-            groupValue: index,
-            onChanged: (value) {
-              setState(
-                () {
-                  index = value as int;
-                },
-              );
-            },
-          ),
-        ),
+        // Container(
+        //   child: RadioListTile(
+        //     title: const Text(
+        //       'ไม่ตรง',
+        //       style: TextStyle(fontSize: 12),
+        //     ),
+        //     value: 0,
+        //     groupValue: _radioGroupA,
+        //     selected: _radioGroupA == 0,
+        //     onChanged: _handleRadioValueChanged,
+        //   ),
+        // ),
+        // Container(
+        //   child: RadioListTile(
+        //     title: const Text(
+        //       'อื่น ๆ ',
+        //       style: TextStyle(fontSize: 12),
+        //     ),
+        //     value: 1,
+        //     selected: _radioGroupA == 1,
+        //     groupValue: _radioGroupA,
+        //     onChanged: _handleRadioValueChanged,
+        //   ),
+        // ),
       ],
     );
   }

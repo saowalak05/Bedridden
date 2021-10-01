@@ -1,4 +1,9 @@
+import 'dart:io';
+
+import 'package:bedridden/utility/dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:image_picker/image_picker.dart';
 
 class Addenvironment extends StatefulWidget {
   const Addenvironment({Key? key}) : super(key: key);
@@ -15,18 +20,34 @@ class _AddenvironmentState extends State<Addenvironment> {
   String? typeHouse;
   String? typeHomeEnvironment;
   String? typeHousingSafety;
+
+  String imageadd = 'assets/images/image_mountain_photo.png';
+
   String? typeFacilities;
 
-  List<Widget> widgetsresidence_status = [];
-  int indexresidence_status = 0;
+  // List<Widget> widgets = [];
+  // int index = 0;
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    widgetsresidence_status.add(
-      buildFormOtheraccommodation(),
-    );
+  List<File?> files = [];
+  File? file;
+
+  // @override
+  // void initState() {
+  //   // TODO: implement initState
+  //   super.initState();
+  //   widgets.add(
+  //     buildFormOtheraccommodation(),
+  //   );
+  //   widgets.add(Text('data'));
+  //   widgets.add(Text('data'));
+  //   widgets.add(Text('data'));
+  //    widgets.add(Text('data'));
+  // }
+
+  void initialFile() {
+    for (var i = 0; i < 4; i++) {
+      files.add(null);
+    }
   }
 
   @override
@@ -41,29 +62,169 @@ class _AddenvironmentState extends State<Addenvironment> {
             ),
           ),
         ),
-        body: GestureDetector(
-          onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
-          behavior: HitTestBehavior.opaque,
-          child: Form(
-            child: ListView(
-              padding: EdgeInsets.only(top: 16, left: 16, right: 16),
-              children: [
-                buildTitle4(),
-                buildaccommodation(),
-                widgetsresidence_status[indexresidence_status],
-                buildtypeHouse(),
-                widgetsresidence_status[indexresidence_status],
-                buildHomeEnvironment(),
-                widgetsresidence_status[indexresidence_status],
-                buildHousingSafety(),
-                widgetsresidence_status[indexresidence_status],
-                buildFacilities(),
-                widgetsresidence_status[indexresidence_status],
-                buildNext4(context),
-              ],
-            ),
+        body: LayoutBuilder(
+            builder: (context, constraints) => GestureDetector(
+                  onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+                  behavior: HitTestBehavior.opaque,
+                  child: Form(
+                    child: ListView(
+                      padding: EdgeInsets.all(16.0),
+                      children: [
+                        buildTitle4(),
+                        // buildaccommodation(),
+                        // widgets[index],
+                        // buildtypeHouse(),
+                        // widgets[index],
+                        // buildHomeEnvironment(),
+                        // widgets[index],
+                        // buildHousingSafety(),
+                        // widgets[index],
+                        // buildFacilities(),
+                        // widgets[index],
+                        buildImage(constraints),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              width: constraints.maxWidth * 0.75,
+                              child: MaterialButton(
+                                onPressed: () {},
+                                child: Text(
+                                  'เพิ่มรูปภาพ',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14),
+                                ),
+                                shape: RoundedRectangleBorder(
+                                    side: BorderSide(
+                                      color: const Color(0xffffede5),
+                                    ),
+                                    borderRadius: BorderRadius.circular(50)),
+                                color: const Color(0xffdfad98),
+                              ),
+                            ),
+                          ],
+                        ),
+                        buildNext4(context),
+                      ],
+                    ),
+                  ),
+                )));
+  }
+
+  Future<Null> processImagePicker(ImageSource source, int index) async {
+    try {
+      var result = await ImagePicker().getImage(
+        source: source,
+        maxWidth: 800,
+        maxHeight: 800,
+      );
+      setState(() {
+        file = File(result!.path);
+        files[index] = file;
+      });
+    } catch (e) {}
+  }
+
+  Future<Null> chooseSourceTmageDialog(int index) async {
+    print('Click Form index ==>> $index');
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: ListTile(
+          leading: Image.asset("assets/images/bedridden.png"),
+          title: Text('กรุณาเลือกแหล่งภาพ ${index + 1} ?'),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              processImagePicker(ImageSource.camera, index);
+            },
+            child: Text('Camera'),
           ),
-        ));
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              processImagePicker(ImageSource.gallery, index);
+            },
+            child: Text('Gallery'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Column buildImage(BoxConstraints constraints) {
+    return Column(
+      children: [
+        Container(
+          width: constraints.maxWidth * 0.75,
+          height: constraints.maxWidth * 0.75,
+          child: file == null ? Image.asset(imageadd) : Image.file(file!),
+        ),
+        Container(
+          width: constraints.maxWidth * 0.8,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                width: 48,
+                height: 48,
+                child: InkWell(
+                  onTap: () => chooseSourceTmageDialog(0),
+                  child: files[0] == null
+                      ? Image.asset(imageadd)
+                      : Image.file(
+                          files[0]!,
+                          fit: BoxFit.cover,
+                        ),
+                ),
+              ),
+              Container(
+                width: 48,
+                height: 48,
+                child: InkWell(
+                  onTap: () => chooseSourceTmageDialog(1),
+                  child: files[1] == null
+                      ? Image.asset(imageadd)
+                      : Image.file(
+                          files[1]!,
+                          fit: BoxFit.cover,
+                        ),
+                ),
+              ),
+              Container(
+                width: 48,
+                height: 48,
+                child: InkWell(
+                  onTap: () => chooseSourceTmageDialog(2),
+                  child: files[2] == null
+                      ? Image.asset(imageadd)
+                      : Image.file(
+                          files[2]!,
+                          fit: BoxFit.cover,
+                        ),
+                ),
+              ),
+              Container(
+                width: 48,
+                height: 48,
+                child: InkWell(
+                  onTap: () => chooseSourceTmageDialog(3),
+                  child: files[3] == null
+                      ? Image.asset(imageadd)
+                      : Image.file(
+                          files[3]!,
+                          fit: BoxFit.cover,
+                        ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
   }
 
   Column buildNext4(BuildContext context) {
@@ -133,11 +294,11 @@ class _AddenvironmentState extends State<Addenvironment> {
             title: const Text(
                 'มี ได้แก่ (ราวจับในบ้าน ราวจับในห้องน้ำ ทางลาดของรถเซ็น อื่น ๆ ระบุ)'),
             value: 0,
-            groupValue: indexresidence_status,
+            groupValue: typeHouse,
             onChanged: (value) {
               setState(
                 () {
-                  indexresidence_status = value as int;
+                  typeHouse = value as String;
                 },
               );
             },
@@ -202,11 +363,11 @@ class _AddenvironmentState extends State<Addenvironment> {
           child: RadioListTile(
             title: const Text('ไม่ปลอดภัย อธิบายที่สังเกตได้'),
             value: 0,
-            groupValue: indexresidence_status,
+            groupValue: typeHouse,
             onChanged: (value) {
               setState(
                 () {
-                  indexresidence_status = value as int;
+                  typeHouse = value as String;
                 },
               );
             },
@@ -274,11 +435,11 @@ class _AddenvironmentState extends State<Addenvironment> {
           child: RadioListTile(
             title: const Text('ไม่สะอาด อธิบายที่สังเกตได้'),
             value: 0,
-            groupValue: indexresidence_status,
+            groupValue: typeHouse,
             onChanged: (value) {
               setState(
                 () {
-                  indexresidence_status = value as int;
+                 typeHouse = value as String;
                 },
               );
             },
@@ -361,12 +522,12 @@ class _AddenvironmentState extends State<Addenvironment> {
           width: 400,
           child: RadioListTile(
             title: const Text('อื่น ๆ (เช่น กระต๊อบ ชนำ เป็นต้น) ระบุ'),
-            value: 0,
-            groupValue: indexresidence_status,
+            value:1,
+            groupValue: typeHouse,
             onChanged: (value) {
               setState(
                 () {
-                  indexresidence_status = value as int;
+                  typeHouse = value as String;
                 },
               );
             },
@@ -466,12 +627,12 @@ class _AddenvironmentState extends State<Addenvironment> {
           width: 400,
           child: RadioListTile(
             title: const Text('อื่น ๆ'),
-            value: 0,
-            groupValue: indexresidence_status,
+            value: 'อื่น ๆ',
+            groupValue: typeHouse,
             onChanged: (value) {
               setState(
                 () {
-                  indexresidence_status = value as int;
+                  typeHouse = value as String;
                 },
               );
             },
