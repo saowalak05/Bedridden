@@ -1,5 +1,6 @@
 import 'package:bedridden/Screen/edit_sick.dart';
 import 'package:bedridden/models/sick_model.dart';
+import 'package:bedridden/widgets/search_widget.dart';
 import 'package:bedridden/widgets/show_progess.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -18,6 +19,8 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final primary = Color(0xffdfad98);
   final secondary = Color(0xfff29a94);
+  late List<SickModel> books;
+  String query = '';
 
   get padding => null;
 
@@ -101,7 +104,7 @@ class _HomeState extends State<Home> {
                 buildtTtleListNameAllBedriddenLevel2(), //'รายชื่อผู้ป่วยติดเตียง ระดับที่ 2,โชว์ทั้งหมด'
                 buildtListNameAllBedriddenLevel2(), //'รายชื่อผู้ป่วยติดเตียง ระดับที่ 2'
                 buildtTtleListNameAllBedriddenLevel3(), //'รายชื่อผู้ป่วยติดเตียง ระดับที่ 3,โชว์ทั้งหมด'
-                buildtListNameAllBedriddenLevel3(),//'รายชื่อผู้ป่วยติดเตียง ระดับที่ 3'
+                buildtListNameAllBedriddenLevel3(), //'รายชื่อผู้ป่วยติดเตียง ระดับที่ 3'
               ],
             ),
           ),
@@ -110,7 +113,7 @@ class _HomeState extends State<Home> {
     );
   }
 
-Future<Null> showSickDialog(SickModel model, int index) async {
+  Future<Null> showSickDialog(SickModel model, int index) async {
     DateTime dateTime = model.bond.toDate();
     DateFormat dateFormat = DateFormat('dd-MMMM-yyyy', 'th');
     String bondStr = dateFormat.format(dateTime);
@@ -183,86 +186,85 @@ Future<Null> showSickDialog(SickModel model, int index) async {
     );
   }
 
-
-
   Widget buildtListNameAllBedriddenLevel3() {
     return sickmodelsLevel3.length == 0
         ? ShowProgress()
-        :Container(
-          height: 270,
-          child: Expanded(
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              shrinkWrap: true,
-              physics: ScrollPhysics(),
-              itemCount: sickmodelsLevel3.length,
-              itemBuilder: (context, index) => Container(
-                width: 175,
-                child: GestureDetector(
-                  onTap: () {
-                    print('## You Click index = $index');
-                    showSickDialog(sickmodelsLevel3[index], index);
-                  },
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.all(Radius.circular(28)),
-                    child: Card(
-                      color: Color(0xffFFD1BB),
-                      child: Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: Column(
-                          children: [
-                            Container(
-                              margin: EdgeInsets.symmetric(vertical: 12),
-                              width: 130,
-                              height: 80,
-                              child: ClipRRect(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10)),
-                                child: Image.network(
-                                  sickmodelsLevel3[index].urlImage,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                            Row(
-                              children: [
-                                Container(
-                                  margin: EdgeInsets.symmetric(
-                                      vertical: 5, horizontal: 8),
-                                  width: 140,
-                                  child: Text(
-                                    sickmodelsLevel3[index].name,
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+        : Container(
+            height: 270,
+            child: Expanded(
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                shrinkWrap: true,
+                physics: ScrollPhysics(),
+                itemCount: sickmodelsLevel3.length,
+                itemBuilder: (context, index) => Container(
+                  width: 175,
+                  child: GestureDetector(
+                    onTap: () {
+                      print('## You Click index = $index');
+                      showSickDialog(sickmodelsLevel3[index], index);
+                    },
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.all(Radius.circular(28)),
+                      child: Card(
+                        color: Color(0xffFFD1BB),
+                        child: Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: Column(
+                            children: [
+                              Container(
+                                margin: EdgeInsets.symmetric(vertical: 12),
+                                width: 130,
+                                height: 80,
+                                child: ClipRRect(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10)),
+                                  child: Image.network(
+                                    sickmodelsLevel3[index].urlImage,
+                                    fit: BoxFit.cover,
                                   ),
                                 ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Container(
-                                  margin: EdgeInsets.symmetric(
-                                      vertical: 5, horizontal: 8),
-                                  width: 140,
-                                  child:
-                                      Text(sickmodelsLevel3[index].address),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Container(
-                                  margin: EdgeInsets.symmetric(
-                                      vertical: 5, horizontal: 8),
-                                  width: 140,
-                                  child: Text(
-                                      'ระดับที่ ${sickmodelsLevel3[index].level}'),
-                                ),
-                              ],
-                            ),
-                          ],
+                              ),
+                              Row(
+                                children: [
+                                  Container(
+                                    margin: EdgeInsets.symmetric(
+                                        vertical: 5, horizontal: 8),
+                                    width: 140,
+                                    child: Text(
+                                      sickmodelsLevel3[index].name,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Container(
+                                    margin: EdgeInsets.symmetric(
+                                        vertical: 5, horizontal: 8),
+                                    width: 140,
+                                    child:
+                                        Text(sickmodelsLevel3[index].address),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Container(
+                                    margin: EdgeInsets.symmetric(
+                                        vertical: 5, horizontal: 8),
+                                    width: 140,
+                                    child: Text(
+                                        'ระดับที่ ${sickmodelsLevel3[index].level}'),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -270,42 +272,39 @@ Future<Null> showSickDialog(SickModel model, int index) async {
                 ),
               ),
             ),
-          ),
-        );
+          );
   }
 
   Row buildtTtleListNameAllBedriddenLevel3() {
     return Row(
-    crossAxisAlignment: CrossAxisAlignment.center,
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: [
-      Text(
-        "รายชื่อผู้ป่วย ระดับที่ 3",
-        style: TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.w600,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          "รายชื่อผู้ป่วย ระดับที่ 3",
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+          ),
         ),
-      ),
-      TextButton(
-          style: TextButton.styleFrom(primary: Colors.black87),
-          onPressed: () {
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //       builder: (context) => LoginPage()),
-            // );
-          },
-          child: Text(
-            "ทั้งหมด",
-            style: TextStyle(
-              color: Colors.black54,
-            ),
-          )),
-    ],
-  );
+        TextButton(
+            style: TextButton.styleFrom(primary: Colors.black87),
+            onPressed: () {
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //       builder: (context) => LoginPage()),
+              // );
+            },
+            child: Text(
+              "ทั้งหมด",
+              style: TextStyle(
+                color: Colors.black54,
+              ),
+            )),
+      ],
+    );
   }
-
-  
 
   Widget buildtListNameAllBedriddenLevel2() {
     return sickmodelsLevel2.length == 0
@@ -671,41 +670,24 @@ Future<Null> showSickDialog(SickModel model, int index) async {
   }
 
 //'ค้นหารายชื่อผู้ป่วยติดเตียง'
-  Widget buildSearch() {
-    return Center(
-      child: Column(
-        children: [
-          SizedBox(
-            height: 20,
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: Material(
-              elevation: 5.0,
-              borderRadius: BorderRadius.all(Radius.circular(30)),
-              child: TextField(
-                // controller: TextEditingController(),
-                cursorColor: Theme.of(context).primaryColor,
-                style: TextStyle(color: Colors.black54),
-                decoration: InputDecoration(
-                    hintText: "Search ",
-                    hintStyle: TextStyle(color: Colors.black38, fontSize: 16),
-                    suffixIcon: Material(
-                      borderRadius: BorderRadius.all(Radius.circular(30)),
-                      child: Icon(Icons.search),
-                    ),
-                    border: InputBorder.none,
-                    contentPadding:
-                        EdgeInsets.symmetric(horizontal: 25, vertical: 13)),
-              ),
-            ),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-        ],
-      ),
-    );
+  Widget buildSearch() => searchWidget(
+        hintText: 'search',
+        onChanged: searchBook, text: '',
+      );
+  void searchBook(String query) {
+    final books = sickmodels.where((book) {
+      final titleLower = sickmodels;
+      final authorLower = sickmodels;
+      final searchLower = query.toLowerCase();
+
+      return titleLower.contains(searchLower) ||
+          authorLower.contains(searchLower);
+    }).toList();
+
+    setState(() {
+      this.query = query;
+      this.sickmodels = books;
+    });
   }
 
   Future<Null> confirmDelete(SickModel model, int index) async {
