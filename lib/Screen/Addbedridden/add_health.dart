@@ -1,0 +1,596 @@
+import 'package:bedridden/Screen/Addbedridden/add.dart';
+import 'package:bedridden/Screen/Addbedridden/add_environment.dart';
+import 'package:flutter/material.dart';
+
+class Addhealth extends StatefulWidget {
+  const Addhealth({Key? key}) : super(key: key);
+
+  @override
+  _AddhealthState createState() => _AddhealthState();
+}
+
+class _AddhealthState extends State<Addhealth> {
+  final formkey = GlobalKey<FormState>();
+  TextEditingController diseaseController = TextEditingController();
+  TextEditingController medicineController = TextEditingController();
+  TextEditingController correctController = TextEditingController();
+  TextEditingController other_drugsController = TextEditingController();
+  TextEditingController HerbController = TextEditingController();
+
+  String? typeexamination_results;
+  String? typecorrect_drug_use;
+
+  List<Widget> widgets = [];
+  int _radioGroupA = 0;
+  List<Widget> widgets2 = [];
+  int _radioGroupB = 0;
+
+  void _handleRadioValueChanged(value) {
+    setState(() {
+      _radioGroupA = value! as int;
+    });
+  }
+
+  void _handleRadioValueChanged2(value) {
+    setState(() {
+      _radioGroupB = value! as int;
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    widgets.add(buildtext());
+    widgets.add(buildincorrect());
+    widgets.add(buildother1());
+    widgets2.add(buildtext2());
+    widgets2.add(buildcorrect());
+  }
+
+  Text buildtext2() => Text('');
+
+  Text buildtext() => Text('');
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          backgroundColor: const Color(0xffdfad98),
+          toolbarHeight: 90,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              bottom: Radius.elliptical(50.0, 50.0),
+            ),
+          ),
+        ),
+        body: GestureDetector(
+          onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+          behavior: HitTestBehavior.opaque,
+          child: Form(
+            child: ListView(
+              padding: EdgeInsets.only(top: 16, left: 16, right: 16),
+              children: [
+                buildTitle3(), //'ส่วนที่ 2 ข้อมูลด้านสุขภาพ '
+                buildDisease(), //'โรคประจำตัวหรือปัญหาสุขภาพ '
+                buildmedicine(), //'ยาที่แพทย์สั่ง '
+                buildtypeexamination_results(), //'ผลการตรวจสอบ '
+                widgets[_radioGroupA],
+                builddrug_use(), //'การใช้ยา '
+                widgets2[_radioGroupB],
+                buildOHF(), //'ยาอื่นๆ สมุนไพร อาหารเสริม '
+                buildNext3(context),
+              ],
+            ),
+          ),
+        ));
+  }
+
+  Column buildNext3(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        MaterialButton(
+          onPressed: () {
+            MaterialPageRoute route = MaterialPageRoute(
+                    builder: (BuildContext context) => Addenvironment(),
+                  );
+                  Navigator.push(context, route);
+          },
+          shape: RoundedRectangleBorder(
+              side: BorderSide(
+                color: const Color(0xffffede5),
+              ),
+              borderRadius: BorderRadius.circular(50)),
+          child: Text(
+            "หน้าถัดไป",
+            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+          ),
+          color: const Color(0xffdfad98),
+        ),
+        const SizedBox(
+          height: 32,
+        )
+      ],
+    );
+  }
+
+  Column buildOHF() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Container(
+          child: Row(
+            children: <Widget>[
+              Text(
+                'ยาอื่น ๆ :',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
+              )
+            ],
+          ),
+        ),
+        const SizedBox(height: 16.0),
+        TextFormField(
+          validator: (value) {
+            if (value!.isEmpty) {
+              return 'กรุณากรอก ระบุยาอื่น ๆ';
+            } else {
+              return null;
+            }
+          },
+          controller: other_drugsController,
+          textCapitalization: TextCapitalization.words,
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            filled: true,
+            hintText: 'ระบุ ยาอื่น ๆ ',
+            labelText: 'ระบุ ยาอื่น ๆ *',
+            fillColor: const Color(0xfff7e4db),
+          ),
+        ),
+        const SizedBox(height: 16.0),
+        Container(
+          child: Row(
+            children: <Widget>[
+              const SizedBox(height: 16.0),
+              Text(
+                'สมุนไพร :',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
+              )
+            ],
+          ),
+        ),
+        const SizedBox(height: 16.0),
+        TextFormField(
+          validator: (value) {
+            if (value!.isEmpty) {
+              return 'กรุณากรอก ระบุสมุนไพร';
+            } else {
+              return null;
+            }
+          },
+          controller: HerbController,
+          textCapitalization: TextCapitalization.words,
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            filled: true,
+            hintText: 'ระบุ สมุนไพร ',
+            labelText: 'ระบุ สมุนไพร *',
+            fillColor: const Color(0xfff7e4db),
+          ),
+        ),
+        const SizedBox(height: 16.0),
+        Container(
+          child: Row(
+            children: <Widget>[
+              Text(
+                'อาหารเสริมและอื่น ๆ :',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
+              )
+            ],
+          ),
+        ),
+        const SizedBox(height: 16.0),
+        TextFormField(
+          validator: (value) {
+            if (value!.isEmpty) {
+              return 'กรุณากรอก อาหารเสริมและอื่น ๆ';
+            } else {
+              return null;
+            }
+          },
+          controller: HerbController,
+          textCapitalization: TextCapitalization.words,
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            filled: true,
+            hintText: 'อาหารเสริมและอื่น ๆ ',
+            labelText: 'อาหารเสริมและอื่น ๆ *',
+            fillColor: const Color(0xfff7e4db),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Column builddrug_use() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Container(
+          child: Row(
+            children: <Widget>[
+              Text(
+                'การใช้ยา :',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
+              )
+            ],
+          ),
+        ),
+        Container(
+          child: Column(
+            children: [
+              RadioListTile(
+                title: const Text(
+                  'ถูกต้อง',
+                  style: TextStyle(fontSize: 12),
+                ),
+                value: 0,
+                groupValue: _radioGroupB,
+                selected: _radioGroupB == 0,
+                onChanged: _handleRadioValueChanged2,
+              ),
+              RadioListTile(
+                title: const Text(
+                  'ไม่ถูกต้อง',
+                  style: TextStyle(fontSize: 12),
+                ),
+                value: 1,
+                groupValue: _radioGroupB,
+                selected: _radioGroupB == 1,
+                onChanged: _handleRadioValueChanged2,
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Column buildtypeexamination_results() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Container(
+          child: Row(
+            children: <Widget>[
+              Text(
+                'ผลการตรวจสอบ :',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
+              )
+            ],
+          ),
+        ),
+        Container(
+          child: Column(
+            children: [
+              RadioListTile(
+                title: const Text(
+                  'ตรงกับการรับรู้ของผู้ป่วย/ผู้ดูแล',
+                  style: TextStyle(fontSize: 12),
+                ),
+                value: 0,
+                groupValue: _radioGroupA,
+                selected: _radioGroupA == 0,
+                onChanged: _handleRadioValueChanged,
+              ),
+              RadioListTile(
+                title: const Text(
+                  'ไม่ตรง',
+                  style: TextStyle(fontSize: 12),
+                ),
+                value: 1,
+                groupValue: _radioGroupA,
+                selected: _radioGroupA == 1,
+                onChanged: _handleRadioValueChanged,
+              ),
+              RadioListTile(
+                title: const Text(
+                  'อื่น ๆ ',
+                  style: TextStyle(fontSize: 12),
+                ),
+                value: 2,
+                selected: _radioGroupA == 2,
+                groupValue: _radioGroupA,
+                onChanged: _handleRadioValueChanged,
+              ),
+            ],
+          ),
+        ),
+        // Container(
+        //   child: RadioListTile(
+        //     title: const Text(
+        //       'ไม่ตรง',
+        //       style: TextStyle(fontSize: 12),
+        //     ),
+        //     value: 0,
+        //     groupValue: _radioGroupA,
+        //     selected: _radioGroupA == 0,
+        //     onChanged: _handleRadioValueChanged,
+        //   ),
+        // ),
+        // Container(
+        //   child: RadioListTile(
+        //     title: const Text(
+        //       'อื่น ๆ ',
+        //       style: TextStyle(fontSize: 12),
+        //     ),
+        //     value: 1,
+        //     selected: _radioGroupA == 1,
+        //     groupValue: _radioGroupA,
+        //     onChanged: _handleRadioValueChanged,
+        //   ),
+        // ),
+      ],
+    );
+  }
+
+  Column buildmedicine() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        const SizedBox(
+          height: 16,
+        ),
+        Container(
+          child: buildTitlemedicine(),
+        ),
+        const SizedBox(
+          height: 16,
+        ),
+        buildFormmedicine(),
+      ],
+    );
+  }
+
+  Text buildTitlemedicine() {
+    return Text(
+      'M-medication (ยาที่ใช้ประจำ) ระบุ',
+      style: TextStyle(
+        fontSize: 14,
+      ),
+    );
+  }
+
+  TextFormField buildFormmedicine() {
+    return TextFormField(
+      validator: (value) {
+        if (value!.isEmpty) {
+          return 'กรุณากรอก ยาที่ใช้ประจำ';
+        } else {
+          return null;
+        }
+      },
+      controller: medicineController,
+      textCapitalization: TextCapitalization.words,
+      decoration: const InputDecoration(
+        border: OutlineInputBorder(),
+        filled: true,
+        hintText: 'ยาที่แพทย์สั่ง ได้แก่',
+        labelText: 'ยาที่แพทย์สั่ง ได้แก่ *',
+        fillColor: const Color(0xfff7e4db),
+      ),
+      maxLines: 3,
+    );
+  }
+
+  Column buildDisease() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: <Widget>[
+        const SizedBox(
+          height: 16,
+        ),
+        buildCongenitalDisease(),
+        const SizedBox(
+          height: 10,
+        ),
+        buildNote(),
+        const SizedBox(height: 16.0),
+        buildFormdisease(),
+      ],
+    );
+  }
+
+  TextFormField buildFormdisease() {
+    return TextFormField(
+      validator: (value) {
+        if (value!.isEmpty) {
+          return 'กรุณากรอก โรคประจำตัวหรือปัญหาสุขภาพ';
+        } else {
+          return null;
+        }
+      },
+      controller: diseaseController,
+      textCapitalization: TextCapitalization.words,
+      decoration: const InputDecoration(
+        border: OutlineInputBorder(),
+        filled: true,
+        hintText: 'โรคประจำตัวหรือปัญหาสุขภาพ',
+        labelText: 'โรคประจำตัวหรือปัญหาสุขภาพ *',
+        fillColor: const Color(0xfff7e4db),
+      ),
+    );
+  }
+
+  Text buildCongenitalDisease() {
+    return Text(
+      'ท่านมีโรคประจำตัวหรือปัญหาสุขภาพหรือไม่ :',
+      style: TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
+      ),
+    );
+  }
+
+  Text buildNote() {
+    return Text(
+      'หมายเหตุ : ถามการรับรู้ของผู้ป่วย/ผู้ดูแล จำเป็นต้องตรวจสอบกับเวชระเบียนผู้ป่วย (Review medical record) ',
+      style: TextStyle(
+        fontSize: 14,
+      ),
+    );
+  }
+
+  Container buildTitle3() {
+    return Container(
+      child: Center(
+        child: Text(
+          'ส่วนที่ 2 ข้อมูลด้านสุขภาพ ',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Column buildcorrect() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        const SizedBox(height: 16.0),
+        Container(
+          child: Row(
+            children: <Widget>[
+              Text(
+                ' ระบุที่ถูกต้อง :',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 16.0),
+        TextFormField(
+          validator: (value) {
+            if (value!.isEmpty) {
+              return 'กรุณากรอก ผลการตรวจสอบที่ถูกต้อง';
+            } else {
+              return null;
+            }
+          },
+          controller: correctController,
+          textCapitalization: TextCapitalization.words,
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            filled: true,
+            hintText: 'ระบุที่ถูกต้อง',
+            labelText: 'ระบุที่ถูกต้อง *',
+            fillColor: const Color(0xfff7e4db),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Column buildincorrect() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        const SizedBox(height: 16.0),
+        Container(
+          child: Row(
+            children: <Widget>[
+              Text(
+                'ไม่ถูกต้องอย่างไร :',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 16.0),
+        TextFormField(
+          validator: (value) {
+            if (value!.isEmpty) {
+              return 'กรุณากรอก การใช้ยา ไม่ถูกต้องอย่างไร';
+            } else {
+              return null;
+            }
+          },
+          controller: correctController,
+          textCapitalization: TextCapitalization.words,
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            filled: true,
+            hintText: 'ไม่ถูกต้องอย่างไร ',
+            labelText: 'ไม่ถูกต้องอย่างไร *',
+            fillColor: const Color(0xfff7e4db),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Column buildother1() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        const SizedBox(height: 16.0),
+        Container(
+          child: Row(
+            children: <Widget>[
+              Text(
+                'อื่น ๆ :',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 16.0),
+        TextFormField(
+          validator: (value) {
+            if (value!.isEmpty) {
+              return 'กรุณากรอก ผลการตรวจสอบอื่น ๆ';
+            } else {
+              return null;
+            }
+          },
+          controller: correctController,
+          textCapitalization: TextCapitalization.words,
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            filled: true,
+            hintText: 'ระบุ ',
+            labelText: 'ระบุ *',
+            fillColor: const Color(0xfff7e4db),
+          ),
+        ),
+      ],
+    );
+  }
+}

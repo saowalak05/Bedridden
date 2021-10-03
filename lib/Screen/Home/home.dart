@@ -84,6 +84,19 @@ class _HomeState extends State<Home> {
     final IconThemeData data;
     return Scaffold(
       appBar: AppBar(
+        // leading: Padding(
+        //     padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+        //     child: Image.asset(
+        //       'assets/images/bedridden.png',
+        //       fit: BoxFit.fitWidth,
+        //     ),
+        //   ),
+        title: Text(
+          'Home',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         backgroundColor: const Color(0xffdfad98),
         toolbarHeight: 90,
         shape: RoundedRectangleBorder(
@@ -92,7 +105,7 @@ class _HomeState extends State<Home> {
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30.0),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
           child: SingleChildScrollView(
             child: Column(
               children: [
