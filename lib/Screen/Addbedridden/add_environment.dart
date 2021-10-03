@@ -25,24 +25,53 @@ class _AddenvironmentState extends State<Addenvironment> {
 
   String? typeFacilities;
 
-  // List<Widget> widgets = [];
-  // int index = 0;
+  List<Widget> widgets = [];
+  int accommodationgroup = 0;
+  List<Widget> widgets2 = [];
+  int typeHousegroup = 0;
+  List<Widget> widgets3 = [];
+  int homeEnvironmentgroup = 0;
+  List<Widget> widgets4 = [];
+  int housingSafetygroup = 0;
+  List<Widget> widgets5 = [];
+  int facilitiesgroup = 0;
 
   List<File?> files = [];
   File? file;
 
-  // @override
-  // void initState() {
-  //   // TODO: implement initState
-  //   super.initState();
-  //   widgets.add(
-  //     buildFormOtheraccommodation(),
-  //   );
-  //   widgets.add(Text('data'));
-  //   widgets.add(Text('data'));
-  //   widgets.add(Text('data'));
-  //    widgets.add(Text('data'));
-  // }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    widgets.add(Text(''));
+    widgets.add(Text(''));
+    widgets.add(Text(''));
+    widgets.add(Text(''));
+    widgets.add(
+      buildFormOtheraccommodation(),
+    );
+    widgets2.add(Text(''));
+    widgets2.add(Text(''));
+    widgets2.add(Text(''));
+    widgets2.add(
+      buildtypehouseother(),
+    );
+    widgets3.add(Text(''));
+    widgets3.add(Text(''));
+    widgets3.add(
+      buildhomeEnvironmentother(),
+    );
+    widgets4.add(Text(''));
+    widgets4.add(
+      buildhousingSafetyother(),
+    );
+    widgets5.add(Text(''));
+    widgets5.add(
+      buildfacilitiesother(),
+    );
+
+    initialFile();
+  }
 
   void initialFile() {
     for (var i = 0; i < 4; i++) {
@@ -71,16 +100,16 @@ class _AddenvironmentState extends State<Addenvironment> {
                       padding: EdgeInsets.all(16.0),
                       children: [
                         buildTitle4(),
-                        // buildaccommodation(),
-                        // widgets[index],
-                        // buildtypeHouse(),
-                        // widgets[index],
-                        // buildHomeEnvironment(),
-                        // widgets[index],
-                        // buildHousingSafety(),
-                        // widgets[index],
-                        // buildFacilities(),
-                        // widgets[index],
+                        buildaccommodation(),
+                        widgets[accommodationgroup],
+                        buildtypeHouse(),
+                        widgets2[typeHousegroup],
+                        buildHomeEnvironment(),
+                        widgets3[homeEnvironmentgroup],
+                        buildHousingSafety(),
+                        widgets4[housingSafetygroup],
+                        buildFacilities(),
+                        widgets5[facilitiesgroup],
                         buildImage(constraints),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -274,12 +303,12 @@ class _AddenvironmentState extends State<Addenvironment> {
               width: 170,
               child: RadioListTile(
                 title: const Text('ไม่มี'),
-                value: 'ไม่มี',
-                groupValue: typeFacilities,
+                value: 0,
+                groupValue: facilitiesgroup,
                 onChanged: (value) {
                   setState(
                     () {
-                      typeFacilities = value as String?;
+                      facilitiesgroup = value as int;
                     },
                   );
                 },
@@ -293,12 +322,12 @@ class _AddenvironmentState extends State<Addenvironment> {
           child: RadioListTile(
             title: const Text(
                 'มี ได้แก่ (ราวจับในบ้าน ราวจับในห้องน้ำ ทางลาดของรถเซ็น อื่น ๆ ระบุ)'),
-            value: 0,
-            groupValue: typeHouse,
+            value: 1,
+            groupValue: facilitiesgroup,
             onChanged: (value) {
               setState(
                 () {
-                  typeHouse = value as String;
+                  facilitiesgroup = value as int;
                 },
               );
             },
@@ -344,12 +373,12 @@ class _AddenvironmentState extends State<Addenvironment> {
               width: 170,
               child: RadioListTile(
                 title: const Text('ปลอดภัย'),
-                value: 'ปลอดภัย',
-                groupValue: typeHousingSafety,
+                value: 0,
+                groupValue: housingSafetygroup,
                 onChanged: (value) {
                   setState(
                     () {
-                      typeHousingSafety = value as String?;
+                      housingSafetygroup = value as int;
                     },
                   );
                 },
@@ -362,12 +391,12 @@ class _AddenvironmentState extends State<Addenvironment> {
           width: 400,
           child: RadioListTile(
             title: const Text('ไม่ปลอดภัย อธิบายที่สังเกตได้'),
-            value: 0,
-            groupValue: typeHouse,
+            value: 1,
+            groupValue: housingSafetygroup,
             onChanged: (value) {
               setState(
                 () {
-                  typeHouse = value as String;
+                  housingSafetygroup = value as int;
                 },
               );
             },
@@ -401,12 +430,12 @@ class _AddenvironmentState extends State<Addenvironment> {
               width: 170,
               child: RadioListTile(
                 title: const Text('สะอาด'),
-                value: 'สะอาด',
-                groupValue: typeHomeEnvironment,
+                value: 0,
+                groupValue: homeEnvironmentgroup,
                 onChanged: (value) {
                   setState(
                     () {
-                      typeHomeEnvironment = value as String?;
+                      homeEnvironmentgroup = value as int;
                     },
                   );
                 },
@@ -416,12 +445,12 @@ class _AddenvironmentState extends State<Addenvironment> {
               width: 170,
               child: RadioListTile(
                 title: const Text('สะอาดปานกลาง'),
-                value: 'สะอาดปานกลาง',
-                groupValue: typeHouse,
+                value: 1,
+                groupValue: homeEnvironmentgroup,
                 onChanged: (value) {
                   setState(
                     () {
-                      typeHouse = value as String?;
+                      homeEnvironmentgroup = value as int;
                     },
                   );
                 },
@@ -434,12 +463,12 @@ class _AddenvironmentState extends State<Addenvironment> {
           width: 400,
           child: RadioListTile(
             title: const Text('ไม่สะอาด อธิบายที่สังเกตได้'),
-            value: 0,
-            groupValue: typeHouse,
+            value: 2,
+            groupValue: homeEnvironmentgroup,
             onChanged: (value) {
               setState(
                 () {
-                 typeHouse = value as String;
+                  homeEnvironmentgroup = value as int;
                 },
               );
             },
@@ -473,12 +502,12 @@ class _AddenvironmentState extends State<Addenvironment> {
               width: 170,
               child: RadioListTile(
                 title: const Text('บ้านชั้นเดียว'),
-                value: 'บ้านชั้นเดียว',
-                groupValue: typeHouse,
+                value: 0,
+                groupValue: typeHousegroup,
                 onChanged: (value) {
                   setState(
                     () {
-                      typeHouse = value as String?;
+                      typeHousegroup = value as int;
                     },
                   );
                 },
@@ -488,12 +517,12 @@ class _AddenvironmentState extends State<Addenvironment> {
               width: 170,
               child: RadioListTile(
                 title: const Text('บ้านสองชั้นขึ้นไป'),
-                value: 'บ้านสองชั้นขึ้นไป',
-                groupValue: typeHouse,
+                value: 1,
+                groupValue: typeHousegroup,
                 onChanged: (value) {
                   setState(
                     () {
-                      typeHouse = value as String?;
+                      typeHousegroup = value as int;
                     },
                   );
                 },
@@ -506,12 +535,12 @@ class _AddenvironmentState extends State<Addenvironment> {
           width: 400,
           child: RadioListTile(
             title: const Text('ตึกแถว ห้องแถว'),
-            value: 'ตึกแถว ห้องแถว',
-            groupValue: typeHouse,
+            value: 2,
+            groupValue: typeHousegroup,
             onChanged: (value) {
               setState(
                 () {
-                  typeHouse = value as String?;
+                  typeHousegroup = value as int;
                 },
               );
             },
@@ -522,12 +551,12 @@ class _AddenvironmentState extends State<Addenvironment> {
           width: 400,
           child: RadioListTile(
             title: const Text('อื่น ๆ (เช่น กระต๊อบ ชนำ เป็นต้น) ระบุ'),
-            value:1,
-            groupValue: typeHouse,
+            value: 3,
+            groupValue: typeHousegroup,
             onChanged: (value) {
               setState(
                 () {
-                  typeHouse = value as String;
+                  typeHousegroup = value as int;
                 },
               );
             },
@@ -561,12 +590,12 @@ class _AddenvironmentState extends State<Addenvironment> {
               width: 170,
               child: RadioListTile(
                 title: const Text('บ้านพ่อแม่'),
-                value: 'บ้านพ่อแม่',
-                groupValue: accommodation,
+                value: 0,
+                groupValue: accommodationgroup,
                 onChanged: (value) {
                   setState(
                     () {
-                      accommodation = value as String?;
+                      accommodationgroup = value as int;
                     },
                   );
                 },
@@ -576,12 +605,12 @@ class _AddenvironmentState extends State<Addenvironment> {
               width: 170,
               child: RadioListTile(
                 title: const Text('บ้านตนเอง'),
-                value: 'บ้านตนเอง',
-                groupValue: accommodation,
+                value: 1,
+                groupValue: accommodationgroup,
                 onChanged: (value) {
                   setState(
                     () {
-                      accommodation = value as String?;
+                      accommodationgroup = value as int;
                     },
                   );
                 },
@@ -595,12 +624,12 @@ class _AddenvironmentState extends State<Addenvironment> {
               width: 170,
               child: RadioListTile(
                 title: const Text('บ้านญาติ'),
-                value: 'บ้านญาติ',
-                groupValue: accommodation,
+                value: 2,
+                groupValue: accommodationgroup,
                 onChanged: (value) {
                   setState(
                     () {
-                      accommodation = value as String?;
+                      accommodationgroup = value as int;
                     },
                   );
                 },
@@ -610,12 +639,12 @@ class _AddenvironmentState extends State<Addenvironment> {
               width: 170,
               child: RadioListTile(
                 title: const Text('บ้านเช่า'),
-                value: 'บ้านเช่า',
-                groupValue: accommodation,
+                value: 3,
+                groupValue: accommodationgroup,
                 onChanged: (value) {
                   setState(
                     () {
-                      accommodation = value as String?;
+                      accommodationgroup = value as int;
                     },
                   );
                 },
@@ -627,12 +656,12 @@ class _AddenvironmentState extends State<Addenvironment> {
           width: 400,
           child: RadioListTile(
             title: const Text('อื่น ๆ'),
-            value: 'อื่น ๆ',
-            groupValue: typeHouse,
+            value: 4,
+            groupValue: accommodationgroup,
             onChanged: (value) {
               setState(
                 () {
-                  typeHouse = value as String;
+                  accommodationgroup = value as int;
                 },
               );
             },
@@ -690,6 +719,171 @@ class _AddenvironmentState extends State<Addenvironment> {
             filled: true,
             hintText: 'ระบุ',
             labelText: 'ระบุ *',
+            fillColor: const Color(0xfff7e4db),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Column buildtypehouseother() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        const SizedBox(height: 16.0),
+        Container(
+          child: Row(
+            children: <Widget>[
+              Text(
+                'อื่น ๆ (เช่น กระต๊อบ ชนำ เป็นต้น) ระบุ',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 16.0),
+        TextFormField(
+          validator: (value) {
+            if (value!.isEmpty) {
+              return 'กรุณากรอก ประเภทที่พักอาศัย';
+            } else {
+              return null;
+            }
+          },
+          controller: OtheraccommodationController,
+          textCapitalization: TextCapitalization.words,
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            filled: true,
+            hintText: 'ระบุ',
+            labelText: 'ระบุ (เช่น กระต๊อบ ชนำ เป็นต้น)*',
+            fillColor: const Color(0xfff7e4db),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Column buildhomeEnvironmentother() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        const SizedBox(height: 16.0),
+        Container(
+          child: Row(
+            children: <Widget>[
+              Text(
+                'ไม่สะอาด อธิบายที่สังเกตได้',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 16.0),
+        TextFormField(
+          validator: (value) {
+            if (value!.isEmpty) {
+              return 'กรุณากรอก ไม่สะอาด อธิบายที่สังเกตได้';
+            } else {
+              return null;
+            }
+          },
+          controller: OtheraccommodationController,
+          textCapitalization: TextCapitalization.words,
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            filled: true,
+            hintText: 'อธิบายที่สังเกตได้',
+            labelText: 'อธิบายที่สังเกตได้ *',
+            fillColor: const Color(0xfff7e4db),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Column buildhousingSafetyother() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        const SizedBox(height: 16.0),
+        Container(
+          child: Row(
+            children: <Widget>[
+              Text(
+                'ไม่ปลอดภัย อธิบายที่สังเกตได้',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 16.0),
+        TextFormField(
+          validator: (value) {
+            if (value!.isEmpty) {
+              return 'กรุณากรอก ไม่ปลอดภัย อธิบายที่สังเกตได้';
+            } else {
+              return null;
+            }
+          },
+          controller: OtheraccommodationController,
+          textCapitalization: TextCapitalization.words,
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            filled: true,
+            hintText: 'อธิบายที่สังเกตได้',
+            labelText: 'อธิบายที่สังเกตได้ *',
+            fillColor: const Color(0xfff7e4db),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Column buildfacilitiesother() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        const SizedBox(height: 16.0),
+        Container(
+          child: Row(
+            children: <Widget>[
+              Text(
+                'มี ได้แก่ อะไรบ้าง',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 16.0),
+        TextFormField(
+          validator: (value) {
+            if (value!.isEmpty) {
+              return 'กรุณากรอก มีสิ่งอำนวยความสดวกให้ผู้ป่วยอะไรบ้าง';
+            } else {
+              return null;
+            }
+          },
+          controller: OtheraccommodationController,
+          textCapitalization: TextCapitalization.words,
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            filled: true,
+            hintText: 'อธิบายที่สังเกตได้',
+            labelText:
+                'มี ได้แก่ (ราวจับในบ้าน ราวจับในห้องน้ำ ทางลาดของรถเซ็น อื่น ๆ ระบุ)*',
             fillColor: const Color(0xfff7e4db),
           ),
         ),
