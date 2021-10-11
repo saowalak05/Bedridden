@@ -970,7 +970,8 @@ class _AddState extends State<Add> {
 
   CircleAvatar circleAsset() {
     return CircleAvatar(
-      backgroundImage: AssetImage('assets/images/image_icon.png'),
+      backgroundColor: Colors.white,
+      backgroundImage: AssetImage('assets/images/image_mountain_photo.png'),
     );
   }
 
