@@ -1,6 +1,5 @@
 import 'package:bedridden/Screen/edit_sick.dart';
 import 'package:bedridden/models/sick_model.dart';
-import 'package:bedridden/widgets/search_widget.dart';
 import 'package:bedridden/widgets/show_progess.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -19,8 +18,6 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final primary = Color(0xffdfad98);
   final secondary = Color(0xfff29a94);
-  late List<SickModel> books;
-  String query = '';
 
   get padding => null;
 
@@ -109,7 +106,6 @@ class _HomeState extends State<Home> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                buildSearch(), //'ค้นหารายชื่อผู้ป่วยติดเตียง'
                 buildtTtleListNameAllBedridden(), //'รายชื่อผู้ป่วยติดเตียง,โชว์ทั้งหมด'
                 buildtListNameAllBedridden(), //'รายชื่อผู้ป่วยติดเตียง'
                 buildtTtleListNameAllBedriddenLevel1(), //'รายชื่อผู้ป่วยติดเตียง ระดับที่ 1,โชว์ทั้งหมด'
@@ -683,25 +679,6 @@ class _HomeState extends State<Home> {
   }
 
 //'ค้นหารายชื่อผู้ป่วยติดเตียง'
-  Widget buildSearch() => searchWidget(
-        hintText: 'search',
-        onChanged: searchBook, text: '',
-      );
-  void searchBook(String query) {
-    final books = sickmodels.where((book) {
-      final titleLower = sickmodels;
-      final authorLower = sickmodels;
-      final searchLower = query.toLowerCase();
-
-      return titleLower.contains(searchLower) ||
-          authorLower.contains(searchLower);
-    }).toList();
-
-    setState(() {
-      this.query = query;
-      this.sickmodels = books;
-    });
-  }
 
   Future<Null> confirmDelete(SickModel model, int index) async {
     showDialog(
