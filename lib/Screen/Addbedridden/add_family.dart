@@ -12,7 +12,9 @@ class Addfamily extends StatefulWidget {
 
 class _AddfamilyState extends State<Addfamily> {
   final formkey = GlobalKey<FormState>();
-  TextEditingController nameController = TextEditingController();
+  TextEditingController familynameController = TextEditingController(); //'ชื่อ'
+  TextEditingController familyrelationshipController = TextEditingController(); //'ความสัมพันธ์'
+  TextEditingController occupationContorller = TextEditingController(); //'อาชีพ'
 
   List<Widget> widgets = [];
   int index = 0;
@@ -56,12 +58,12 @@ class _AddfamilyState extends State<Addfamily> {
               children: [
                 buildTitle2(), //'ข้อมูลความสัมพันธ์กับสมาชิกในครอบครัว'
                 buildtitleform(), //'ชื่อ-สกุล สมาชิกในครอบครัว '
-                optionOne(),//'ชื่อ-สกุล สมาชิกในครอบครัว จำนวน 1 คน'
-                optionTwo(),//'ชื่อ-สกุล สมาชิกในครอบครัว จำนวน 2 คน'
-                optionThree(),//'ชื่อ-สกุล สมาชิกในครอบครัว จำนวน 3 คน'
-                optionFour(),//'ชื่อ-สกุล สมาชิกในครอบครัว จำนวน 4 คน'
-                optionfive(),//'ชื่อ-สกุล สมาชิกในครอบครัว จำนวน 5 คน'
-                optionsix(),//'ชื่อ-สกุล สมาชิกในครอบครัว จำนวน 6 คน'
+                optionOne(), //'ชื่อ-สกุล สมาชิกในครอบครัว จำนวน 1 คน'
+                optionTwo(), //'ชื่อ-สกุล สมาชิกในครอบครัว จำนวน 2 คน'
+                optionThree(), //'ชื่อ-สกุล สมาชิกในครอบครัว จำนวน 3 คน'
+                optionFour(), //'ชื่อ-สกุล สมาชิกในครอบครัว จำนวน 4 คน'
+                optionfive(), //'ชื่อ-สกุล สมาชิกในครอบครัว จำนวน 5 คน'
+                optionsix(), //'ชื่อ-สกุล สมาชิกในครอบครัว จำนวน 6 คน'
                 widgets[index],
                 buildNext2(context), //'หน้าถัดไป'
               ],
@@ -119,7 +121,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: familynameController,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -138,7 +140,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: familyrelationshipController,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -157,7 +159,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: occupationContorller,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -198,7 +200,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: familynameController,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -217,7 +219,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: familyrelationshipController,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -236,7 +238,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: occupationContorller,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -269,7 +271,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: familynameController,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -288,7 +290,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: familyrelationshipController,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -307,7 +309,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: occupationContorller,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -348,7 +350,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: familynameController,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -367,7 +369,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: familyrelationshipController,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -386,7 +388,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: occupationContorller,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -419,7 +421,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: familynameController,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -438,7 +440,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: familyrelationshipController,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -457,7 +459,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: occupationContorller,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -490,7 +492,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: familynameController,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -509,7 +511,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: familyrelationshipController,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -528,7 +530,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: occupationContorller,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -569,7 +571,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: familynameController,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -588,7 +590,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: familyrelationshipController,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -607,7 +609,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: occupationContorller,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -640,7 +642,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: familynameController,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -659,7 +661,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: familyrelationshipController,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -678,7 +680,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: occupationContorller,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -711,7 +713,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: familynameController,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -730,7 +732,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: familyrelationshipController,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -749,7 +751,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: occupationContorller,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -782,7 +784,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: familynameController,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -801,7 +803,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: familyrelationshipController,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -820,7 +822,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: occupationContorller,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -861,7 +863,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: familynameController,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -880,7 +882,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: familyrelationshipController,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -899,7 +901,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: occupationContorller,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -932,7 +934,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: familynameController,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -951,7 +953,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: familyrelationshipController,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -970,7 +972,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: occupationContorller,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -1003,7 +1005,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: familynameController,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -1022,7 +1024,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: familyrelationshipController,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -1041,7 +1043,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: occupationContorller,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -1074,7 +1076,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: familynameController,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -1093,7 +1095,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: familyrelationshipController,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -1112,7 +1114,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: occupationContorller,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -1145,7 +1147,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: familynameController,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -1164,7 +1166,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: familyrelationshipController,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -1183,7 +1185,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: occupationContorller,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -1224,7 +1226,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: familynameController,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -1243,7 +1245,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: familyrelationshipController,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -1262,7 +1264,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: occupationContorller,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -1295,7 +1297,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: familynameController,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -1314,7 +1316,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: familyrelationshipController,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -1333,7 +1335,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: occupationContorller,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -1366,7 +1368,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: familynameController,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -1385,7 +1387,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: familyrelationshipController,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -1404,7 +1406,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: occupationContorller,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -1437,7 +1439,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: familynameController,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -1456,7 +1458,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: familyrelationshipController,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -1475,7 +1477,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: occupationContorller,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -1508,7 +1510,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: familynameController,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -1527,7 +1529,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: familyrelationshipController,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -1546,7 +1548,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: occupationContorller,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -1579,7 +1581,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: familynameController,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -1598,7 +1600,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: familyrelationshipController,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -1617,7 +1619,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: nameController,
+          controller: occupationContorller,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -1735,8 +1737,6 @@ class _AddfamilyState extends State<Addfamily> {
       ],
     );
   }
-
-  
 
   Container buildTitle2() {
     return Container(

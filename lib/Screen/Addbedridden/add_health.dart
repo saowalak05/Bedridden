@@ -11,14 +11,17 @@ class Addhealth extends StatefulWidget {
 
 class _AddhealthState extends State<Addhealth> {
   final formkey = GlobalKey<FormState>();
-  TextEditingController diseaseController = TextEditingController();
-  TextEditingController medicineController = TextEditingController();
-  TextEditingController correctController = TextEditingController();
-  TextEditingController other_drugsController = TextEditingController();
-  TextEditingController HerbController = TextEditingController();
+  TextEditingController diseaseController = TextEditingController(); // 'โรคประจำตัว'
+  TextEditingController medicineController = TextEditingController(); // 'ยาที่แพทย์สั่ง'
+  TextEditingController inspectionresultsController =TextEditingController(); // 'ผลการตรวจสอบ'
+  TextEditingController druguseController = TextEditingController(); // 'การใช้ยา'
+  TextEditingController correctController = TextEditingController(); // 'ระบุที่ถูกต้อง'
+  TextEditingController otherdrugsController = TextEditingController(); // 'ยาอื่นๆ'
+  TextEditingController herbController = TextEditingController(); // 'สมุนไพร'
+  TextEditingController foodsupplementController =TextEditingController(); // 'อาหารเสริมและอื่นๆ'
 
-  String? typeexamination_results;
-  String? typecorrect_drug_use;
+  String? typeexaminationresults;
+  String? typecorrectdruguse;
 
   List<Widget> widgets = [];
   int _radioGroupA = 0;
@@ -141,7 +144,7 @@ class _AddhealthState extends State<Addhealth> {
               return null;
             }
           },
-          controller: other_drugsController,
+          controller: otherdrugsController,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -175,7 +178,7 @@ class _AddhealthState extends State<Addhealth> {
               return null;
             }
           },
-          controller: HerbController,
+          controller: herbController,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -208,7 +211,7 @@ class _AddhealthState extends State<Addhealth> {
               return null;
             }
           },
-          controller: HerbController,
+          controller: foodsupplementController,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -539,7 +542,7 @@ class _AddhealthState extends State<Addhealth> {
               return null;
             }
           },
-          controller: correctController,
+          controller: druguseController,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -580,7 +583,7 @@ class _AddhealthState extends State<Addhealth> {
               return null;
             }
           },
-          controller: correctController,
+          controller: inspectionresultsController,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),

@@ -971,7 +971,7 @@ class _AddState extends State<Add> {
   CircleAvatar circleAsset() {
     return CircleAvatar(
       backgroundColor: Colors.white,
-      backgroundImage: AssetImage('assets/images/image_mountain_photo.png'),
+      backgroundImage: AssetImage('assets/images/account_ciecle_con.png'),
     );
   }
 
@@ -1053,7 +1053,8 @@ class _AddState extends State<Add> {
                 normalDialog(context, 'กรุณาเลือก ระดับการป่วย');
               } else if (formkey.currentState!.validate()) {
                 processUploadImageAndInsertValue();
-              }
+              } 
+              
             },
             shape: RoundedRectangleBorder(
                 side: BorderSide(
