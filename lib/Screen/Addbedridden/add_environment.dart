@@ -14,12 +14,18 @@ class Addenvironment extends StatefulWidget {
 
 class _AddenvironmentState extends State<Addenvironment> {
   final formkey = GlobalKey<FormState>();
-  TextEditingController OtheraccommodationController = TextEditingController();
+  TextEditingController statusresidenceotherController = TextEditingController(); //'สถานะที่พักกอาศัย'
+  TextEditingController housetypeotherController = TextEditingController(); //'ประเภทบ้าน'
+  TextEditingController homeienvironmentController = TextEditingController(); //'สภาพสิ่งแวดล้อมในบ้าน'
+  TextEditingController typeHousingSafetyController = TextEditingController(); //'ความปลอยภัยภายในบ้าน'
+  TextEditingController typefacilitiesController = TextEditingController(); //'สิ่งอำนวยความสะดวกภายในบ้าน'
 
-  String? accommodation;
-  String? typeHouse;
-  String? typeHomeEnvironment;
-  String? typeHousingSafety;
+
+  String? accommodation; //'ที่พัก'
+  String? typeHouse; //'ประเภทบ้าน'
+  String? typeHomeEnvironment; //'สภาพสิ้งแวดล้อมในบ้าน'
+  String? typeHousingSafety; // 'ความปลอยภัยภายในบ้าน'
+  String? typefacilities; // 'สิ่งอำนวยความสะดวกภายในบ้าน'
 
   String imageadd = 'assets/images/image_mountain_photo.png';
 
@@ -191,6 +197,9 @@ class _AddenvironmentState extends State<Addenvironment> {
           width: constraints.maxWidth * 0.75,
           height: constraints.maxWidth * 0.75,
           child: file == null ? Image.asset(imageadd) : Image.file(file!),
+        ),
+        SizedBox(
+          height: 20,
         ),
         Container(
           width: constraints.maxWidth * 0.8,
@@ -712,7 +721,7 @@ class _AddenvironmentState extends State<Addenvironment> {
               return null;
             }
           },
-          controller: OtheraccommodationController,
+          controller: statusresidenceotherController,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -753,7 +762,7 @@ class _AddenvironmentState extends State<Addenvironment> {
               return null;
             }
           },
-          controller: OtheraccommodationController,
+          controller: housetypeotherController,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -794,7 +803,7 @@ class _AddenvironmentState extends State<Addenvironment> {
               return null;
             }
           },
-          controller: OtheraccommodationController,
+          controller: homeienvironmentController,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -835,7 +844,7 @@ class _AddenvironmentState extends State<Addenvironment> {
               return null;
             }
           },
-          controller: OtheraccommodationController,
+          controller: typeHousingSafetyController,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -876,7 +885,7 @@ class _AddenvironmentState extends State<Addenvironment> {
               return null;
             }
           },
-          controller: OtheraccommodationController,
+          controller: typefacilitiesController,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),

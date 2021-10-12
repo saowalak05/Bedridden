@@ -197,7 +197,7 @@ class _ProfileState extends State<Profile> {
     return CircleAvatar(
       backgroundColor: Colors.white,
       backgroundImage: AssetImage(
-        'assets/images/bedridden.png',
+        'a ssets/images/bedridden.png',
       ),
     );
   }
