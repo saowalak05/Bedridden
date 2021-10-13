@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class Search_widget extends StatefulWidget {
+class Searchwidget extends StatefulWidget {
   final String text;
   final ValueChanged<String> onChanged;
   final String hintText;
 
 
-  const Search_widget({
+  const Searchwidget({
     Key? key,
     required this.text,
     required this.onChanged,
@@ -14,10 +14,10 @@ class Search_widget extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _Search_widgetState createState() => _Search_widgetState();
+  _SearchwidgetState createState() => _SearchwidgetState();
 }
 
-class _Search_widgetState extends State<Search_widget> {
+class _SearchwidgetState extends State<Searchwidget> {
   final controller = TextEditingController();
 
   @override
