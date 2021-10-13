@@ -1,7 +1,8 @@
 import 'package:bedridden/Screen/Home/home.dart';
+import 'package:bedridden/Screen/Search/search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
-import 'Search/search.dart';
+import 'Search/search_bar.dart';
 import 'Profile/profile.dart';
 import 'Map/map.dart';
 import 'Addbedridden/add.dart';
@@ -10,16 +11,12 @@ import 'Home/home.dart';
 // Adapted from offical flutter gallery:
 // https://github.com/flutter/flutter/blob/master/examples/flutter_gallery/lib/demo/material/bottom_app_bar_demo.dart
 class MyService extends StatefulWidget {
-  final String text;
-  final ValueChanged<String> onChanged;
-  final String hintText;
 
-  const MyService({Key? key,
-  
-    required this.text,
-    required this.onChanged,
-    required this.hintText,
-    }) : super(key: key);
+
+  const MyService({
+    Key? key,
+
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _MyServiceState();
@@ -27,7 +24,7 @@ class MyService extends StatefulWidget {
 
 class _MyServiceState extends State<MyService> {
   int selectedpage = 0;
-  final _pageOption = [Home(),Search_widget(text: text, onChanged: onChanged, hintText: hintText)(), Add(), map(), Profile()];
+  final _pageOption = [Home(),SearchBar() ,Add(), map(), Profile()];
 
   @override
   Widget build(BuildContext context) {
@@ -38,9 +35,9 @@ class _MyServiceState extends State<MyService> {
         bottomNavigationBar: ConvexAppBar(
           items: [
             TabItem(icon: Icons.home, title: 'Home'),
-            TabItem(icon: Icons.search, title: 'search'),
-            TabItem(icon: Icons.map, title: 'map'),
+            TabItem(icon: Icons.search, title: 'Search'),
             TabItem(icon: Icons.add_location, title: 'Add'),
+            TabItem(icon: Icons.map, title: 'map'),
             TabItem(icon: Icons.account_circle, title: 'Profile'),
           ],
           initialActiveIndex: selectedpage, //optional, default as 0
@@ -53,3 +50,6 @@ class _MyServiceState extends State<MyService> {
         ));
   }
 }
+
+
+

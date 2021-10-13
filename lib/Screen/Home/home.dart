@@ -121,7 +121,7 @@ class _HomeState extends State<Home> {
       ),
     );
   }
-
+  // ignore: non_constant_identifier_names
   Future<Null> showSickDialog(SickModel model, int index) async {
     DateTime dateTime = model.bond.toDate();
     DateFormat dateFormat = DateFormat('dd-MMMM-yyyy', 'th');
