@@ -34,6 +34,8 @@ class _SearchBarState extends State<SearchBar> {
   bool isExcecuted = false;
 
   get val => null;
+
+  get GetBuilder => null;
   @override
   Widget build(BuildContext context) {
     Widget searchedData() {
@@ -43,17 +45,17 @@ class _SearchBarState extends State<SearchBar> {
           return ListTile(
             leading: CircleAvatar(
               backgroundImage:
-                  NetworkImage(snapshotData.docs[index].data()['urlImage']),
+                  NetworkImage(snapshotData.docs[index]['urlImage']),
             ),
             title: Text(
-              snapshotData.docs[index].data()['name'],
+              snapshotData.docs[index]['name'],
               style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                   fontSize: 24.0),
             ),
             subtitle: Text(
-              snapshotData.docs[index].data()['level'],
+              snapshotData.docs[index]['level'],
               style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
