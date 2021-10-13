@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:get/get.dart';
 
 class DataController extends GetxController {
   Future getData(String collection) async {
@@ -11,11 +12,8 @@ class DataController extends GetxController {
 
   Future queryData(String queryString) async {
     return FirebaseFirestore.instance
-        .collection('Featured')
+        .collection('name')
         .where('name', isGreaterThanOrEqualTo: queryString)
         .get();
   }
-}
-
-class GetxController {
 }

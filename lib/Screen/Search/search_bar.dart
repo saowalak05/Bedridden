@@ -1,6 +1,7 @@
 import 'package:bedridden/DataController.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class SearchBar extends StatefulWidget {
   const SearchBar({
@@ -33,9 +34,8 @@ class _SearchBarState extends State<SearchBar> {
   late QuerySnapshot snapshotData;
   bool isExcecuted = false;
 
-  get val => null;
+  var val;
 
-  get GetBuilder => null;
   @override
   Widget build(BuildContext context) {
     Widget searchedData() {
@@ -66,12 +66,11 @@ class _SearchBarState extends State<SearchBar> {
       );
     }
 
-    
-
     var getBuilder = GetBuilder;
     return Scaffold(
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.clear),
+          backgroundColor: Color(0xffdfad98),
           onPressed: () {
             setState(() {
               isExcecuted = false;
@@ -83,34 +82,23 @@ class _SearchBarState extends State<SearchBar> {
               });
             });
           }),
-      backgroundColor: Colors.black,
+      backgroundColor: Color(0xfff7e4db),
       appBar: AppBar(
         actions: [
-          getBuilder<DataController>(
+          GetBuilder<DataController>(
               init: DataController(),
               builder: (val) {
                 return IconButton(icon: Icon(Icons.search), onPressed: () {});
               })
         ],
         title: TextField(
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: Colors.black),
           decoration: InputDecoration(
-              hintText: 'Search', hintStyle: TextStyle(color: Colors.white)),
+              hintText: 'Search', hintStyle: TextStyle(color: Colors.black)),
           controller: searchController,
         ),
-        backgroundColor: Colors.black,
+        backgroundColor: Color(0xffdfad98),
       ),
-      body: isExcecuted
-          ? searchedData()
-          : Container(
-              child: Center(
-                child: Text(
-                  'Search any courses',
-                  style: TextStyle(color: Colors.white, fontSize: 30.0),
-                ),
-              ),
-            ),
     );
   }
 }
-
