@@ -116,6 +116,45 @@ class _AddState extends State<Add> {
     );
   }
 
+  Container buildSaveBedridden() {
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          MaterialButton(
+            onPressed: () {
+
+              if (file == null) {
+                normalDialog(context, 'กรุณาใส่รูปภาพ');
+              } else if (_typesex == null) {
+                normalDialog(context, 'กรุณาเลือก เพศ');
+              } else if (_typestatus == null) {
+                normalDialog(context, 'กรุณาเลือก สถานะ');
+              } else if (bondStatus) {
+                normalDialog(context, 'กรุณาเลือก วันเกิด');
+              } else if (level == null) {
+                normalDialog(context, 'กรุณาเลือก ระดับการป่วย');
+              } else if (formkey.currentState!.validate()) {
+                processUploadImageAndInsertValue();
+              } 
+              
+            },
+            shape: RoundedRectangleBorder(
+                side: BorderSide(
+                  color: const Color(0xffffede5),
+                ),
+                borderRadius: BorderRadius.circular(50)),
+            child: Text(
+              "บันทึก",
+              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+            ),
+            color: const Color(0xffdfad98),
+          ),
+        ],
+      ),
+    );
+  }
+
   Column groupPosition() {
     return Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -1034,43 +1073,7 @@ class _AddState extends State<Add> {
     });
   }
 
-  Container buildSaveBedridden() {
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          MaterialButton(
-            onPressed: () {
-              if (file == null) {
-                normalDialog(context, 'กรุณาใส่รูปภาพ');
-              } else if (_typesex == null) {
-                normalDialog(context, 'กรุณาเลือก เพศ');
-              } else if (_typestatus == null) {
-                normalDialog(context, 'กรุณาเลือก สถานะ');
-              } else if (bondStatus) {
-                normalDialog(context, 'กรุณาเลือก วันเกิด');
-              } else if (level == null) {
-                normalDialog(context, 'กรุณาเลือก ระดับการป่วย');
-              } else if (formkey.currentState!.validate()) {
-                processUploadImageAndInsertValue();
-              } 
-              
-            },
-            shape: RoundedRectangleBorder(
-                side: BorderSide(
-                  color: const Color(0xffffede5),
-                ),
-                borderRadius: BorderRadius.circular(50)),
-            child: Text(
-              "บันทึก",
-              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
-            ),
-            color: const Color(0xffdfad98),
-          ),
-        ],
-      ),
-    );
-  }
+  
 
   _pickDate() async {
     DateTime? date = await showDatePicker(

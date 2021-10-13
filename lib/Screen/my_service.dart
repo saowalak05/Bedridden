@@ -12,11 +12,11 @@ import 'Home/home.dart';
 // https://github.com/flutter/flutter/blob/master/examples/flutter_gallery/lib/demo/material/bottom_app_bar_demo.dart
 class MyService extends StatefulWidget {
 
-
   const MyService({
     Key? key,
 
   }) : super(key: key);
+
 
   @override
   State<StatefulWidget> createState() => _MyServiceState();
@@ -24,7 +24,9 @@ class MyService extends StatefulWidget {
 
 class _MyServiceState extends State<MyService> {
   int selectedpage = 0;
+
   final _pageOption = [Home(),SearchBar() ,Add(), map(), Profile()];
+
 
   @override
   Widget build(BuildContext context) {

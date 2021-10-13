@@ -1,6 +1,8 @@
 import 'dart:ffi';
+import 'dart:io';
 
 import 'package:bedridden/Screen/Addbedridden/add_health.dart';
+import 'package:bedridden/utility/dialog.dart';
 import 'package:flutter/material.dart';
 
 class Addfamily extends StatefulWidget {
@@ -13,8 +15,11 @@ class Addfamily extends StatefulWidget {
 class _AddfamilyState extends State<Addfamily> {
   final formkey = GlobalKey<FormState>();
   TextEditingController familynameController = TextEditingController(); //'ชื่อ'
-  TextEditingController familyrelationshipController = TextEditingController(); //'ความสัมพันธ์'
-  TextEditingController occupationContorller = TextEditingController(); //'อาชีพ'
+  TextEditingController familyrelationshipController =
+      TextEditingController(); //'ความสัมพันธ์'
+  TextEditingController occupationContorller =
+      TextEditingController(); //'อาชีพ'
+
 
   List<Widget> widgets = [];
   int index = 0;
@@ -56,6 +61,7 @@ class _AddfamilyState extends State<Addfamily> {
             child: ListView(
               padding: EdgeInsets.only(top: 16, left: 16, right: 16),
               children: [
+                buildSavefamily(),
                 buildTitle2(), //'ข้อมูลความสัมพันธ์กับสมาชิกในครอบครัว'
                 buildtitleform(), //'ชื่อ-สกุล สมาชิกในครอบครัว '
                 optionOne(), //'ชื่อ-สกุล สมาชิกในครอบครัว จำนวน 1 คน'
@@ -70,6 +76,34 @@ class _AddfamilyState extends State<Addfamily> {
             ),
           ),
         ));
+  }
+
+  Container buildSavefamily() {
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          MaterialButton(
+            onPressed: () {
+              if (index == 0 ) {
+                normalDialog(context, 'กรุณาเลือกจำนวนสมาชิก');
+              } else if(index == 1) {
+                normalDialog(context, 'กรุณาเลือกจำนวนสมาชิก 2');}
+            },
+            shape: RoundedRectangleBorder(
+                side: BorderSide(
+                  color: const Color(0xffffede5),
+                ),
+                borderRadius: BorderRadius.circular(50)),
+            child: Text(
+              "บันทึก",
+              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+            ),
+            color: const Color(0xffdfad98),
+          ),
+        ],
+      ),
+    );
   }
 
   Row buildtitleform() {

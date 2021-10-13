@@ -140,12 +140,15 @@ class _AddenvironmentState extends State<Addenvironment> {
                             ),
                           ],
                         ),
+                        
                         buildNext4(context),
                       ],
                     ),
                   ),
                 )));
   }
+
+  
 
   Future<Null> processImagePicker(ImageSource source, int index) async {
     try {
