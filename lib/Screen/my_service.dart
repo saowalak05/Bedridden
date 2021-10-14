@@ -25,7 +25,7 @@ class MyService extends StatefulWidget {
 class _MyServiceState extends State<MyService> {
   int selectedpage = 0;
 
-  final _pageOption = [Home(),SearchBar() ,Add(), map(), Profile()];
+  final _pageOption = [Home(),SearchBar() ,Add(), Map(), Profile()];
 
 
   @override
