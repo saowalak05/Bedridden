@@ -1,13 +1,15 @@
 import 'package:bedridden/DataController.dart';
+import 'package:bedridden/models/sick_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class SearchBar extends StatefulWidget {
   const SearchBar({
+    
     Key? key,
   }) : super(key: key);
-
+ 
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -30,6 +32,7 @@ class SearchBar extends StatefulWidget {
 }
 
 class _SearchBarState extends State<SearchBar> {
+  List<String> sickmodels = [];
   final TextEditingController searchController = TextEditingController();
   late QuerySnapshot snapshotData;
   bool isExcecuted = false;
