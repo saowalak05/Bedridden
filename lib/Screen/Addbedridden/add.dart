@@ -3,11 +3,14 @@ import 'dart:math';
 import 'package:bedridden/Screen/Addbedridden/add_family.dart';
 import 'package:bedridden/models/sick_model.dart';
 import 'package:bedridden/utility/dialog.dart';
+import 'package:bedridden/widgets/show_progess.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 
 class Add extends StatefulWidget {
@@ -30,6 +33,8 @@ class _AddState extends State<Add> {
   bool typeeducation_levelbol = false;
 
   File? file;
+  double? lat;
+  double? lng;
 
   final formkey = GlobalKey<FormState>();
   TextEditingController nameController = TextEditingController();
@@ -58,6 +63,61 @@ class _AddState extends State<Add> {
   void initState() {
     super.initState();
     pickedDate = DateTime.now();
+    checkPermission();
+  }
+
+  Future<Null> checkPermission() async {
+    bool locationService;
+    
+
+    locationService = await Geolocator.isLocationServiceEnabled();
+    if (locationService) {
+      print('Service Location Open');
+
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        LocationPermission permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.deniedForever) {
+          MyDialog().alertLocationService(
+              context, 'ไม่อนุญาติแชร์ Location', 'โปรดแชร์ Location');
+        } else {
+          // Find LatLang
+          findLatLng();
+        }
+      } else {
+        if (permission == LocationPermission.deniedForever) {
+          MyDialog().alertLocationService(
+              context, 'ไม่อนุญาติแชร์ Location', 'โปรดแชร์ Location');
+        } else {
+          // Find LatLng
+          findLatLng();
+        }
+      }
+    } else {
+      print('Service Location Close');
+      MyDialog().alertLocationService(context, 'Location Service ปิดอยู่ ?',
+          'กรุณาเปิด Location Service ด้วยคะ');
+    }
+  }
+
+  Future<Null> findLatLng() async {
+    print('findLatLan ==> Work');
+    Position? position = await findPostion();
+    setState(() {
+      lat = position!.latitude;
+      lng = position.longitude;
+      print('lat = $lat, lng = $lng');
+    });
+  }
+
+  Future<Position?> findPostion() async {
+    Position position;
+    try {
+      position = await Geolocator.getCurrentPosition();
+      return position;
+    } catch (e) {
+      return null;
+    }
   }
 
   @override
@@ -106,8 +166,9 @@ class _AddState extends State<Add> {
               groupTypeeducation(), //'ระดับการศึกษา'
               buildOccupationTalent(), //'อาชีพ,ความสามารถพิเศษ'
               buildAddressPhonenumberBedridden(), //'ที่อยู่เ,บอร์โทร์'
+              // buildMap,
               groupPosition(), //'ฐานะ'
-              buildlevel(),//'ระดับกการเจ็บป่วย'
+              buildlevel(), //'ระดับกการเจ็บป่วย'
               buildNext1(context), //'หน้าถัดไป'
             ],
           ),
@@ -116,6 +177,30 @@ class _AddState extends State<Add> {
     );
   }
 
+  Set<Marker> setMarker() => <Marker>[
+        Marker(
+          markerId: MarkerId('id'),
+          position: LatLng(lat!, lng!),
+          infoWindow: InfoWindow(
+              title: 'คุณอยู่ที่นี่', snippet: 'Lat = $lat, lng = $lng'),
+        ),
+      ].toSet();
+
+  Widget buildMap() => Container(
+        width: double.infinity,
+        height: 300,
+        child: lat == null
+            ? ShowProgress()
+            : GoogleMap(
+                initialCameraPosition: CameraPosition(
+                  target: LatLng(lat!, lng!),
+                  zoom: 16,
+                ),
+                onMapCreated: (controller) {},
+                markers: setMarker(),
+              ),
+      );
+
   Container buildSaveBedridden() {
     return Container(
       child: Column(
@@ -123,7 +208,6 @@ class _AddState extends State<Add> {
         children: [
           MaterialButton(
             onPressed: () {
-
               if (file == null) {
                 normalDialog(context, 'กรุณาใส่รูปภาพ');
               } else if (_typesex == null) {
@@ -136,8 +220,7 @@ class _AddState extends State<Add> {
                 normalDialog(context, 'กรุณาเลือก ระดับการป่วย');
               } else if (formkey.currentState!.validate()) {
                 processUploadImageAndInsertValue();
-              } 
-              
+              }
             },
             shape: RoundedRectangleBorder(
                 side: BorderSide(
@@ -157,89 +240,89 @@ class _AddState extends State<Add> {
 
   Column groupPosition() {
     return Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                const SizedBox(
-                  height: 16,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        const SizedBox(
+          height: 16,
+        ),
+        Container(
+          // width: 120,
+          child: Row(
+            children: <Widget>[
+              Text(
+                'ฐานะของผู้ป่วยและครอบครัวเป็นอย่างไร :',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
                 ),
-                Container(
-                  // width: 120,
-                  child: Row(
-                    children: <Widget>[
-                      Text(
-                        'ฐานะของผู้ป่วยและครอบครัวเป็นอย่างไร :',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      )
-                    ],
-                  ),
+              )
+            ],
+          ),
+        ),
+        Row(
+          children: [
+            Container(
+              width: 140,
+              child: RadioListTile(
+                title: const Text(
+                  'ขัดสน',
+                  style: TextStyle(fontSize: 12),
                 ),
-                Row(
-                  children: [
-                    Container(
-                      width: 140,
-                      child: RadioListTile(
-                        title: const Text(
-                          'ขัดสน',
-                          style: TextStyle(fontSize: 12),
-                        ),
-                        value: 'ขัดสน',
-                        groupValue: typeposition,
-                        onChanged: (value) {
-                          setState(
-                            () {
-                              typeposition = value as String?;
-                            },
-                          );
-                        },
-                      ),
-                    ),
-                    Container(
-                      width: 150,
-                      child: RadioListTile(
-                        title: const Text(
-                          'พออยู่พอกิน',
-                          style: TextStyle(fontSize: 12),
-                        ),
-                        value: 'พออยู่พอกิน',
-                        groupValue: typeposition,
-                        onChanged: (value) {
-                          setState(
-                            () {
-                              typeposition = value as String?;
-                            },
-                          );
-                        },
-                      ),
-                    ),
-                  ],
+                value: 'ขัดสน',
+                groupValue: typeposition,
+                onChanged: (value) {
+                  setState(
+                    () {
+                      typeposition = value as String?;
+                    },
+                  );
+                },
+              ),
+            ),
+            Container(
+              width: 150,
+              child: RadioListTile(
+                title: const Text(
+                  'พออยู่พอกิน',
+                  style: TextStyle(fontSize: 12),
                 ),
-                Row(
-                  children: [
-                    Container(
-                      width: 140,
-                      child: RadioListTile(
-                        title: const Text(
-                          'มีเหลือเก็บ',
-                          style: TextStyle(fontSize: 12),
-                        ),
-                        value: 'มีเหลือเก็บ',
-                        groupValue: typeposition,
-                        onChanged: (value) {
-                          setState(
-                            () {
-                              typeposition = value as String?;
-                            },
-                          );
-                        },
-                      ),
-                    ),
-                  ],
+                value: 'พออยู่พอกิน',
+                groupValue: typeposition,
+                onChanged: (value) {
+                  setState(
+                    () {
+                      typeposition = value as String?;
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            Container(
+              width: 140,
+              child: RadioListTile(
+                title: const Text(
+                  'มีเหลือเก็บ',
+                  style: TextStyle(fontSize: 12),
                 ),
-              ],
-            );
+                value: 'มีเหลือเก็บ',
+                groupValue: typeposition,
+                onChanged: (value) {
+                  setState(
+                    () {
+                      typeposition = value as String?;
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
   }
 
   Column buildNext1(BuildContext context) {
@@ -1072,8 +1155,6 @@ class _AddState extends State<Add> {
       });
     });
   }
-
-  
 
   _pickDate() async {
     DateTime? date = await showDatePicker(
