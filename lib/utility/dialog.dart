@@ -1,7 +1,9 @@
 
+import 'dart:io';
 
 import 'package:bedridden/widgets/show_image.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 
 Future<Null> normalDialog(BuildContext context, String string) async {
   showDialog(
@@ -30,7 +32,12 @@ class MyDialog {
           subtitle: Text('กรุณาเปิด Location Service'),
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: Text('OK'))
+          TextButton(
+              onPressed: () async {
+                // Navigator.pop(context);
+                await Geolocator.openLocationSettings();
+                exit(0);
+              }, child: Text('OK'))
         ],
       ),
     );
