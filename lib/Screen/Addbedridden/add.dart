@@ -166,7 +166,7 @@ class _AddState extends State<Add> {
               groupTypeeducation(), //'ระดับการศึกษา'
               buildOccupationTalent(), //'อาชีพ,ความสามารถพิเศษ'
               buildAddressPhonenumberBedridden(), //'ที่อยู่เ,บอร์โทร์'
-              // buildMap,
+              buildMap(),
               groupPosition(), //'ฐานะ'
               buildlevel(), //'ระดับกการเจ็บป่วย'
               buildNext1(context), //'หน้าถัดไป'
@@ -187,8 +187,12 @@ class _AddState extends State<Add> {
       ].toSet();
 
   Widget buildMap() => Container(
-        width: double.infinity,
-        height: 300,
+        decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey),
+          ),
+          margin: EdgeInsets.symmetric(vertical: 16),
+          width: 200,
+          height: 200,
         child: lat == null
             ? ShowProgress()
             : GoogleMap(
