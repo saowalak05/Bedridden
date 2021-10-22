@@ -41,6 +41,8 @@ class _AddState extends State<Add> {
   TextEditingController idCardController = TextEditingController();
   TextEditingController addressController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
+  TextEditingController patientoccupationController = TextEditingController();
+  TextEditingController talentController = TextEditingController();
 
   String? level;
   List<String> levels = ['1', '2', '3'];
@@ -68,7 +70,6 @@ class _AddState extends State<Add> {
 
   Future<Null> checkPermission() async {
     bool locationService;
-    
 
     locationService = await Geolocator.isLocationServiceEnabled();
     if (locationService) {
@@ -164,9 +165,9 @@ class _AddState extends State<Add> {
               buildTitleStatus(), //'สถานภาพสมรส'
               groupStatus(), //'ตัวเลือกสถานภาพสมรส'
               groupTypeeducation(), //'ระดับการศึกษา'
-              buildOccupationTalent(), //'อาชีพ,ความสามารถพิเศษ'
               buildAddressPhonenumberBedridden(), //'ที่อยู่เ,บอร์โทร์'
               buildMap(),
+              buildOccupationTalent(), //'อาชีพ,ความสามารถพิเศษ'
               groupPosition(), //'ฐานะ'
               buildlevel(), //'ระดับกการเจ็บป่วย'
               buildNext1(context), //'หน้าถัดไป'
@@ -188,11 +189,11 @@ class _AddState extends State<Add> {
 
   Widget buildMap() => Container(
         decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey),
-          ),
-          margin: EdgeInsets.symmetric(vertical: 16),
-          width: 200,
-          height: 200,
+          border: Border.all(color: Colors.grey),
+        ),
+        margin: EdgeInsets.symmetric(vertical: 16),
+        width: 200,
+        height: 200,
         child: lat == null
             ? ShowProgress()
             : GoogleMap(
@@ -216,10 +217,20 @@ class _AddState extends State<Add> {
                 normalDialog(context, 'กรุณาใส่รูปภาพ');
               } else if (_typesex == null) {
                 normalDialog(context, 'กรุณาเลือก เพศ');
-              } else if (_typestatus == null) {
-                normalDialog(context, 'กรุณาเลือก สถานะ');
               } else if (bondStatus) {
                 normalDialog(context, 'กรุณาเลือก วันเกิด');
+              } else if (race == null) {
+                normalDialog(context, 'กรุณาเลือกเชื้อชาติ');
+              } else if (nationality == null) {
+                normalDialog(context, 'กรุณาเลือก สัญชาติ');
+              } else if (religion == null) {
+                normalDialog(context, 'กรุณาเลือก ศาสนา');
+              } else if (_typestatus == null) {
+                normalDialog(context, 'กรุณาเลือก สถานะภาพสมรส');
+              } else if (typeeducation_level == null) {
+                normalDialog(context, 'กรุณาเลือก ระดับการศึกษา');
+              } else if (typeposition == null) {
+                normalDialog(context, 'กรุณาเลือก ฐานะของผู้ป่วย');
               } else if (level == null) {
                 normalDialog(context, 'กรุณาเลือก ระดับการป่วย');
               } else if (formkey.currentState!.validate()) {
@@ -364,12 +375,12 @@ class _AddState extends State<Add> {
         TextFormField(
           validator: (value) {
             if (value!.isEmpty) {
-              return 'กรุณากรอก อาชีพ';
+              return 'กรุณากรอก ก่อนป่วยติดเตียงผู้ป่วยมีอาชีพอะไร';
             } else {
               return null;
             }
           },
-          controller: nameController,
+          controller: patientoccupationController,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -388,7 +399,7 @@ class _AddState extends State<Add> {
               return null;
             }
           },
-          controller: nameController,
+          controller: talentController,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -915,6 +926,31 @@ class _AddState extends State<Add> {
       children: [
         const SizedBox(height: 16.0),
         TextFormField(
+          maxLength: 10,
+          validator: (value) {
+            if (value!.isEmpty) {
+              return 'กรุณากรอก เบอร์โทรศัพท์';
+            } else {
+              if (value.length != 10) {
+                return 'เบอร์โทรศัพท์ ไม่ครบ 10 หลัก';
+              } else {
+                return null;
+              }
+            }
+          },
+          controller: phoneController,
+          textCapitalization: TextCapitalization.words,
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            filled: true,
+            hintText: 'เบอร์โทรศัพท์',
+            labelText: 'เบอร์โทรศัพท์ *',
+            fillColor: const Color(0xfff7e4db),
+          ),
+          keyboardType: TextInputType.number,
+        ),
+        const SizedBox(height: 16.0),
+        TextFormField(
           validator: (value) {
             if (value!.isEmpty) {
               return 'กรุณากรอก ที่อยู่ปัจจุบัน';
@@ -932,26 +968,6 @@ class _AddState extends State<Add> {
             fillColor: const Color(0xfff7e4db),
           ),
           maxLines: 3,
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก เบอร์โทรศัพท์';
-            } else {
-              return null;
-            }
-          },
-          controller: phoneController,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: 'เบอร์โทรศัพท์',
-            labelText: 'เบอร์โทรศัพท์ *',
-            fillColor: const Color(0xfff7e4db),
-          ),
-          keyboardType: TextInputType.number,
         ),
       ],
     );
@@ -1147,7 +1163,14 @@ class _AddState extends State<Add> {
               typeSex: _typesex!,
               typeStatus: _typestatus!,
               urlImage: urlImage,
-              level: level!);
+              level: level!,
+              nationality: nationality!,
+              patientoccupation: patientoccupationController.text,
+              race: race!,
+              religion: religion!,
+              talent: talentController.text,
+              typeeducation_level: typeeducation_level!,
+              typeposition: typeposition!);
 
           await FirebaseFirestore.instance
               .collection('sick')
