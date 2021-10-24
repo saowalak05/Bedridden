@@ -924,7 +924,6 @@ class _AddState extends State<Add> {
   Column buildAddressPhonenumberBedridden() {
     return Column(
       children: [
-        
         const SizedBox(height: 16.0),
         TextFormField(
           validator: (value) {
@@ -950,13 +949,10 @@ class _AddState extends State<Add> {
           validator: (value) {
             if (value!.isEmpty) {
               return 'กรุณากรอก เบอร์โทรศัพท์';
-            } else {
-              if (value.length != 10) {
-                return 'เบอร์โทรศัพท์ ไม่ครบ 10 หลัก';
-              } else {
-                return null;
-              }
+            } else if (value.length != 10) {
+              return 'เบอร์โทรศัพท์ ไม่ครบ 10 หลัก';
             }
+            return null;
           },
           controller: phoneController,
           maxLength: 10,

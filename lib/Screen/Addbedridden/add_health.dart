@@ -1,5 +1,10 @@
 import 'package:bedridden/Screen/Addbedridden/add.dart';
 import 'package:bedridden/Screen/Addbedridden/add_environment.dart';
+import 'package:bedridden/models/health_model.dart';
+import 'package:bedridden/utility/dialog.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 class Addhealth extends StatefulWidget {
@@ -11,14 +16,21 @@ class Addhealth extends StatefulWidget {
 
 class _AddhealthState extends State<Addhealth> {
   final formkey = GlobalKey<FormState>();
-  TextEditingController diseaseController = TextEditingController(); // 'โรคประจำตัว'
-  TextEditingController medicineController = TextEditingController(); // 'ยาที่แพทย์สั่ง'
-  TextEditingController inspectionresultsController =TextEditingController(); // 'ผลการตรวจสอบ'
-  TextEditingController druguseController = TextEditingController(); // 'การใช้ยา'
-  TextEditingController correctController = TextEditingController(); // 'ระบุที่ถูกต้อง'
-  TextEditingController otherdrugsController = TextEditingController(); // 'ยาอื่นๆ'
+  TextEditingController diseaseController =
+      TextEditingController(); // 'โรคประจำตัว'
+  TextEditingController medicineController =
+      TextEditingController(); // 'ยาที่แพทย์สั่ง'
+  TextEditingController inspectionresultsController =
+      TextEditingController(); // 'ผลการตรวจสอบ'
+  TextEditingController druguseController =
+      TextEditingController(); // 'การใช้ยา'
+  TextEditingController correctController =
+      TextEditingController(); // 'ระบุที่ถูกต้อง'
+  TextEditingController otherdrugsController =
+      TextEditingController(); // 'ยาอื่นๆ'
   TextEditingController herbController = TextEditingController(); // 'สมุนไพร'
-  TextEditingController foodsupplementController =TextEditingController(); // 'อาหารเสริมและอื่นๆ'
+  TextEditingController foodsupplementController =
+      TextEditingController(); // 'อาหารเสริมและอื่นๆ'
 
   String? typeexaminationresults;
   String? typecorrectdruguse;
@@ -74,6 +86,7 @@ class _AddhealthState extends State<Addhealth> {
             child: ListView(
               padding: EdgeInsets.only(top: 16, left: 16, right: 16),
               children: [
+                buildsavehealth(), //'บันทึก'
                 buildTitle3(), //'ส่วนที่ 2 ข้อมูลด้านสุขภาพ '
                 buildDisease(), //'โรคประจำตัวหรือปัญหาสุขภาพ '
                 buildmedicine(), //'ยาที่แพทย์สั่ง '
@@ -89,6 +102,62 @@ class _AddhealthState extends State<Addhealth> {
         ));
   }
 
+  Future<Null> proccessUplodhealth() async {
+    await Firebase.initializeApp().then((value) async {
+      FirebaseStorage storage = FirebaseStorage.instance;
+
+      HealthModel model = HealthModel(
+          disease: diseaseController.text,
+          medicine: medicineController.text,
+          inspectionresults: inspectionresultsController.text,
+          druguse: druguseController.text,
+          correct: correctController.text,
+          otherdrugs: otherdrugsController.text,
+          herb: herbController.text,
+          foodsupplement: foodsupplementController.text,
+          typeexaminationresults: typeexaminationresults!,
+          typecorrectdruguse: typecorrectdruguse!);
+
+        await FirebaseFirestore.instance
+              .collection('Health')
+              .doc()
+              .set(model.toMap())
+              .then((value) =>
+                  normalDialog(context, 'บันทึกข้อมูลสำเร็จ'));
+    });
+  }
+
+  Container buildsavehealth() {
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          MaterialButton(
+            onPressed: () {
+              if (typeexaminationresults == null) {
+                normalDialog(context, 'กรุณาเลือก ผลการตรวจสอบ');
+              } else if (typecorrectdruguse == null) {
+                normalDialog(context, 'กรุณาเลือก การใช้ยา');
+              } else if (formkey.currentState!.validate()) {
+                proccessUplodhealth();
+              }
+            },
+            shape: RoundedRectangleBorder(
+                side: BorderSide(
+                  color: const Color(0xffffede5),
+                ),
+                borderRadius: BorderRadius.circular(50)),
+            child: Text(
+              "บันทึก",
+              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+            ),
+            color: const Color(0xffdfad98),
+          ),
+        ],
+      ),
+    );
+  }
+
   Column buildNext3(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -96,9 +165,9 @@ class _AddhealthState extends State<Addhealth> {
         MaterialButton(
           onPressed: () {
             MaterialPageRoute route = MaterialPageRoute(
-                    builder: (BuildContext context) => Addenvironment(),
-                  );
-                  Navigator.push(context, route);
+              builder: (BuildContext context) => Addenvironment(),
+            );
+            Navigator.push(context, route);
           },
           shape: RoundedRectangleBorder(
               side: BorderSide(
