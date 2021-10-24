@@ -12,6 +12,13 @@ class SickModel {
   final String typeStatus;
   final String urlImage;
   final String level;
+  final String typeeducation_level;
+  final String typeposition;
+  final String patientoccupation;
+  final String talent;
+  final String race;
+  final String nationality;
+  final String religion;
   SickModel({
     required this.address,
     required this.bond,
@@ -22,6 +29,13 @@ class SickModel {
     required this.typeStatus,
     required this.urlImage,
     required this.level,
+    required this.typeeducation_level,
+    required this.typeposition,
+    required this.patientoccupation,
+    required this.talent,
+    required this.race,
+    required this.nationality,
+    required this.religion,
   });
 
   SickModel copyWith({
@@ -34,6 +48,13 @@ class SickModel {
     String? typeStatus,
     String? urlImage,
     String? level,
+    String? typeeducation_level,
+    String? typeposition,
+    String? patientoccupation,
+    String? talent,
+    String? race,
+    String? nationality,
+    String? religion,
   }) {
     return SickModel(
       address: address ?? this.address,
@@ -45,6 +66,13 @@ class SickModel {
       typeStatus: typeStatus ?? this.typeStatus,
       urlImage: urlImage ?? this.urlImage,
       level: level ?? this.level,
+      typeeducation_level: typeeducation_level ?? this.typeeducation_level,
+      typeposition: typeposition ?? this.typeposition,
+      patientoccupation: patientoccupation ?? this.patientoccupation,
+      talent: talent ?? this.talent,
+      race: race ?? this.race,
+      nationality: nationality ?? this.nationality,
+      religion: religion ?? this.religion,
     );
   }
 
@@ -59,6 +87,13 @@ class SickModel {
       'typeStatus': typeStatus,
       'urlImage': urlImage,
       'level': level,
+      'typeeducation_level': typeeducation_level,
+      'typeposition': typeposition,
+      'patientoccupation': patientoccupation,
+      'talent': talent,
+      'race': race,
+      'nationality': nationality,
+      'religion': religion,
     };
   }
 
@@ -73,6 +108,13 @@ class SickModel {
       typeStatus: map['typeStatus'],
       urlImage: map['urlImage'],
       level: map['level'],
+      typeeducation_level: map['typeeducation_level'],
+      typeposition: map['typeposition'],
+      patientoccupation: map['patientoccupation'],
+      talent: map['talent'],
+      race: map['race'],
+      nationality: map['nationality'],
+      religion: map['religion'],
     );
   }
 
@@ -82,7 +124,7 @@ class SickModel {
 
   @override
   String toString() {
-    return 'SickModel(address: $address, bond: $bond, idCard: $idCard, name: $name, phone: $phone, typeSex: $typeSex, typeStatus: $typeStatus, urlImage: $urlImage, level: $level)';
+    return 'SickModel(address: $address, bond: $bond, idCard: $idCard, name: $name, phone: $phone, typeSex: $typeSex, typeStatus: $typeStatus, urlImage: $urlImage, level: $level, typeeducation_level: $typeeducation_level, typeposition: $typeposition, patientoccupation: $patientoccupation, talent: $talent, race: $race, nationality: $nationality, religion: $religion)';
   }
 
   @override
@@ -98,7 +140,14 @@ class SickModel {
       other.typeSex == typeSex &&
       other.typeStatus == typeStatus &&
       other.urlImage == urlImage &&
-      other.level == level;
+      other.level == level &&
+      other.typeeducation_level == typeeducation_level &&
+      other.typeposition == typeposition &&
+      other.patientoccupation == patientoccupation &&
+      other.talent == talent &&
+      other.race == race &&
+      other.nationality == nationality &&
+      other.religion == religion;
   }
 
   @override
@@ -111,6 +160,13 @@ class SickModel {
       typeSex.hashCode ^
       typeStatus.hashCode ^
       urlImage.hashCode ^
-      level.hashCode;
+      level.hashCode ^
+      typeeducation_level.hashCode ^
+      typeposition.hashCode ^
+      patientoccupation.hashCode ^
+      talent.hashCode ^
+      race.hashCode ^
+      nationality.hashCode ^
+      religion.hashCode;
   }
 }
