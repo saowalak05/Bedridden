@@ -924,31 +924,7 @@ class _AddState extends State<Add> {
   Column buildAddressPhonenumberBedridden() {
     return Column(
       children: [
-        const SizedBox(height: 16.0),
-        TextFormField(
-          maxLength: 10,
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก เบอร์โทรศัพท์';
-            } else {
-              if (value.length != 10) {
-                return 'เบอร์โทรศัพท์ ไม่ครบ 10 หลัก';
-              } else {
-                return null;
-              }
-            }
-          },
-          controller: phoneController,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: 'เบอร์โทรศัพท์',
-            labelText: 'เบอร์โทรศัพท์ *',
-            fillColor: const Color(0xfff7e4db),
-          ),
-          keyboardType: TextInputType.number,
-        ),
+        
         const SizedBox(height: 16.0),
         TextFormField(
           validator: (value) {
@@ -968,6 +944,31 @@ class _AddState extends State<Add> {
             fillColor: const Color(0xfff7e4db),
           ),
           maxLines: 3,
+        ),
+        const SizedBox(height: 16.0),
+        TextFormField(
+          validator: (value) {
+            if (value!.isEmpty) {
+              return 'กรุณากรอก เบอร์โทรศัพท์';
+            } else {
+              if (value.length != 10) {
+                return 'เบอร์โทรศัพท์ ไม่ครบ 10 หลัก';
+              } else {
+                return null;
+              }
+            }
+          },
+          controller: phoneController,
+          maxLength: 10,
+          textCapitalization: TextCapitalization.words,
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            filled: true,
+            hintText: 'เบอร์โทรศัพท์',
+            labelText: 'เบอร์โทรศัพท์ *',
+            fillColor: const Color(0xfff7e4db),
+          ),
+          keyboardType: TextInputType.number,
         ),
       ],
     );

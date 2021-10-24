@@ -126,43 +126,43 @@ class MapState extends State<Map> {
   }
 
 
-  Widget _boxes(String _image, double lat, double long, String restaurantName) {
-    return GestureDetector(
-      onTap: () {
-        _gotoLocation(lat, long);
-      },
-      child: Container(
-        child: new FittedBox(
-          child: Material(
-              color: Colors.white,
-              elevation: 14.0,
-              borderRadius: BorderRadius.circular(24.0),
-              shadowColor: Color(0xffdfad98),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Container(
-                    width: 180,
-                    height: 200,
-                    child: ClipRRect(
-                      borderRadius: new BorderRadius.circular(24.0),
-                      child: Image(
-                        fit: BoxFit.fill,
-                        image: NetworkImage(_image),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                    ),
-                  ),
-                ],
-              )),
-        ),
-      ),
-    );
-  }
+  // Widget _boxes(String _image, double lat, double long, String restaurantName) {
+  //   return GestureDetector(
+  //     onTap: () {
+  //       _gotoLocation(lat, long);
+  //     },
+  //     child: Container(
+  //       child: new FittedBox(
+  //         child: Material(
+  //             color: Colors.white,
+  //             elevation: 14.0,
+  //             borderRadius: BorderRadius.circular(24.0),
+  //             shadowColor: Color(0xffdfad98),
+  //             child: Row(
+  //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //               children: <Widget>[
+  //                 Container(
+  //                   width: 180,
+  //                   height: 200,
+  //                   child: ClipRRect(
+  //                     borderRadius: new BorderRadius.circular(24.0),
+  //                     child: Image(
+  //                       fit: BoxFit.fill,
+  //                       image: NetworkImage(_image),
+  //                     ),
+  //                   ),
+  //                 ),
+  //                 Container(
+  //                   child: Padding(
+  //                     padding: const EdgeInsets.all(8.0),
+  //                   ),
+  //                 ),
+  //               ],
+  //             )),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Widget _buildGoogleMap(BuildContext context) {
     return Container(
