@@ -104,4 +104,5 @@ class _SearchBarState extends State<SearchBar> {
       ),
     );
   }
+    bool get wantKeepAlive => true;
 }

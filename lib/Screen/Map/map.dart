@@ -41,7 +41,7 @@ class MapState extends State<Map> {
           _buildGoogleMap(context),
           _zoomminusfunction(),
           _zoomplusfunction(),
-          _buildContainer(),
+
         ],
       ),
     );
@@ -82,41 +82,7 @@ class MapState extends State<Map> {
   }
 
   
-  Widget _buildContainer() {
-    return Align(
-      alignment: Alignment.bottomLeft,
-      child: Container(
-        margin: EdgeInsets.symmetric(vertical: 20.0),
-        height: 150.0,
-        child: ListView(
-          scrollDirection: Axis.horizontal,
-          children: <Widget>[
-            SizedBox(width: 10.0),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: _boxes(
-                  "https://lh5.googleusercontent.com/p/AF1QipO3VPL9m-b355xWeg4MXmOQTauFAEkavSluTtJU=w225-h160-k-no",
-                  40.738380, -73.988426,"Gramercy Tavern"),
-            ),
-            SizedBox(width: 10.0),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: _boxes(
-                  "https://lh5.googleusercontent.com/p/AF1QipMKRN-1zTYMUVPrH-CcKzfTo6Nai7wdL7D8PMkt=w340-h160-k-no",
-                  40.761421, -73.981667,"Le Bernardin"),
-            ),
-            SizedBox(width: 10.0),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: _boxes(
-                  "https://images.unsplash.com/photo-1504940892017-d23b9053d5d4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
-                  40.732128, -73.999619,"Blue Hill"),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+
 
   Widget _boxes(String _image, double lat,double long,String restaurantName) {
     return  GestureDetector(
@@ -146,7 +112,6 @@ class MapState extends State<Map> {
                           Container(
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: myDetailsContainer1(restaurantName),
                           ),
                         ),
 
@@ -157,99 +122,6 @@ class MapState extends State<Map> {
     );
   }
 
-  Widget myDetailsContainer1(String restaurantName) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.only(left: 8.0),
-          child: Container(
-              child: Text(restaurantName,
-            style: TextStyle(
-                color: Color(0xffdfad98),
-                fontSize: 24.0,
-                fontWeight: FontWeight.bold),
-          )),
-        ),
-        SizedBox(height:5.0),
-        Container(
-              child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              Container(
-                  child: Text(
-                "4.1",
-                style: TextStyle(
-                  color: Colors.black54,
-                  fontSize: 18.0,
-                ),
-              )),
-              Container(
-                child: Icon(
-                  FontAwesomeIcons.solidStar,
-                  color: Colors.amber,
-                  size: 15.0,
-                ),
-              ),
-              Container(
-                child: Icon(
-                  FontAwesomeIcons.solidStar,
-                  color: Colors.amber,
-                  size: 15.0,
-                ),
-              ),
-              Container(
-                child: Icon(
-                  FontAwesomeIcons.solidStar,
-                  color: Colors.amber,
-                  size: 15.0,
-                ),
-              ),
-              Container(
-                child: Icon(
-                  FontAwesomeIcons.solidStar,
-                  color: Colors.amber,
-                  size: 15.0,
-                ),
-              ),
-              Container(
-                child: Icon(
-                  FontAwesomeIcons.solidStarHalf,
-                  color: Colors.amber,
-                  size: 15.0,
-                ),
-              ),
-               Container(
-                  child: Text(
-                "(946)",
-                style: TextStyle(
-                  color: Colors.black54,
-                  fontSize: 18.0,
-                ),
-              )),
-            ],
-          )),
-          SizedBox(height:5.0),
-        Container(
-                  child: Text(
-                "American \u00B7 \u0024\u0024 \u00B7 1.6 mi",
-                style: TextStyle(
-                  color: Colors.black54,
-                  fontSize: 18.0,
-                ),
-              )),
-              SizedBox(height:5.0),
-        Container(
-            child: Text(
-          "Closed \u00B7 Opens 17:00 Thu",
-          style: TextStyle(
-              color: Colors.black54,
-              fontSize: 18.0,
-              fontWeight: FontWeight.bold),
-        )),
-      ],
-    );
-  }
 
   Widget _buildGoogleMap(BuildContext context) {
     return Container(

@@ -64,6 +64,13 @@ class _EditSickState extends State<EditSick> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Edit Sick'),
+        backgroundColor: const Color(0xffdfad98),
+        toolbarHeight: 90,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.elliptical(50.0, 50.0),
+          ),
+        ),
         actions: [
           IconButton(onPressed: () => processEditData(), icon: Icon(Icons.edit))
         ],

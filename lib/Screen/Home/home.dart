@@ -1,3 +1,7 @@
+import 'package:bedridden/Screen/Home/listall.dart';
+import 'package:bedridden/Screen/Home/listl1.dart';
+import 'package:bedridden/Screen/Home/listl2.dart';
+import 'package:bedridden/Screen/Home/listl3.dart';
 import 'package:bedridden/Screen/edit_sick.dart';
 import 'package:bedridden/models/sick_model.dart';
 import 'package:bedridden/widgets/show_progess.dart';
@@ -299,11 +303,13 @@ class _HomeState extends State<Home> {
         TextButton(
             style: TextButton.styleFrom(primary: Colors.black87),
             onPressed: () {
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(
-              //       builder: (context) => LoginPage()),
-              // );
+                Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (BuildContext context){
+                          return Listl3();
+                        },
+                      ),
+                    );
             },
             child: Text(
               "ทั้งหมด",
@@ -419,11 +425,13 @@ class _HomeState extends State<Home> {
         TextButton(
             style: TextButton.styleFrom(primary: Colors.black87),
             onPressed: () {
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(
-              //       builder: (context) => LoginPage()),
-              // );
+                Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (BuildContext context){
+                          return Listl2();
+                        },
+                      ),
+                    );
             },
             child: Text(
               "ทั้งหมด",
@@ -527,6 +535,25 @@ class _HomeState extends State<Home> {
 
 //'รายชื่อผู้ป่วยติดเตียง ระดับที่ 1,โชว์ทั้งหมด'
   Row buildtTtleListNameAllBedriddenLevel1() {
+    var textButton = TextButton(
+            style: TextButton.styleFrom(primary: Colors.black87),
+            onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (BuildContext context){
+                          return listl1();
+                        },
+                      ),
+                    );
+            },
+            child: Text(
+              "ทั้งหมด",
+              style: TextStyle(
+                color: Colors.black54,
+              ),
+            ),
+         
+            );
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -538,21 +565,7 @@ class _HomeState extends State<Home> {
             fontWeight: FontWeight.w600,
           ),
         ),
-        TextButton(
-            style: TextButton.styleFrom(primary: Colors.black87),
-            onPressed: () {
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(
-              //       builder: (context) => LoginPage()),
-              // );
-            },
-            child: Text(
-              "ทั้งหมด",
-              style: TextStyle(
-                color: Colors.black54,
-              ),
-            )),
+        textButton,
       ],
     );
   }
@@ -661,12 +674,13 @@ class _HomeState extends State<Home> {
         ),
         TextButton(
             style: TextButton.styleFrom(primary: Colors.black87),
-            onPressed: () {
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(
-              //       builder: (context) => LoginPage()),
-              // );
+            onPressed: () {  Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (BuildContext context){
+                          return All();
+                        },
+                      ),
+                    );
             },
             child: Text(
               "ทั้งหมด",
@@ -678,7 +692,7 @@ class _HomeState extends State<Home> {
     );
   }
 
-//'ค้นหารายชื่อผู้ป่วยติดเตียง'
+
 
   Future<Null> confirmDelete(SickModel model, int index) async {
     showDialog(

@@ -41,6 +41,7 @@ dependencies:
   intl: ^0.17.0
   smooth_page_indicator: ^1.0.0+2
   get: ^4.3.8
+  provider: ^4.0.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
