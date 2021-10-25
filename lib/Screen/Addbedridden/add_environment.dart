@@ -1,6 +1,10 @@
 import 'dart:io';
+import 'dart:math';
 
+import 'package:bedridden/models/environment_model.dart';
 import 'package:bedridden/utility/dialog.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:image_picker/image_picker.dart';
@@ -14,12 +18,16 @@ class Addenvironment extends StatefulWidget {
 
 class _AddenvironmentState extends State<Addenvironment> {
   final formkey = GlobalKey<FormState>();
-  TextEditingController statusresidenceotherController = TextEditingController(); //'สถานะที่พักกอาศัย'
-  TextEditingController housetypeotherController = TextEditingController(); //'ประเภทบ้าน'
-  TextEditingController homeienvironmentController = TextEditingController(); //'สภาพสิ่งแวดล้อมในบ้าน'
-  TextEditingController typeHousingSafetyController = TextEditingController(); //'ความปลอยภัยภายในบ้าน'
-  TextEditingController typefacilitiesController = TextEditingController(); //'สิ่งอำนวยความสะดวกภายในบ้าน'
-
+  TextEditingController statusresidenceotherController =
+      TextEditingController(); //'สถานะที่พักกอาศัย'
+  TextEditingController housetypeotherController =
+      TextEditingController(); //'ประเภทบ้าน'
+  TextEditingController homeienvironmentController =
+      TextEditingController(); //'สภาพสิ่งแวดล้อมในบ้าน'
+  TextEditingController housingSafetyController =
+      TextEditingController(); //'ความปลอยภัยภายในบ้าน'
+  TextEditingController facilitiesController =
+      TextEditingController(); //'สิ่งอำนวยความสะดวกภายในบ้าน'
 
   String? accommodation; //'ที่พัก'
   String? typeHouse; //'ประเภทบ้าน'
@@ -43,7 +51,7 @@ class _AddenvironmentState extends State<Addenvironment> {
   int facilitiesgroup = 0;
 
   List<File?> files = [];
-  File? file;
+  File? fileimageenvironmement;
 
   @override
   void initState() {
@@ -105,6 +113,7 @@ class _AddenvironmentState extends State<Addenvironment> {
                     child: ListView(
                       padding: EdgeInsets.all(16.0),
                       children: [
+                        buildsaveenvironment(),
                         buildTitle4(),
                         buildaccommodation(),
                         widgets[accommodationgroup],
@@ -140,7 +149,6 @@ class _AddenvironmentState extends State<Addenvironment> {
                             ),
                           ],
                         ),
-                        
                         buildNext4(context),
                       ],
                     ),
@@ -148,7 +156,72 @@ class _AddenvironmentState extends State<Addenvironment> {
                 )));
   }
 
-  
+  Future<Null> proccessUploadImageenvironmentValue() async {
+    String nameimage = 'environment${Random().nextInt(1000000)}.jpg';
+
+    await Firebase.initializeApp().then((value) async {
+      FirebaseStorage storage = FirebaseStorage.instance;
+      Reference reference = storage.ref().child('environment/$nameimage');
+      UploadTask task = reference.putFile(fileimageenvironmement!);
+      await task.whenComplete(() async {});
+      await reference.getDownloadURL().then((value) async {
+        String urlenvironmentImage = value.toString();
+        print('### urlenvironmentImage ==> $urlenvironmentImage');
+
+        EnvironmentModel model = EnvironmentModel(
+            accommodation: accommodation!,
+            statusresidenceother: statusresidenceotherController.text,
+            typeHouse: typeHouse!,
+            housetypeother: housetypeotherController.text,
+            typeHomeEnvironment: typeHomeEnvironment!,
+            homeienvironment: homeienvironmentController.text,
+            typeHousingSafety: typeHousingSafety!,
+            housingSafety: housingSafetyController.text,
+            typefacilities: typefacilities!,
+            facilities: facilitiesController.text,
+            urlenvironmentImage: urlenvironmentImage);
+      });
+    });
+  }
+
+  Container buildsaveenvironment() {
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          MaterialButton(
+            onPressed: () {
+              if (accommodation == null) {
+                normalDialog(context, 'กรุณาเลือกสถานะของที่พักอาศัย');
+              } else if (typeHouse == null) {
+                normalDialog(context, 'กรุณาเลือกประเภทบ้าน');
+              } else if (typeHomeEnvironment == null) {
+                normalDialog(context, 'กรุณาเลือกสภาพสิ่งแวดล้อมในบ้าน');
+              } else if (typeHousingSafety == null) {
+                normalDialog(context, 'กรุณาเลือกความปลอดภัย');
+              } else if (typeFacilities == null) {
+                normalDialog(context,
+                    'กรุณาเลือกมีสิ่งอำนวยความสะดวกให้ผู้ป่วยสามารถดำรงชีวิตในบ้านได้');
+              } else if (fileimageenvironmement == null) {
+                normalDialog(context, 'กรุณาใส่รูปภาพ');
+              } else if (formkey.currentState!.validate()) {
+              } else {}
+            },
+            shape: RoundedRectangleBorder(
+                side: BorderSide(
+                  color: const Color(0xffffede5),
+                ),
+                borderRadius: BorderRadius.circular(50)),
+            child: Text(
+              "บันทึก",
+              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+            ),
+            color: const Color(0xffdfad98),
+          ),
+        ],
+      ),
+    );
+  }
 
   Future<Null> processImagePicker(ImageSource source, int index) async {
     try {
@@ -158,8 +231,8 @@ class _AddenvironmentState extends State<Addenvironment> {
         maxHeight: 800,
       );
       setState(() {
-        file = File(result!.path);
-        files[index] = file;
+        fileimageenvironmement = File(result!.path);
+        files[index] = fileimageenvironmement;
       });
     } catch (e) {}
   }
@@ -199,7 +272,9 @@ class _AddenvironmentState extends State<Addenvironment> {
         Container(
           width: constraints.maxWidth * 0.75,
           height: constraints.maxWidth * 0.75,
-          child: file == null ? Image.asset(imageadd) : Image.file(file!),
+          child: fileimageenvironmement == null
+              ? Image.asset(imageadd)
+              : Image.file(fileimageenvironmement!),
         ),
         SizedBox(
           height: 20,
@@ -847,7 +922,7 @@ class _AddenvironmentState extends State<Addenvironment> {
               return null;
             }
           },
-          controller: typeHousingSafetyController,
+          controller: housingSafetyController,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -888,7 +963,7 @@ class _AddenvironmentState extends State<Addenvironment> {
               return null;
             }
           },
-          controller: typefacilitiesController,
+          controller: facilitiesController,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
