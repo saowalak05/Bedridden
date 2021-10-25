@@ -24,9 +24,15 @@ class _SearchBarState extends State<SearchBar> {
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
-          title: Text(MyApp.title),
-          centerTitle: true,
-          backgroundColor: Color(0xffdfad98)
+        title: Text('Search'),
+        backgroundColor: const Color(0xffdfad98),
+        toolbarHeight: 90,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.elliptical(50.0, 50.0),
+          ),
+        ),
+        
         ),
         body: Column(
           children: <Widget>[
@@ -81,12 +87,11 @@ class _SearchBarState extends State<SearchBar> {
 
 class MyApp {
   
-  static final String title = 'Search';
+ 
 
   @override
   Widget build(BuildContext context) => MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: title,
         theme: ThemeData(primarySwatch: Colors.blue),
         home: SearchBar(),
       );
