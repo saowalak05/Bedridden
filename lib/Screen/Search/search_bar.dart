@@ -1,108 +1,93 @@
-import 'package:bedridden/DataController.dart';
-import 'package:bedridden/models/sick_model.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+
+import 'package:bedridden/Data/book_data.dart';
+import 'package:bedridden/models/book.dart';
+import 'package:bedridden/widgets/search_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+
 
 class SearchBar extends StatefulWidget {
-  const SearchBar({
-    
-    Key? key,
-  }) : super(key: key);
- 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 30),
-      padding: EdgeInsets.symmetric(horizontal: 30, vertical: 5),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(29.5),
-      ),
-      child: TextField(
-        decoration: InputDecoration(
-          hintText: "Search",
-          border: InputBorder.none,
-        ),
-      ),
-    );
-  }
-
   _SearchBarState createState() => _SearchBarState();
 }
 
 class _SearchBarState extends State<SearchBar> {
-  List<String> sickmodels = [];
-  final TextEditingController searchController = TextEditingController();
-  late QuerySnapshot snapshotData;
-  bool isExcecuted = false;
-
-  var val;
+  late List<Book> books;
+  String query = '';
 
   @override
-  Widget build(BuildContext context) {
-    Widget searchedData() {
-      return ListView.builder(
-        itemCount: snapshotData.docs.length,
-        itemBuilder: (BuildContext context, int index) {
-          return ListTile(
-            leading: CircleAvatar(
-              backgroundImage:
-                  NetworkImage(snapshotData.docs[index]['urlImage']),
-            ),
-            title: Text(
-              snapshotData.docs[index]['name'],
-              style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 24.0),
-            ),
-            subtitle: Text(
-              snapshotData.docs[index]['level'],
-              style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16.0),
-            ),
-          );
-        },
-      );
-    }
+  void initState() {
+    super.initState();
 
-    var getBuilder = GetBuilder;
-    return Scaffold(
-      floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.clear),
-          backgroundColor: Color(0xffdfad98),
-          onPressed: () {
-            setState(() {
-              isExcecuted = false;
-            });
-            val.queryData(searchController.text).then((value) {
-              snapshotData = value;
-              setState(() {
-                isExcecuted = true;
-              });
-            });
-          }),
-      backgroundColor: Color(0xfff7e4db),
-      appBar: AppBar(
-        actions: [
-          GetBuilder<DataController>(
-              init: DataController(),
-              builder: (val) {
-                return IconButton(icon: Icon(Icons.search), onPressed: () {});
-              })
-        ],
-        title: TextField(
-          style: TextStyle(color: Colors.black),
-          decoration: InputDecoration(
-              hintText: 'Search', hintStyle: TextStyle(color: Colors.black)),
-          controller: searchController,
-        ),
-        backgroundColor: Color(0xffdfad98),
-      ),
-    );
+    books = allBooks;
   }
-    bool get wantKeepAlive => true;
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(
+          title: Text(MyApp.title),
+          centerTitle: true,
+          backgroundColor: Color(0xffdfad98)
+        ),
+        body: Column(
+          children: <Widget>[
+            buildSearch(),
+            Expanded(
+              child: ListView.builder(
+                itemCount: books.length,
+                itemBuilder: (context, index) {
+                  final book = books[index];
+
+                  return buildBook(book);
+                },
+              ),
+            ),
+          ],
+        ),
+      );
+
+  Widget buildSearch() => SearchWidget(
+        text: query,
+        hintText: 'Search',
+        onChanged: searchBook,
+      );
+
+  Widget buildBook(Book book) => ListTile(
+        leading: Image.network(
+          book.urlImage,
+          fit: BoxFit.cover,
+          width: 50,
+          height: 50,
+        ),
+        title: Text(book.title),
+        subtitle: Text(book.author),
+      );
+
+  void searchBook(String query) {
+    final books = allBooks.where((book) {
+      final titleLower = book.title.toLowerCase();
+      final authorLower = book.author.toLowerCase();
+      final searchLower = query.toLowerCase();
+
+      return titleLower.contains(searchLower) ||
+          authorLower.contains(searchLower);
+    }).toList();
+
+    setState(() {
+      this.query = query;
+      this.books = books;
+    });
+  }
+}
+
+class MyApp {
+  
+  static final String title = 'Search';
+
+  @override
+  Widget build(BuildContext context) => MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: title,
+        theme: ThemeData(primarySwatch: Colors.blue),
+        home: SearchBar(),
+      );
 }

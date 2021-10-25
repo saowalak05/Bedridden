@@ -97,6 +97,7 @@ class SickModel {
     };
   }
 
+
   factory SickModel.fromMap(Map<String, dynamic> map) {
     return SickModel(
       address: map['address'],
@@ -169,4 +170,5 @@ class SickModel {
       nationality.hashCode ^
       religion.hashCode;
   }
+  
 }
