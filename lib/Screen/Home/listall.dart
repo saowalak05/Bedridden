@@ -199,7 +199,7 @@ class _AllState extends State<All> {
             height: 270,
             child: Expanded(
               child: ListView.builder(
-                scrollDirection: Axis.horizontal,
+                scrollDirection: Axis.vertical,
                 shrinkWrap: true,
                 physics: ScrollPhysics(),
                 itemCount: sickmodels.length,
