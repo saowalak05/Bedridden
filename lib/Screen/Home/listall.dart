@@ -196,10 +196,10 @@ class _AllState extends State<All> {
     return sickmodels.length == 0
         ? ShowProgress()
         : Container(
-            height: 270,
+            height: 650,
             child: Expanded(
               child: ListView.builder(
-                scrollDirection: Axis.horizontal,
+                scrollDirection: Axis.vertical,
                 shrinkWrap: true,
                 physics: ScrollPhysics(),
                 itemCount: sickmodels.length,
