@@ -105,13 +105,14 @@ class _Listl2State extends State<Listl2> {
                 BorderRadius.vertical(bottom: Radius.elliptical(50.0, 50.0))),
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [buildtListNameAllBedriddenLevel2()],
+        child: Stack(
+          children: 
+            [SingleChildScrollView(
+              child: Column(
+                children: [buildtListNameAllBedriddenLevel2()],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );
@@ -203,7 +204,7 @@ class _Listl2State extends State<Listl2> {
                 physics: ScrollPhysics(),
                 itemCount: sickmodelsLevel2.length,
                 itemBuilder: (context, index) => Container(
-                  width: 175,
+                  width: 100,
                   child: GestureDetector(
                     onTap: () {
                       print('## You Click index = $index');
