@@ -37,6 +37,7 @@ class MapState extends State<Map> {
           backgroundColor: Color(0xffdfad98)),
       body: Stack(
         children: <Widget>[
+          
           _buildGoogleMap(context),
 
           // _zoomminusfunction(),
@@ -46,6 +47,7 @@ class MapState extends State<Map> {
       ),
     );
   }
+  
 
   // Widget _zoomminusfunction() {
   //   return Align(

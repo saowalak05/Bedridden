@@ -32,25 +32,25 @@ class _AddhealthState extends State<Addhealth> {
   TextEditingController foodsupplementController =
       TextEditingController(); // 'อาหารเสริมและอื่นๆ'
 
-  String? typeexaminationresults;
-  String? typecorrectdruguse;
+  // late String typeexaminationresults;
+  // late String typecorrectdruguse;
 
   List<Widget> widgets = [];
-  int _radioGroupA = 0;
+  String? groupA  ;
   List<Widget> widgets2 = [];
-  int _radioGroupB = 0;
+  String? groupB ;
 
-  void _handleRadioValueChanged(value) {
-    setState(() {
-      _radioGroupA = value! as int;
-    });
-  }
+  // void _handleRadioValueChanged(value) {
+  //   setState(() {
+  //     groupA  = value!;
+  //   });
+  // }
 
-  void _handleRadioValueChanged2(value) {
-    setState(() {
-      _radioGroupB = value! as int;
-    });
-  }
+  // void _handleRadioValueChanged2(value) {
+  //   setState(() {
+  //     groupB = value!;
+  //   });
+  // }
 
   @override
   void initState() {
@@ -91,9 +91,9 @@ class _AddhealthState extends State<Addhealth> {
                 buildDisease(), //'โรคประจำตัวหรือปัญหาสุขภาพ '
                 buildmedicine(), //'ยาที่แพทย์สั่ง '
                 buildtypeexamination_results(), //'ผลการตรวจสอบ '
-                widgets[_radioGroupA],
+                // widgets[groupA as String ],
                 builddrug_use(), //'การใช้ยา '
-                widgets2[_radioGroupB],
+                // widgets2[groupB ],
                 buildOHF(), //'ยาอื่นๆ สมุนไพร อาหารเสริม '
                 buildNext3(context),
               ],
@@ -103,28 +103,29 @@ class _AddhealthState extends State<Addhealth> {
   }
 
   Future<Null> proccessUplodhealth() async {
-    await Firebase.initializeApp().then((value) async {
-      FirebaseStorage storage = FirebaseStorage.instance;
+    await Firebase.initializeApp().then((value) 
+      async {
+        FirebaseStorage storage = FirebaseStorage.instance;
 
-      HealthModel model = HealthModel(
-          disease: diseaseController.text,
-          medicine: medicineController.text,
-          inspectionresults: inspectionresultsController.text,
-          druguse: druguseController.text,
-          correct: correctController.text,
-          otherdrugs: otherdrugsController.text,
-          herb: herbController.text,
-          foodsupplement: foodsupplementController.text,
-          typeexaminationresults: typeexaminationresults!,
-          typecorrectdruguse: typecorrectdruguse!);
+        HealthModel model = HealthModel(
+            disease: diseaseController.text,
+            medicine: medicineController.text,
+            inspectionresults: inspectionresultsController.text,
+            druguse: druguseController.text,
+            correct: correctController.text,
+            otherdrugs: otherdrugsController.text,
+            herb: herbController.text,
+            foodsupplement: foodsupplementController.text,
+            groupA: groupA as String,
+            groupB: groupB as String);
 
         await FirebaseFirestore.instance
-              .collection('Health')
-              .doc()
-              .set(model.toMap())
-              .then((value) =>
-                  normalDialog(context, 'บันทึกข้อมูลสำเร็จ'));
-    });
+            .collection('Health')
+            .doc()
+            .set(model.toMap())
+            .then((value) => normalDialog(context, 'บันทึกข้อมูลสำเร็จ'));
+    }
+    );
   }
 
   Container buildsavehealth() {
@@ -134,11 +135,11 @@ class _AddhealthState extends State<Addhealth> {
         children: [
           MaterialButton(
             onPressed: () {
-              if (typeexaminationresults == null) {
+              if (groupA == null) {
                 normalDialog(context, 'กรุณาเลือก ผลการตรวจสอบ');
-              } else if (typecorrectdruguse == null) {
+              } else if (groupB == null) {
                 normalDialog(context, 'กรุณาเลือก การใช้ยา');
-              } else if (formkey.currentState!.validate()) {
+              } else {
                 proccessUplodhealth();
               }
             },
@@ -315,25 +316,31 @@ class _AddhealthState extends State<Addhealth> {
           child: Column(
             children: [
               RadioListTile(
-                title: const Text(
-                  'ถูกต้อง',
-                  style: TextStyle(fontSize: 12),
-                ),
-                value: 0,
-                groupValue: _radioGroupB,
-                selected: _radioGroupB == 0,
-                onChanged: _handleRadioValueChanged2,
-              ),
+                  title: const Text(
+                    'ถูกต้อง',
+                    style: TextStyle(fontSize: 12),
+                  ),
+                  value: 'ถูกต้อง',
+                  groupValue: groupB,
+                  selected: groupB== 0,
+                  onChanged: (value) {
+                    setState(() {
+                      groupB = value as String;
+                    });
+                  }),
               RadioListTile(
-                title: const Text(
-                  'ไม่ถูกต้อง',
-                  style: TextStyle(fontSize: 12),
-                ),
-                value: 1,
-                groupValue: _radioGroupB,
-                selected: _radioGroupB == 1,
-                onChanged: _handleRadioValueChanged2,
-              ),
+                  title: const Text(
+                    'ไม่ถูกต้อง',
+                    style: TextStyle(fontSize: 12),
+                  ),
+                  value: 'ไม่ถูกต้อง',
+                  groupValue: groupB,
+                  selected: groupB == 1,
+                  onChanged: (value) {
+                    setState(() {
+                      groupB = value as String;
+                    });
+                  }),
             ],
           ),
         ),
@@ -366,30 +373,42 @@ class _AddhealthState extends State<Addhealth> {
                   'ตรงกับการรับรู้ของผู้ป่วย/ผู้ดูแล',
                   style: TextStyle(fontSize: 12),
                 ),
-                value: 0,
-                groupValue: _radioGroupA,
-                selected: _radioGroupA == 0,
-                onChanged: _handleRadioValueChanged,
+                value: 'ตรงกับการรับรู้ของผู้ป่วย/ผู้ดูแล',
+                groupValue: groupA,
+                selected: groupA == 0,
+                onChanged: (value) {
+                  setState(() {
+                    groupA = value as String;
+                  });
+                },
               ),
               RadioListTile(
                 title: const Text(
                   'ไม่ตรง',
                   style: TextStyle(fontSize: 12),
                 ),
-                value: 1,
-                groupValue: _radioGroupA,
-                selected: _radioGroupA == 1,
-                onChanged: _handleRadioValueChanged,
+                value: 'ไม่ตรง',
+                groupValue: groupA,
+                selected: groupA == 1,
+                onChanged: (value) {
+                  setState(() {
+                    groupA = value as String;
+                  });
+                },
               ),
               RadioListTile(
                 title: const Text(
                   'อื่น ๆ ',
                   style: TextStyle(fontSize: 12),
                 ),
-                value: 2,
-                selected: _radioGroupA == 2,
-                groupValue: _radioGroupA,
-                onChanged: _handleRadioValueChanged,
+                value: 'อื่น ๆ ',
+                selected: groupA == 2,
+                groupValue: groupA,
+                onChanged: (value) {
+                  setState(() {
+                    groupA = value as String;
+                  });
+                },
               ),
             ],
           ),
