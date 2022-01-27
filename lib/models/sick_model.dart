@@ -12,7 +12,7 @@ class SickModel {
   final String typeStatus;
   final String urlImage;
   final String level;
-  final String typeeducation_level;
+  final String typeeducationlevel;
   final String typeposition;
   final String patientoccupation;
   final String talent;
@@ -29,7 +29,7 @@ class SickModel {
     required this.typeStatus,
     required this.urlImage,
     required this.level,
-    required this.typeeducation_level,
+    required this.typeeducationlevel,
     required this.typeposition,
     required this.patientoccupation,
     required this.talent,
@@ -48,7 +48,7 @@ class SickModel {
     String? typeStatus,
     String? urlImage,
     String? level,
-    String? typeeducation_level,
+    String? typeeducationlevel,
     String? typeposition,
     String? patientoccupation,
     String? talent,
@@ -66,7 +66,7 @@ class SickModel {
       typeStatus: typeStatus ?? this.typeStatus,
       urlImage: urlImage ?? this.urlImage,
       level: level ?? this.level,
-      typeeducation_level: typeeducation_level ?? this.typeeducation_level,
+      typeeducationlevel: typeeducationlevel ?? this.typeeducationlevel,
       typeposition: typeposition ?? this.typeposition,
       patientoccupation: patientoccupation ?? this.patientoccupation,
       talent: talent ?? this.talent,
@@ -87,7 +87,7 @@ class SickModel {
       'typeStatus': typeStatus,
       'urlImage': urlImage,
       'level': level,
-      'typeeducation_level': typeeducation_level,
+      'typeeducation_level': typeeducationlevel,
       'typeposition': typeposition,
       'patientoccupation': patientoccupation,
       'talent': talent,
@@ -96,7 +96,6 @@ class SickModel {
       'religion': religion,
     };
   }
-
 
   factory SickModel.fromMap(Map<String, dynamic> map) {
     return SickModel(
@@ -109,66 +108,66 @@ class SickModel {
       typeStatus: map['typeStatus'],
       urlImage: map['urlImage'],
       level: map['level'],
-      typeeducation_level: map['typeeducation_level'],
-      typeposition: map['typeposition'],
-      patientoccupation: map['patientoccupation'],
-      talent: map['talent'],
-      race: map['race'],
-      nationality: map['nationality'],
-      religion: map['religion'],
+      typeeducationlevel: map['typeeducation_level'] ?? '',
+      typeposition: map['typeposition'] ?? '',
+      patientoccupation: map['patientoccupation'] ?? '',
+      talent: map['talent'] ?? '',
+      race: map['race'] ?? '',
+      nationality: map['nationality'] ?? '',
+      religion: map['religion'] ?? '',
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory SickModel.fromJson(String source) => SickModel.fromMap(json.decode(source));
+  factory SickModel.fromJson(String source) =>
+      SickModel.fromMap(json.decode(source));
 
   @override
   String toString() {
-    return 'SickModel(address: $address, bond: $bond, idCard: $idCard, name: $name, phone: $phone, typeSex: $typeSex, typeStatus: $typeStatus, urlImage: $urlImage, level: $level, typeeducation_level: $typeeducation_level, typeposition: $typeposition, patientoccupation: $patientoccupation, talent: $talent, race: $race, nationality: $nationality, religion: $religion)';
+    return 'SickModel(address: $address, bond: $bond, idCard: $idCard, name: $name, phone: $phone, typeSex: $typeSex, typeStatus: $typeStatus, urlImage: $urlImage, level: $level, typeeducation_level: $typeeducationlevel, typeposition: $typeposition, patientoccupation: $patientoccupation, talent: $talent, race: $race, nationality: $nationality, religion: $religion)';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-  
+
     return other is SickModel &&
-      other.address == address &&
-      other.bond == bond &&
-      other.idCard == idCard &&
-      other.name == name &&
-      other.phone == phone &&
-      other.typeSex == typeSex &&
-      other.typeStatus == typeStatus &&
-      other.urlImage == urlImage &&
-      other.level == level &&
-      other.typeeducation_level == typeeducation_level &&
-      other.typeposition == typeposition &&
-      other.patientoccupation == patientoccupation &&
-      other.talent == talent &&
-      other.race == race &&
-      other.nationality == nationality &&
-      other.religion == religion;
+        other.address == address &&
+        other.bond == bond &&
+        other.idCard == idCard &&
+        other.name == name &&
+        other.phone == phone &&
+        other.typeSex == typeSex &&
+        other.typeStatus == typeStatus &&
+        other.urlImage == urlImage &&
+        other.level == level &&
+        other.typeeducationlevel == typeeducationlevel &&
+        other.typeposition == typeposition &&
+        other.patientoccupation == patientoccupation &&
+        other.talent == talent &&
+        other.race == race &&
+        other.nationality == nationality &&
+        other.religion == religion;
   }
 
   @override
   int get hashCode {
     return address.hashCode ^
-      bond.hashCode ^
-      idCard.hashCode ^
-      name.hashCode ^
-      phone.hashCode ^
-      typeSex.hashCode ^
-      typeStatus.hashCode ^
-      urlImage.hashCode ^
-      level.hashCode ^
-      typeeducation_level.hashCode ^
-      typeposition.hashCode ^
-      patientoccupation.hashCode ^
-      talent.hashCode ^
-      race.hashCode ^
-      nationality.hashCode ^
-      religion.hashCode;
+        bond.hashCode ^
+        idCard.hashCode ^
+        name.hashCode ^
+        phone.hashCode ^
+        typeSex.hashCode ^
+        typeStatus.hashCode ^
+        urlImage.hashCode ^
+        level.hashCode ^
+        typeeducationlevel.hashCode ^
+        typeposition.hashCode ^
+        patientoccupation.hashCode ^
+        talent.hashCode ^
+        race.hashCode ^
+        nationality.hashCode ^
+        religion.hashCode;
   }
-  
 }

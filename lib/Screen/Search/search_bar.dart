@@ -1,9 +1,7 @@
-
 import 'package:bedridden/Data/book_data.dart';
 import 'package:bedridden/models/book.dart';
 import 'package:bedridden/widgets/search_widget.dart';
 import 'package:flutter/material.dart';
-
 
 class SearchBar extends StatefulWidget {
   @override
@@ -24,15 +22,14 @@ class _SearchBarState extends State<SearchBar> {
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
-        title: Text('Search'),
-        backgroundColor: const Color(0xffdfad98),
-        toolbarHeight: 90,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            bottom: Radius.elliptical(50.0, 50.0),
+          title: Text('Search'),
+          backgroundColor: const Color(0xffdfad98),
+          toolbarHeight: 90,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              bottom: Radius.elliptical(50.0, 50.0),
+            ),
           ),
-        ),
-        
         ),
         body: Column(
           children: <Widget>[
@@ -83,16 +80,4 @@ class _SearchBarState extends State<SearchBar> {
       this.books = books;
     });
   }
-}
-
-class MyApp {
-  
- 
-
-  @override
-  Widget build(BuildContext context) => MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(primarySwatch: Colors.blue),
-        home: SearchBar(),
-      );
 }

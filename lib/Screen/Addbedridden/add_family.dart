@@ -1,5 +1,3 @@
-// import 'dart:ffi';
-import 'dart:io';
 import 'package:bedridden/Screen/Addbedridden/add_health.dart';
 import 'package:bedridden/utility/dialog.dart';
 import 'package:flutter/material.dart';
@@ -19,14 +17,11 @@ class _AddfamilyState extends State<Addfamily> {
   TextEditingController occupationContorller =
       TextEditingController(); //'อาชีพ'
 
-
   List<Widget> widgets = [];
   int index = 0;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-
     widgets.add(filedOne());
     widgets.add(filedTwo());
     widgets.add(filedThree());
@@ -41,7 +36,7 @@ class _AddfamilyState extends State<Addfamily> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    // Size size = MediaQuery.of(context).size;
     // final IconThemeData data;
     return Scaffold(
         appBar: AppBar(
@@ -84,10 +79,11 @@ class _AddfamilyState extends State<Addfamily> {
         children: [
           MaterialButton(
             onPressed: () {
-              if (index == 0 ) {
+              if (index == 0) {
                 normalDialog(context, 'กรุณาเลือกจำนวนสมาชิก');
-              } else if(index == 1) {
-                normalDialog(context, 'กรุณาเลือกจำนวนสมาชิก 2');}
+              } else if (index == 1) {
+                normalDialog(context, 'กรุณาเลือกจำนวนสมาชิก 2');
+              }
             },
             shape: RoundedRectangleBorder(
                 side: BorderSide(

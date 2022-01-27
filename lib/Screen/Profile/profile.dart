@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'dart:math';
-import 'dart:ui';
 import 'package:bedridden/utility/dialog.dart';
 import 'package:bedridden/widgets/show_progess.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -33,7 +32,7 @@ class _ProfileState extends State<Profile> {
 
   Future<Null> findCurrentUser() async {
     await Firebase.initializeApp().then((value) async {
-      await FirebaseAuth.instance.authStateChanges().listen((event) {
+       FirebaseAuth.instance.authStateChanges().listen((event) {
         setState(() {
           userNameController.text = event!.displayName!;
           email = event.email;
@@ -197,7 +196,7 @@ class _ProfileState extends State<Profile> {
     return CircleAvatar(
       backgroundColor: Colors.white,
       backgroundImage: AssetImage(
-        'a ssets/images/bedridden.png',
+        'assets/images/bedridden.png',
       ),
     );
   }
@@ -305,7 +304,7 @@ class _ProfileState extends State<Profile> {
         await reference.getDownloadURL().then((value) async {
           print('Upload Success access Token ==> $value');
           String urlProfile = value.toString();
-          await FirebaseAuth.instance.authStateChanges().listen((event) async {
+           FirebaseAuth.instance.authStateChanges().listen((event) async {
             await event!.updatePhotoURL(urlProfile).then((value) =>
                 normalDialog(context, 'Update Image Profile Success'));
           });
@@ -316,7 +315,7 @@ class _ProfileState extends State<Profile> {
 
   Future<Null> processChangeDisplayName() async {
     await Firebase.initializeApp().then((value) async {
-      await FirebaseAuth.instance.authStateChanges().listen((event) async {
+       FirebaseAuth.instance.authStateChanges().listen((event) async {
         await event!
             .updateDisplayName(userNameController.text)
             .then((value) => normalDialog(context, 'change Dsiplay Success'));

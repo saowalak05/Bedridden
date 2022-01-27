@@ -1,4 +1,3 @@
-import 'package:bedridden/Screen/Addbedridden/add.dart';
 import 'package:bedridden/Screen/Addbedridden/add_environment.dart';
 import 'package:bedridden/models/health_model.dart';
 import 'package:bedridden/utility/dialog.dart';
@@ -54,7 +53,6 @@ class _AddhealthState extends State<Addhealth> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     widgets.add(buildtext());
     widgets.add(buildincorrect());
@@ -90,9 +88,9 @@ class _AddhealthState extends State<Addhealth> {
                 buildTitle3(), //'ส่วนที่ 2 ข้อมูลด้านสุขภาพ '
                 buildDisease(), //'โรคประจำตัวหรือปัญหาสุขภาพ '
                 buildmedicine(), //'ยาที่แพทย์สั่ง '
-                buildtypeexamination_results(), //'ผลการตรวจสอบ '
+                buildtypeexaminationresults(), //'ผลการตรวจสอบ '
                 // widgets[groupA as String ],
-                builddrug_use(), //'การใช้ยา '
+                builddruguse(), //'การใช้ยา '
                 // widgets2[groupB ],
                 buildOHF(), //'ยาอื่นๆ สมุนไพร อาหารเสริม '
                 buildNext3(context),
@@ -295,7 +293,7 @@ class _AddhealthState extends State<Addhealth> {
     );
   }
 
-  Column builddrug_use() {
+  Column builddruguse() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -322,7 +320,7 @@ class _AddhealthState extends State<Addhealth> {
                   ),
                   value: 'ถูกต้อง',
                   groupValue: groupB,
-                  selected: groupB== 0,
+                  selected: groupB == 0,
                   onChanged: (value) {
                     setState(() {
                       groupB = value as String;
@@ -348,7 +346,7 @@ class _AddhealthState extends State<Addhealth> {
     );
   }
 
-  Column buildtypeexamination_results() {
+  Column buildtypeexaminationresults() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [

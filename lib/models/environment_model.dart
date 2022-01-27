@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class EnvironmentModel {
   final String accommodation;
@@ -89,7 +88,8 @@ class EnvironmentModel {
 
   String toJson() => json.encode(toMap());
 
-  factory EnvironmentModel.fromJson(String source) => EnvironmentModel.fromMap(json.decode(source));
+  factory EnvironmentModel.fromJson(String source) =>
+      EnvironmentModel.fromMap(json.decode(source));
 
   @override
   String toString() {
@@ -99,33 +99,33 @@ class EnvironmentModel {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-  
+
     return other is EnvironmentModel &&
-      other.accommodation == accommodation &&
-      other.statusresidenceother == statusresidenceother &&
-      other.typeHouse == typeHouse &&
-      other.housetypeother == housetypeother &&
-      other.typeHomeEnvironment == typeHomeEnvironment &&
-      other.homeienvironment == homeienvironment &&
-      other.typeHousingSafety == typeHousingSafety &&
-      other.housingSafety == housingSafety &&
-      other.typefacilities == typefacilities &&
-      other.facilities == facilities &&
-      other.urlenvironmentImage == urlenvironmentImage;
+        other.accommodation == accommodation &&
+        other.statusresidenceother == statusresidenceother &&
+        other.typeHouse == typeHouse &&
+        other.housetypeother == housetypeother &&
+        other.typeHomeEnvironment == typeHomeEnvironment &&
+        other.homeienvironment == homeienvironment &&
+        other.typeHousingSafety == typeHousingSafety &&
+        other.housingSafety == housingSafety &&
+        other.typefacilities == typefacilities &&
+        other.facilities == facilities &&
+        other.urlenvironmentImage == urlenvironmentImage;
   }
 
   @override
   int get hashCode {
     return accommodation.hashCode ^
-      statusresidenceother.hashCode ^
-      typeHouse.hashCode ^
-      housetypeother.hashCode ^
-      typeHomeEnvironment.hashCode ^
-      homeienvironment.hashCode ^
-      typeHousingSafety.hashCode ^
-      housingSafety.hashCode ^
-      typefacilities.hashCode ^
-      facilities.hashCode ^
-      urlenvironmentImage.hashCode;
+        statusresidenceother.hashCode ^
+        typeHouse.hashCode ^
+        housetypeother.hashCode ^
+        typeHomeEnvironment.hashCode ^
+        homeienvironment.hashCode ^
+        typeHousingSafety.hashCode ^
+        housingSafety.hashCode ^
+        typefacilities.hashCode ^
+        facilities.hashCode ^
+        urlenvironmentImage.hashCode;
   }
 }

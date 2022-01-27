@@ -1,4 +1,3 @@
-
 import 'package:bedridden/routere.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -11,30 +10,30 @@ String initialRoute = '/Homepage';
 Future<Null> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp().then((value) async {
-    await FirebaseAuth.instance.authStateChanges().listen((event) {
+    FirebaseAuth.instance.authStateChanges().listen((event) {
       if (event != null) {
         initialRoute = '/myService';
       }
-      runApp(myapp());
+      runApp(MyApp());
     });
   });
 }
 
-class myapp extends StatefulWidget {
-  const myapp({ Key? key }) : super(key: key);
+class MyApp extends StatefulWidget {
+  const MyApp({Key? key}) : super(key: key);
 
   @override
-  _myappState createState() => _myappState();
+  _MyAppState createState() => _MyAppState();
 }
 
-class _myappState extends State<myapp> {
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-    routes: routes,
-    initialRoute: initialRoute,
-    debugShowCheckedModeBanner: false,
-    home: Homepage(),
-    ) ;
+      routes: routes,
+      initialRoute: initialRoute,
+      debugShowCheckedModeBanner: false,
+      home: Homepage(),
+    );
   }
 }

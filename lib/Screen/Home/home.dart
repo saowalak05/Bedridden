@@ -7,7 +7,6 @@ import 'package:bedridden/models/sick_model.dart';
 import 'package:bedridden/widgets/show_progess.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
@@ -33,7 +32,6 @@ class _HomeState extends State<Home> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     readAllSick();
   }
@@ -48,10 +46,7 @@ class _HomeState extends State<Home> {
     }
 
     await Firebase.initializeApp().then((value) async {
-      await FirebaseFirestore.instance
-          .collection('sick')
-          .snapshots()
-          .listen((event) {
+      FirebaseFirestore.instance.collection('sick').snapshots().listen((event) {
         for (var item in event.docs) {
           SickModel model = SickModel.fromMap(item.data());
           print('## name ==> ${model.name}');
@@ -125,6 +120,7 @@ class _HomeState extends State<Home> {
       ),
     );
   }
+
   // ignore: non_constant_identifier_names
   Future<Null> showSickDialog(SickModel model, int index) async {
     DateTime dateTime = model.bond.toDate();
@@ -303,13 +299,13 @@ class _HomeState extends State<Home> {
         TextButton(
             style: TextButton.styleFrom(primary: Colors.black87),
             onPressed: () {
-                Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (BuildContext context){
-                          return Listl3();
-                        },
-                      ),
-                    );
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (BuildContext context) {
+                    return Listl3();
+                  },
+                ),
+              );
             },
             child: Text(
               "ทั้งหมด",
@@ -425,13 +421,13 @@ class _HomeState extends State<Home> {
         TextButton(
             style: TextButton.styleFrom(primary: Colors.black87),
             onPressed: () {
-                Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (BuildContext context){
-                          return Listl2();
-                        },
-                      ),
-                    );
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (BuildContext context) {
+                    return Listl2();
+                  },
+                ),
+              );
             },
             child: Text(
               "ทั้งหมด",
@@ -536,24 +532,23 @@ class _HomeState extends State<Home> {
 //'รายชื่อผู้ป่วยติดเตียง ระดับที่ 1,โชว์ทั้งหมด'
   Row buildtTtleListNameAllBedriddenLevel1() {
     var textButton = TextButton(
-            style: TextButton.styleFrom(primary: Colors.black87),
-            onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (BuildContext context){
-                          return listl1();
-                        },
-                      ),
-                    );
+      style: TextButton.styleFrom(primary: Colors.black87),
+      onPressed: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (BuildContext context) {
+              return Listl();
             },
-            child: Text(
-              "ทั้งหมด",
-              style: TextStyle(
-                color: Colors.black54,
-              ),
-            ),
-         
-            );
+          ),
+        );
+      },
+      child: Text(
+        "ทั้งหมด",
+        style: TextStyle(
+          color: Colors.black54,
+        ),
+      ),
+    );
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -674,13 +669,14 @@ class _HomeState extends State<Home> {
         ),
         TextButton(
             style: TextButton.styleFrom(primary: Colors.black87),
-            onPressed: () {  Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (BuildContext context){
-                          return All();
-                        },
-                      ),
-                    );
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (BuildContext context) {
+                    return All();
+                  },
+                ),
+              );
             },
             child: Text(
               "ทั้งหมด",
@@ -691,8 +687,6 @@ class _HomeState extends State<Home> {
       ],
     );
   }
-
-
 
   Future<Null> confirmDelete(SickModel model, int index) async {
     showDialog(

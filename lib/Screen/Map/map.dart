@@ -73,13 +73,13 @@ class MapState extends State<Map> {
   //   );
   // }
 
-  Future<void> _minus(double zoomVal) async {
+  Future<void> minus(double zoomVal) async {
     final GoogleMapController controller = await _controller.future;
     controller.animateCamera(CameraUpdate.newCameraPosition(
         CameraPosition(target: LatLng(40.712776, -74.005974), zoom: zoomVal)));
   }
 
-  Future<void> _plus(double zoomVal) async {
+  Future<void> plus(double zoomVal) async {
     final GoogleMapController controller = await _controller.future;
     controller.animateCamera(CameraUpdate.newCameraPosition(
         CameraPosition(target: LatLng(40.712776, -74.005974), zoom: zoomVal)));
@@ -89,7 +89,7 @@ class MapState extends State<Map> {
 
 
 
-  Widget _boxes(String _image, double lat,double long,String restaurantName) {
+  Widget boxes(String _image, double lat,double long,String restaurantName) {
     return  GestureDetector(
         onTap: () {
           _gotoLocation(lat,long);

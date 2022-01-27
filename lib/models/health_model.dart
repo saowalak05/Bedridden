@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 class HealthModel {
   final String disease;
   final String medicine;
@@ -25,7 +23,6 @@ class HealthModel {
     required this.groupA,
     required this.groupB,
   });
- 
 
   HealthModel copyWith({
     String? disease,
@@ -85,7 +82,8 @@ class HealthModel {
 
   String toJson() => json.encode(toMap());
 
-  factory HealthModel.fromJson(String source) => HealthModel.fromMap(json.decode(source));
+  factory HealthModel.fromJson(String source) =>
+      HealthModel.fromMap(json.decode(source));
 
   @override
   String toString() {
@@ -95,31 +93,31 @@ class HealthModel {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-  
+
     return other is HealthModel &&
-      other.disease == disease &&
-      other.medicine == medicine &&
-      other.inspectionresults == inspectionresults &&
-      other.druguse == druguse &&
-      other.correct == correct &&
-      other.otherdrugs == otherdrugs &&
-      other.herb == herb &&
-      other.foodsupplement == foodsupplement &&
-      other.groupA == groupA &&
-      other.groupB == groupB;
+        other.disease == disease &&
+        other.medicine == medicine &&
+        other.inspectionresults == inspectionresults &&
+        other.druguse == druguse &&
+        other.correct == correct &&
+        other.otherdrugs == otherdrugs &&
+        other.herb == herb &&
+        other.foodsupplement == foodsupplement &&
+        other.groupA == groupA &&
+        other.groupB == groupB;
   }
 
   @override
   int get hashCode {
     return disease.hashCode ^
-      medicine.hashCode ^
-      inspectionresults.hashCode ^
-      druguse.hashCode ^
-      correct.hashCode ^
-      otherdrugs.hashCode ^
-      herb.hashCode ^
-      foodsupplement.hashCode ^
-      groupA.hashCode ^
-      groupB.hashCode;
+        medicine.hashCode ^
+        inspectionresults.hashCode ^
+        druguse.hashCode ^
+        correct.hashCode ^
+        otherdrugs.hashCode ^
+        herb.hashCode ^
+        foodsupplement.hashCode ^
+        groupA.hashCode ^
+        groupB.hashCode;
   }
 }

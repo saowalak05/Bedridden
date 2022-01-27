@@ -3,7 +3,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:bedridden/Screen/login.dart';
 import 'package:bedridden/utility/dialog.dart';
-import 'package:bedridden/Screen/my_service.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({Key? key}) : super(key: key);

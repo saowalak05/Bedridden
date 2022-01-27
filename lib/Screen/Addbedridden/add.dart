@@ -8,7 +8,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
@@ -24,13 +23,13 @@ class Add extends StatefulWidget {
 
 String? _typesex;
 String? _typestatus;
-String? typeeducation_level;
+String? typeeducationLevel;
 String? typeposition;
 
 class _AddState extends State<Add> {
   late DateTime pickedDate;
   bool bondStatus = true; // true => ยังไม่ได้เลือกวันเกิด
-  bool typeeducation_levelbol = false;
+  bool typeeducationLevelbol = false;
 
   File? file;
   double? lat;
@@ -102,13 +101,14 @@ class _AddState extends State<Add> {
   }
 
   Future<Null> findLatLng() async {
-    print('findLatLan ==> Work');
     Position? position = await findPostion();
-    setState(() {
-      lat = position!.latitude;
-      lng = position.longitude;
-      print('lat = $lat, lng = $lng');
-    });
+    if (mounted) {
+      setState(() {
+        lat = position!.latitude;
+        lng = position.longitude;
+        print('lat = $lat, lng = $lng');
+      });
+    }
   }
 
   Future<Position?> findPostion() async {
@@ -123,7 +123,7 @@ class _AddState extends State<Add> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    // Size size = MediaQuery.of(context).size;
     // final IconThemeData data;
     return Scaffold(
       appBar: AppBar(
@@ -227,7 +227,7 @@ class _AddState extends State<Add> {
                 normalDialog(context, 'กรุณาเลือก ศาสนา');
               } else if (_typestatus == null) {
                 normalDialog(context, 'กรุณาเลือก สถานะภาพสมรส');
-              } else if (typeeducation_level == null) {
+              } else if (typeeducationLevel == null) {
                 normalDialog(context, 'กรุณาเลือก ระดับการศึกษา');
               } else if (typeposition == null) {
                 normalDialog(context, 'กรุณาเลือก ฐานะของผู้ป่วย');
@@ -441,11 +441,11 @@ class _AddState extends State<Add> {
                   style: TextStyle(fontSize: 12),
                 ),
                 value: 'ไม่ได้รับการศึกษา',
-                groupValue: typeeducation_level,
+                groupValue: typeeducationLevel,
                 onChanged: (value) {
                   setState(
                     () {
-                      typeeducation_level = value as String?;
+                      typeeducationLevel = value as String?;
                     },
                   );
                 },
@@ -459,11 +459,11 @@ class _AddState extends State<Add> {
                   style: TextStyle(fontSize: 12),
                 ),
                 value: 'ประถมศึกษาตอนต้น',
-                groupValue: typeeducation_level,
+                groupValue: typeeducationLevel,
                 onChanged: (value) {
                   setState(
                     () {
-                      typeeducation_level = value as String?;
+                      typeeducationLevel = value as String?;
                     },
                   );
                 },
@@ -481,11 +481,11 @@ class _AddState extends State<Add> {
                   style: TextStyle(fontSize: 12),
                 ),
                 value: 'ประถมศึกษาตอนปลาย',
-                groupValue: typeeducation_level,
+                groupValue: typeeducationLevel,
                 onChanged: (value) {
                   setState(
                     () {
-                      typeeducation_level = value as String?;
+                      typeeducationLevel = value as String?;
                     },
                   );
                 },
@@ -499,11 +499,11 @@ class _AddState extends State<Add> {
                   style: TextStyle(fontSize: 12),
                 ),
                 value: 'มัธยมศึกษาตอนต้น',
-                groupValue: typeeducation_level,
+                groupValue: typeeducationLevel,
                 onChanged: (value) {
                   setState(
                     () {
-                      typeeducation_level = value as String?;
+                      typeeducationLevel = value as String?;
                     },
                   );
                 },
@@ -521,11 +521,11 @@ class _AddState extends State<Add> {
                   style: TextStyle(fontSize: 12),
                 ),
                 value: 'มัธยมศึกษาตอนปลาย',
-                groupValue: typeeducation_level,
+                groupValue: typeeducationLevel,
                 onChanged: (value) {
                   setState(
                     () {
-                      typeeducation_level = value as String?;
+                      typeeducationLevel = value as String?;
                     },
                   );
                 },
@@ -539,11 +539,11 @@ class _AddState extends State<Add> {
                   style: TextStyle(fontSize: 12),
                 ),
                 value: 'ปวช',
-                groupValue: typeeducation_level,
+                groupValue: typeeducationLevel,
                 onChanged: (value) {
                   setState(
                     () {
-                      typeeducation_level = value as String?;
+                      typeeducationLevel = value as String?;
                     },
                   );
                 },
@@ -561,11 +561,11 @@ class _AddState extends State<Add> {
                   style: TextStyle(fontSize: 12),
                 ),
                 value: 'ปวส',
-                groupValue: typeeducation_level,
+                groupValue: typeeducationLevel,
                 onChanged: (value) {
                   setState(
                     () {
-                      typeeducation_level = value as String?;
+                      typeeducationLevel = value as String?;
                     },
                   );
                 },
@@ -579,11 +579,11 @@ class _AddState extends State<Add> {
                   style: TextStyle(fontSize: 12),
                 ),
                 value: 'ปริญญาตรี',
-                groupValue: typeeducation_level,
+                groupValue: typeeducationLevel,
                 onChanged: (value) {
                   setState(
                     () {
-                      typeeducation_level = value as String?;
+                      typeeducationLevel = value as String?;
                     },
                   );
                 },
@@ -1169,7 +1169,7 @@ class _AddState extends State<Add> {
             race: race!,
             religion: religion!,
             talent: talentController.text,
-            typeeducation_level: typeeducation_level!,
+            typeeducationlevel: typeeducationLevel!,
             typeposition: typeposition!,
           );
 

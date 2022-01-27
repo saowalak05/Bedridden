@@ -1,12 +1,10 @@
 import 'dart:io';
 import 'dart:math';
-
 import 'package:bedridden/models/environment_model.dart';
 import 'package:bedridden/utility/dialog.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:image_picker/image_picker.dart';
 
 class Addenvironment extends StatefulWidget {
@@ -55,7 +53,6 @@ class _AddenvironmentState extends State<Addenvironment> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     widgets.add(Text(''));
     widgets.add(Text(''));
@@ -180,6 +177,7 @@ class _AddenvironmentState extends State<Addenvironment> {
             typefacilities: typefacilities!,
             facilities: facilitiesController.text,
             urlenvironmentImage: urlenvironmentImage);
+        print(model);
       });
     });
   }

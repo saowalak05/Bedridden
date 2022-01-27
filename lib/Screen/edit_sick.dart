@@ -39,7 +39,6 @@ class _EditSickState extends State<EditSick> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     sickModel = widget.sickModel;
     nameController.text = sickModel!.name;

@@ -1,25 +1,21 @@
-import 'package:bedridden/Screen/Home/listall.dart';
-import 'package:bedridden/Screen/Home/listl1.dart';
-import 'package:bedridden/Screen/Home/listl2.dart';
-import 'package:bedridden/Screen/Home/listl3.dart';
+
 import 'package:bedridden/Screen/edit_sick.dart';
 import 'package:bedridden/models/sick_model.dart';
 import 'package:bedridden/widgets/show_progess.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 
-class listl1 extends StatefulWidget {
-  const listl1({Key? key}) : super(key: key);
+class Listl extends StatefulWidget {
+  const Listl({Key? key}) : super(key: key);
 
   @override
-  _listl1State createState() => _listl1State();
+  ListlState createState() => ListlState();
 }
 
-class _listl1State extends State<listl1> {
+class ListlState extends State<Listl> {
   final primary = Color(0xffdfad98);
   final secondary = Color(0xfff29a94);
 
@@ -33,7 +29,6 @@ class _listl1State extends State<listl1> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     readAllSick();
   }
@@ -48,7 +43,7 @@ class _listl1State extends State<listl1> {
     }
 
     await Firebase.initializeApp().then((value) async {
-      await FirebaseFirestore.instance
+       FirebaseFirestore.instance
           .collection('sick')
           .snapshots()
           .listen((event) {
