@@ -197,6 +197,12 @@ class _AddState extends State<Add> {
         child: lat == null
             ? ShowProgress()
             : GoogleMap(
+                onTap: (latLng) {
+                  setState(() {
+                    lat = latLng.latitude;
+                    lng = latLng.longitude;
+                  });
+                },
                 initialCameraPosition: CameraPosition(
                   target: LatLng(lat!, lng!),
                   zoom: 16,
@@ -1171,11 +1177,13 @@ class _AddState extends State<Add> {
             talent: talentController.text,
             typeeducationlevel: typeeducationLevel!,
             typeposition: typeposition!,
+            lat: lat!,
+            lng: lng!,
           );
 
           await FirebaseFirestore.instance
               .collection('sick')
-              .doc()
+              .doc(model.idCard)
               .set(model.toMap())
               .then((value) =>
                   normalDialog(context, 'Insert Sick Database Success'));

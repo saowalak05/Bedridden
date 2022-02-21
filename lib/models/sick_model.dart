@@ -19,6 +19,9 @@ class SickModel {
   final String race;
   final String nationality;
   final String religion;
+  final double lat;
+  final double lng;
+
   SickModel({
     required this.address,
     required this.bond,
@@ -36,6 +39,8 @@ class SickModel {
     required this.race,
     required this.nationality,
     required this.religion,
+    required this.lat,
+    required this.lng,
   });
 
   SickModel copyWith({
@@ -55,6 +60,8 @@ class SickModel {
     String? race,
     String? nationality,
     String? religion,
+    double? lat,
+    double? lng,
   }) {
     return SickModel(
       address: address ?? this.address,
@@ -73,6 +80,8 @@ class SickModel {
       race: race ?? this.race,
       nationality: nationality ?? this.nationality,
       religion: religion ?? this.religion,
+      lat: lat ?? this.lat,
+      lng: lng ?? this.lng,
     );
   }
 
@@ -94,6 +103,8 @@ class SickModel {
       'race': race,
       'nationality': nationality,
       'religion': religion,
+      'lat': lat,
+      'lng': lng,
     };
   }
 
@@ -115,6 +126,8 @@ class SickModel {
       race: map['race'] ?? '',
       nationality: map['nationality'] ?? '',
       religion: map['religion'] ?? '',
+      lat: map['lat'] ?? '',
+      lng: map['lng'] ?? '',
     );
   }
 
@@ -125,7 +138,7 @@ class SickModel {
 
   @override
   String toString() {
-    return 'SickModel(address: $address, bond: $bond, idCard: $idCard, name: $name, phone: $phone, typeSex: $typeSex, typeStatus: $typeStatus, urlImage: $urlImage, level: $level, typeeducation_level: $typeeducationlevel, typeposition: $typeposition, patientoccupation: $patientoccupation, talent: $talent, race: $race, nationality: $nationality, religion: $religion)';
+    return 'SickModel(address: $address, bond: $bond, idCard: $idCard, name: $name, phone: $phone, typeSex: $typeSex, typeStatus: $typeStatus, urlImage: $urlImage, level: $level, typeeducation_level: $typeeducationlevel, typeposition: $typeposition, patientoccupation: $patientoccupation, talent: $talent, race: $race, nationality: $nationality, religion: $religion, lat: $lng, lng: $lng)';
   }
 
   @override
@@ -148,7 +161,9 @@ class SickModel {
         other.talent == talent &&
         other.race == race &&
         other.nationality == nationality &&
-        other.religion == religion;
+        other.religion == religion &&
+        other.lat == lat &&
+        other.lng == lng;
   }
 
   @override
@@ -168,6 +183,8 @@ class SickModel {
         talent.hashCode ^
         race.hashCode ^
         nationality.hashCode ^
-        religion.hashCode;
+        religion.hashCode ^
+        lat.hashCode ^
+        lng.hashCode;
   }
 }
