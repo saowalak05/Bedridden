@@ -1,4 +1,3 @@
-
 import 'package:bedridden/Screen/edit_sick.dart';
 import 'package:bedridden/models/sick_model.dart';
 import 'package:bedridden/widgets/show_progess.dart';
@@ -43,10 +42,7 @@ class _AllState extends State<All> {
     }
 
     await Firebase.initializeApp().then((value) async {
-       FirebaseFirestore.instance
-          .collection('sick')
-          .snapshots()
-          .listen((event) {
+      FirebaseFirestore.instance.collection('sick').snapshots().listen((event) {
         for (var item in event.docs) {
           SickModel model = SickModel.fromMap(item.data());
           print('## name ==> ${model.name}');
@@ -130,6 +126,8 @@ class _AllState extends State<All> {
               child: Image.network(
                 model.urlImage,
                 fit: BoxFit.cover,
+                errorBuilder: (context, exception, stackTrack) =>
+                    Icon(Icons.error),
               ),
             ),
           ),
@@ -223,6 +221,9 @@ class _AllState extends State<All> {
                                   child: Image.network(
                                     sickmodels[index].urlImage,
                                     fit: BoxFit.cover,
+                                    errorBuilder:
+                                        (context, exception, stackTrack) =>
+                                            Icon(Icons.error),
                                   ),
                                 ),
                               ),

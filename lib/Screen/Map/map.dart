@@ -21,33 +21,31 @@ class MapState extends State<Map> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          leading: IconButton(
-              icon: Icon(FontAwesomeIcons.arrowLeft),
-              onPressed: () {
-                //
-              }),
-          title: Text("Map"),
-          actions: <Widget>[
-            IconButton(
-                icon: Icon(FontAwesomeIcons.search),
-                onPressed: () {
-                  //
-                }),
-          ],
-          backgroundColor: Color(0xffdfad98)),
+        leading: Container(),
+        title: Center(
+          child: Text(
+            'Map',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        backgroundColor: const Color(0xffdfad98),
+        toolbarHeight: 90,
+        shape: RoundedRectangleBorder(
+            borderRadius:
+                BorderRadius.vertical(bottom: Radius.elliptical(50.0, 50.0))),
+      ),
       body: Stack(
         children: <Widget>[
-          
           _buildGoogleMap(context),
 
           // _zoomminusfunction(),
           // _zoomplusfunction(),
-          
         ],
       ),
     );
   }
-  
 
   // Widget _zoomminusfunction() {
   //   return Align(
@@ -85,48 +83,43 @@ class MapState extends State<Map> {
         CameraPosition(target: LatLng(40.712776, -74.005974), zoom: zoomVal)));
   }
 
-  
-
-
-
-  Widget boxes(String _image, double lat,double long,String restaurantName) {
-    return  GestureDetector(
-        onTap: () {
-          _gotoLocation(lat,long);
-        },
-        child:Container(
-              child: new FittedBox(
-                child: Material(
-                    color: Colors.white,
-                    elevation: 14.0,
-                    borderRadius: BorderRadius.circular(24.0),
-                    shadowColor: Color(0xffdfad98),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Container(
-                          width: 180,
-                          height: 200,
-                          child: ClipRRect(
-                            borderRadius: new BorderRadius.circular(24.0),
-                            child: Image(
-                              fit: BoxFit.fill,
-                              image: NetworkImage(_image),
-                            ),
-                          ),),
-                          Container(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                          ),
-                        ),
-
-                      ],)
-                ),
-              ),
-            ),
+  Widget boxes(String _image, double lat, double long, String restaurantName) {
+    return GestureDetector(
+      onTap: () {
+        _gotoLocation(lat, long);
+      },
+      child: Container(
+        child: new FittedBox(
+          child: Material(
+              color: Colors.white,
+              elevation: 14.0,
+              borderRadius: BorderRadius.circular(24.0),
+              shadowColor: Color(0xffdfad98),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Container(
+                    width: 180,
+                    height: 200,
+                    child: ClipRRect(
+                      borderRadius: new BorderRadius.circular(24.0),
+                      child: Image(
+                        fit: BoxFit.fill,
+                        image: NetworkImage(_image),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                    ),
+                  ),
+                ],
+              )),
+        ),
+      ),
     );
   }
-
 
   // Widget _boxes(String _image, double lat, double long, String restaurantName) {
   //   return GestureDetector(

@@ -22,30 +22,39 @@ class _SearchBarState extends State<SearchBar> {
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
-          title: Text('Search'),
+          leading: Container(),
+          title: Center(
+            child: Text(
+              'Search',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
           backgroundColor: const Color(0xffdfad98),
           toolbarHeight: 90,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(
-              bottom: Radius.elliptical(50.0, 50.0),
-            ),
-          ),
+              borderRadius:
+                  BorderRadius.vertical(bottom: Radius.elliptical(50.0, 50.0))),
         ),
-        body: Column(
-          children: <Widget>[
-            buildSearch(),
-            Expanded(
-              child: ListView.builder(
-                itemCount: books.length,
-                itemBuilder: (context, index) {
-                  final book = books[index];
-
-                  return buildBook(book);
-                },
+        body: SafeArea(
+            child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+          child: Column(
+            children: <Widget>[
+              buildSearch(),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: books.length,
+                  itemBuilder: (context, index) {
+                    final book = books[index];
+                    return buildBook(book);
+                  },
+                ),
               ),
-            ),
-          ],
-        ),
+            ],
+          ),
+        )),
       );
 
   Widget buildSearch() => SearchWidget(
@@ -60,6 +69,7 @@ class _SearchBarState extends State<SearchBar> {
           fit: BoxFit.cover,
           width: 50,
           height: 50,
+          errorBuilder: (context, exception, stackTrack) => Icon(Icons.error),
         ),
         title: Text(book.title),
         subtitle: Text(book.author),

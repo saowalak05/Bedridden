@@ -1,8 +1,11 @@
+import 'package:bedridden/Screen/homepage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:bedridden/utility/dialog.dart';
 // ignore: unused_import
+import 'my_service.dart';
 import 'signup.dart';
 
 class LoginPage extends StatefulWidget {
@@ -14,8 +17,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final formkey = GlobalKey<FormState>();
   bool statusRedEye = true;
-  String? email, password,value;
-  
+  String? email, password, value;
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +69,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: Column(
                     children: <Widget>[
                       TextFormField(
-                        onChanged:(value)=> email = value.trim(),
+                          onChanged: (value) => email = value.trim(),
                           keyboardType: TextInputType.emailAddress,
                           decoration: InputDecoration(
                             labelText: "Email",
@@ -92,7 +94,7 @@ class _LoginPageState extends State<LoginPage> {
                         height: 20,
                       ),
                       TextFormField(
-                          onChanged:(value)=> password = value.trim(),
+                          onChanged: (value) => password = value.trim(),
                           obscureText: statusRedEye,
                           keyboardType: TextInputType.emailAddress,
                           decoration: InputDecoration(
@@ -197,8 +199,12 @@ class _LoginPageState extends State<LoginPage> {
         .signInWithEmailAndPassword(
             email: (email as String), password: (password as String))
         .then((result) async {
-      Navigator.pushNamedAndRemoveUntil(
-          context, '/myService', (route) => false);
+      Navigator.of(context).pushAndRemoveUntil(
+        CupertinoPageRoute(
+          builder: (context) => MyService(),
+        ),
+        (route) => false,
+      );
     });
     // await Firebase.initializeApp().then((value) async {
     //   await FirebaseAuth.instance

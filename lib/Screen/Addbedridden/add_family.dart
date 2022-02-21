@@ -3,7 +3,8 @@ import 'package:bedridden/utility/dialog.dart';
 import 'package:flutter/material.dart';
 
 class Addfamily extends StatefulWidget {
-  const Addfamily({Key? key}) : super(key: key);
+  final String idCard;
+  const Addfamily({Key? key, required this.idCard}) : super(key: key);
 
   @override
   _AddfamilyState createState() => _AddfamilyState();
@@ -1746,8 +1747,8 @@ class _AddfamilyState extends State<Addfamily> {
       children: [
         MaterialButton(
           onPressed: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => Addhealth()));
+            // Navigator.push(
+            //     context, MaterialPageRoute(builder: (context) => Addhealth()));
           },
           shape: RoundedRectangleBorder(
               side: BorderSide(

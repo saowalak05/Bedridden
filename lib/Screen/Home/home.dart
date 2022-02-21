@@ -1,3 +1,4 @@
+import 'package:bedridden/Screen/Addbedridden/add.dart';
 import 'package:bedridden/Screen/Home/listall.dart';
 import 'package:bedridden/Screen/Home/listl1.dart';
 import 'package:bedridden/Screen/Home/listl2.dart';
@@ -80,17 +81,24 @@ class _HomeState extends State<Home> {
     final IconThemeData data;
     return Scaffold(
       appBar: AppBar(
-        // leading: Padding(
-        //     padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
-        //     child: Image.asset(
-        //       'assets/images/bedridden.png',
-        //       fit: BoxFit.fitWidth,
-        //     ),
-        //   ),
-        title: Text(
-          'Home',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
+        actions: [
+          TextButton(
+              onPressed: () {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => Add()));
+              },
+              child: Text(
+                'Add',
+                style: TextStyle(color: Colors.white),
+              ))
+        ],
+        leading: Container(),
+        title: Center(
+          child: Text(
+            'Home',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
         backgroundColor: const Color(0xffdfad98),
@@ -103,17 +111,20 @@ class _HomeState extends State<Home> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
           child: SingleChildScrollView(
-            child: Column(
-              children: [
-                buildtTtleListNameAllBedridden(), //'รายชื่อผู้ป่วยติดเตียง,โชว์ทั้งหมด'
-                buildtListNameAllBedridden(), //'รายชื่อผู้ป่วยติดเตียง'
-                buildtTtleListNameAllBedriddenLevel1(), //'รายชื่อผู้ป่วยติดเตียง ระดับที่ 1,โชว์ทั้งหมด'
-                buildtListNameAllBedriddenLevel1(), //'รายชื่อผู้ป่วยติดเตียง ระดับที่ 1'
-                buildtTtleListNameAllBedriddenLevel2(), //'รายชื่อผู้ป่วยติดเตียง ระดับที่ 2,โชว์ทั้งหมด'
-                buildtListNameAllBedriddenLevel2(), //'รายชื่อผู้ป่วยติดเตียง ระดับที่ 2'
-                buildtTtleListNameAllBedriddenLevel3(), //'รายชื่อผู้ป่วยติดเตียง ระดับที่ 3,โชว์ทั้งหมด'
-                buildtListNameAllBedriddenLevel3(), //'รายชื่อผู้ป่วยติดเตียง ระดับที่ 3'
-              ],
+            child: ConstrainedBox(
+              constraints: BoxConstraints(),
+              child: Column(
+                children: [
+                  buildtTtleListNameAllBedridden(), //'รายชื่อผู้ป่วยติดเตียง,โชว์ทั้งหมด'
+                  buildtListNameAllBedridden(), //'รายชื่อผู้ป่วยติดเตียง'
+                  buildtTtleListNameAllBedriddenLevel1(), //'รายชื่อผู้ป่วยติดเตียง ระดับที่ 1,โชว์ทั้งหมด'
+                  buildtListNameAllBedriddenLevel1(), //'รายชื่อผู้ป่วยติดเตียง ระดับที่ 1'
+                  buildtTtleListNameAllBedriddenLevel2(), //'รายชื่อผู้ป่วยติดเตียง ระดับที่ 2,โชว์ทั้งหมด'
+                  buildtListNameAllBedriddenLevel2(), //'รายชื่อผู้ป่วยติดเตียง ระดับที่ 2'
+                  buildtTtleListNameAllBedriddenLevel3(), //'รายชื่อผู้ป่วยติดเตียง ระดับที่ 3,โชว์ทั้งหมด'
+                  buildtListNameAllBedriddenLevel3(), //'รายชื่อผู้ป่วยติดเตียง ระดับที่ 3'
+                ],
+              ),
             ),
           ),
         ),
@@ -139,6 +150,8 @@ class _HomeState extends State<Home> {
               child: Image.network(
                 model.urlImage,
                 fit: BoxFit.cover,
+                errorBuilder: (context, exception, stackTrack) =>
+                    Icon(Icons.error),
               ),
             ),
           ),
@@ -200,80 +213,81 @@ class _HomeState extends State<Home> {
         ? ShowProgress()
         : Container(
             height: 270,
-            child: Expanded(
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                shrinkWrap: true,
-                physics: ScrollPhysics(),
-                itemCount: sickmodelsLevel3.length,
-                itemBuilder: (context, index) => Container(
-                  width: 175,
-                  child: GestureDetector(
-                    onTap: () {
-                      print('## You Click index = $index');
-                      showSickDialog(sickmodelsLevel3[index], index);
-                    },
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.all(Radius.circular(28)),
-                      child: Card(
-                        color: Color(0xffFFD1BB),
-                        child: Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: Column(
-                            children: [
-                              Container(
-                                margin: EdgeInsets.symmetric(vertical: 12),
-                                width: 130,
-                                height: 80,
-                                child: ClipRRect(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10)),
-                                  child: Image.network(
-                                    sickmodelsLevel3[index].urlImage,
-                                    fit: BoxFit.cover,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              shrinkWrap: true,
+              physics: ScrollPhysics(),
+              itemCount: sickmodelsLevel3.length,
+              itemBuilder: (context, index) => Container(
+                width: 175,
+                child: GestureDetector(
+                  onTap: () {
+                    print('## You Click index = $index');
+                    showSickDialog(sickmodelsLevel3[index], index);
+                  },
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.all(Radius.circular(28)),
+                    child: Card(
+                      color: Color(0xffFFD1BB),
+                      child: Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Column(
+                          children: [
+                            Container(
+                              margin: EdgeInsets.symmetric(vertical: 12),
+                              width: 130,
+                              height: 80,
+                              child: ClipRRect(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                                child: Image.network(
+                                  sickmodelsLevel3[index].urlImage,
+                                  fit: BoxFit.cover,
+                                  errorBuilder:
+                                      (context, exception, stackTrack) => Icon(
+                                    Icons.error,
                                   ),
                                 ),
                               ),
-                              Row(
-                                children: [
-                                  Container(
-                                    margin: EdgeInsets.symmetric(
-                                        vertical: 5, horizontal: 8),
-                                    width: 140,
-                                    child: Text(
-                                      sickmodelsLevel3[index].name,
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                            ),
+                            Row(
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.symmetric(
+                                      vertical: 5, horizontal: 8),
+                                  width: 140,
+                                  child: Text(
+                                    sickmodelsLevel3[index].name,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Container(
-                                    margin: EdgeInsets.symmetric(
-                                        vertical: 5, horizontal: 8),
-                                    width: 140,
-                                    child:
-                                        Text(sickmodelsLevel3[index].address),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Container(
-                                    margin: EdgeInsets.symmetric(
-                                        vertical: 5, horizontal: 8),
-                                    width: 140,
-                                    child: Text(
-                                        'ระดับที่ ${sickmodelsLevel3[index].level}'),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.symmetric(
+                                      vertical: 5, horizontal: 8),
+                                  width: 140,
+                                  child: Text(sickmodelsLevel3[index].address),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.symmetric(
+                                      vertical: 5, horizontal: 8),
+                                  width: 140,
+                                  child: Text(
+                                      'ระดับที่ ${sickmodelsLevel3[index].level}'),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -322,80 +336,81 @@ class _HomeState extends State<Home> {
         ? ShowProgress()
         : Container(
             height: 270,
-            child: Expanded(
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                shrinkWrap: true,
-                physics: ScrollPhysics(),
-                itemCount: sickmodelsLevel2.length,
-                itemBuilder: (context, index) => Container(
-                  width: 175,
-                  child: GestureDetector(
-                    onTap: () {
-                      print('## You Click index = $index');
-                      showSickDialog(sickmodelsLevel2[index], index);
-                    },
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.all(Radius.circular(28)),
-                      child: Card(
-                        color: Color(0xffFFD1BB),
-                        child: Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: Column(
-                            children: [
-                              Container(
-                                margin: EdgeInsets.symmetric(vertical: 12),
-                                width: 130,
-                                height: 80,
-                                child: ClipRRect(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10)),
-                                  child: Image.network(
-                                    sickmodelsLevel2[index].urlImage,
-                                    fit: BoxFit.cover,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              shrinkWrap: true,
+              physics: ScrollPhysics(),
+              itemCount: sickmodelsLevel2.length,
+              itemBuilder: (context, index) => Container(
+                width: 175,
+                child: GestureDetector(
+                  onTap: () {
+                    print('## You Click index = $index');
+                    showSickDialog(sickmodelsLevel2[index], index);
+                  },
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.all(Radius.circular(28)),
+                    child: Card(
+                      color: Color(0xffFFD1BB),
+                      child: Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Column(
+                          children: [
+                            Container(
+                              margin: EdgeInsets.symmetric(vertical: 12),
+                              width: 130,
+                              height: 80,
+                              child: ClipRRect(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                                child: Image.network(
+                                  sickmodelsLevel2[index].urlImage,
+                                  fit: BoxFit.cover,
+                                  errorBuilder:
+                                      (context, exception, stackTrack) => Icon(
+                                    Icons.error,
                                   ),
                                 ),
                               ),
-                              Row(
-                                children: [
-                                  Container(
-                                    margin: EdgeInsets.symmetric(
-                                        vertical: 5, horizontal: 8),
-                                    width: 140,
-                                    child: Text(
-                                      sickmodelsLevel2[index].name,
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                            ),
+                            Row(
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.symmetric(
+                                      vertical: 5, horizontal: 8),
+                                  width: 140,
+                                  child: Text(
+                                    sickmodelsLevel2[index].name,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Container(
-                                    margin: EdgeInsets.symmetric(
-                                        vertical: 5, horizontal: 8),
-                                    width: 140,
-                                    child:
-                                        Text(sickmodelsLevel2[index].address),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Container(
-                                    margin: EdgeInsets.symmetric(
-                                        vertical: 5, horizontal: 8),
-                                    width: 140,
-                                    child: Text(
-                                        'ระดับที่ ${sickmodelsLevel2[index].level}'),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.symmetric(
+                                      vertical: 5, horizontal: 8),
+                                  width: 140,
+                                  child: Text(sickmodelsLevel2[index].address),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.symmetric(
+                                      vertical: 5, horizontal: 8),
+                                  width: 140,
+                                  child: Text(
+                                      'ระดับที่ ${sickmodelsLevel2[index].level}'),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -445,80 +460,81 @@ class _HomeState extends State<Home> {
         ? ShowProgress()
         : Container(
             height: 270,
-            child: Expanded(
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                shrinkWrap: true,
-                physics: ScrollPhysics(),
-                itemCount: sickmodelsLevel1.length,
-                itemBuilder: (context, index) => Container(
-                  width: 175,
-                  child: GestureDetector(
-                    onTap: () {
-                      print('## You Click index = $index');
-                      showSickDialog(sickmodelsLevel1[index], index);
-                    },
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.all(Radius.circular(28)),
-                      child: Card(
-                        color: Color(0xffFFD1BB),
-                        child: Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: Column(
-                            children: [
-                              Container(
-                                margin: EdgeInsets.symmetric(vertical: 12),
-                                width: 130,
-                                height: 80,
-                                child: ClipRRect(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10)),
-                                  child: Image.network(
-                                    sickmodelsLevel1[index].urlImage,
-                                    fit: BoxFit.cover,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              shrinkWrap: true,
+              physics: ScrollPhysics(),
+              itemCount: sickmodelsLevel1.length,
+              itemBuilder: (context, index) => Container(
+                width: 175,
+                child: GestureDetector(
+                  onTap: () {
+                    print('## You Click index = $index');
+                    showSickDialog(sickmodelsLevel1[index], index);
+                  },
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.all(Radius.circular(28)),
+                    child: Card(
+                      color: Color(0xffFFD1BB),
+                      child: Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Column(
+                          children: [
+                            Container(
+                              margin: EdgeInsets.symmetric(vertical: 12),
+                              width: 130,
+                              height: 80,
+                              child: ClipRRect(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                                child: Image.network(
+                                  sickmodelsLevel1[index].urlImage,
+                                  fit: BoxFit.cover,
+                                  errorBuilder:
+                                      (context, exception, stackTrack) => Icon(
+                                    Icons.error,
                                   ),
                                 ),
                               ),
-                              Row(
-                                children: [
-                                  Container(
-                                    margin: EdgeInsets.symmetric(
-                                        vertical: 5, horizontal: 8),
-                                    width: 140,
-                                    child: Text(
-                                      sickmodelsLevel1[index].name,
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                            ),
+                            Row(
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.symmetric(
+                                      vertical: 5, horizontal: 8),
+                                  width: 140,
+                                  child: Text(
+                                    sickmodelsLevel1[index].name,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Container(
-                                    margin: EdgeInsets.symmetric(
-                                        vertical: 5, horizontal: 8),
-                                    width: 140,
-                                    child:
-                                        Text(sickmodelsLevel1[index].address),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Container(
-                                    margin: EdgeInsets.symmetric(
-                                        vertical: 5, horizontal: 8),
-                                    width: 140,
-                                    child: Text(
-                                        'ระดับที่ ${sickmodelsLevel1[index].level}'),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.symmetric(
+                                      vertical: 5, horizontal: 8),
+                                  width: 140,
+                                  child: Text(sickmodelsLevel1[index].address),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.symmetric(
+                                      vertical: 5, horizontal: 8),
+                                  width: 140,
+                                  child: Text(
+                                      'ระดับที่ ${sickmodelsLevel1[index].level}'),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -571,79 +587,81 @@ class _HomeState extends State<Home> {
         ? ShowProgress()
         : Container(
             height: 270,
-            child: Expanded(
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                shrinkWrap: true,
-                physics: ScrollPhysics(),
-                itemCount: sickmodels.length,
-                itemBuilder: (context, index) => Container(
-                  width: 175,
-                  child: GestureDetector(
-                    onTap: () {
-                      print('## You Click index = $index');
-                      showSickDialog(sickmodels[index], index);
-                    },
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.all(Radius.circular(28)),
-                      child: Card(
-                        color: Color(0xffFFD1BB),
-                        child: Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: Column(
-                            children: [
-                              Container(
-                                margin: EdgeInsets.symmetric(vertical: 12),
-                                width: 130,
-                                height: 80,
-                                child: ClipRRect(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10)),
-                                  child: Image.network(
-                                    sickmodels[index].urlImage,
-                                    fit: BoxFit.cover,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              shrinkWrap: true,
+              physics: ScrollPhysics(),
+              itemCount: sickmodels.length,
+              itemBuilder: (context, index) => Container(
+                width: 175,
+                child: GestureDetector(
+                  onTap: () {
+                    print('## You Click index = $index');
+                    showSickDialog(sickmodels[index], index);
+                  },
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.all(Radius.circular(28)),
+                    child: Card(
+                      color: Color(0xffFFD1BB),
+                      child: Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Column(
+                          children: [
+                            Container(
+                              margin: EdgeInsets.symmetric(vertical: 12),
+                              width: 130,
+                              height: 80,
+                              child: ClipRRect(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                                child: Image.network(
+                                  sickmodels[index].urlImage,
+                                  fit: BoxFit.cover,
+                                  errorBuilder:
+                                      (context, exception, stackTrack) => Icon(
+                                    Icons.error,
                                   ),
                                 ),
                               ),
-                              Row(
-                                children: [
-                                  Container(
-                                    margin: EdgeInsets.symmetric(
-                                        vertical: 5, horizontal: 8),
-                                    width: 140,
-                                    child: Text(
-                                      sickmodels[index].name,
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                            ),
+                            Row(
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.symmetric(
+                                      vertical: 5, horizontal: 8),
+                                  width: 140,
+                                  child: Text(
+                                    sickmodels[index].name,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Container(
-                                    margin: EdgeInsets.symmetric(
-                                        vertical: 5, horizontal: 8),
-                                    width: 140,
-                                    child: Text(sickmodels[index].address),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Container(
-                                    margin: EdgeInsets.symmetric(
-                                        vertical: 5, horizontal: 8),
-                                    width: 140,
-                                    child: Text(
-                                        'ระดับที่ ${sickmodels[index].level}'),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.symmetric(
+                                      vertical: 5, horizontal: 8),
+                                  width: 140,
+                                  child: Text(sickmodels[index].address),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.symmetric(
+                                      vertical: 5, horizontal: 8),
+                                  width: 140,
+                                  child: Text(
+                                      'ระดับที่ ${sickmodels[index].level}'),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
                     ),

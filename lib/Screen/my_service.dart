@@ -5,7 +5,6 @@ import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'Search/search_bar.dart';
 import 'Profile/profile.dart';
 import 'Map/map.dart';
-import 'Addbedridden/add.dart';
 import 'Home/home.dart';
 
 // Adapted from offical flutter gallery:
@@ -25,7 +24,7 @@ class MyService extends StatefulWidget {
 class _MyServiceState extends State<MyService> {
   int selectedpage = 0;
 
-  final _pageOption = [Home(),SearchBar() ,Add(), Map(), Profile()];
+  final _pageOption = [Home(),SearchBar() , Map(), Profile()];
 
 
   @override
@@ -38,7 +37,7 @@ class _MyServiceState extends State<MyService> {
           items: [
             TabItem(icon: Icons.home, title: 'Home'),
             TabItem(icon: Icons.search, title: 'Search'),
-            TabItem(icon: Icons.add_location, title: 'Add'),
+            // TabItem(icon: Icons.add_location, title: 'Add'),
             TabItem(icon: Icons.map, title: 'map'),
             TabItem(icon: Icons.account_circle, title: 'Profile'),
           ],

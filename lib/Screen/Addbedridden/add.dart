@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'dart:math';
-import 'package:bedridden/Screen/Addbedridden/add_family.dart';
 import 'package:bedridden/models/sick_model.dart';
 import 'package:bedridden/utility/dialog.dart';
 import 'package:bedridden/widgets/show_progess.dart';
@@ -11,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+
+import 'add_health.dart';
 
 class Add extends StatefulWidget {
   const Add({
@@ -66,6 +67,7 @@ class _AddState extends State<Add> {
     pickedDate = DateTime.now();
     checkPermission();
   }
+
 
   Future<Null> checkPermission() async {
     bool locationService;
@@ -123,7 +125,6 @@ class _AddState extends State<Add> {
 
   @override
   Widget build(BuildContext context) {
-    // Size size = MediaQuery.of(context).size;
     // final IconThemeData data;
     return Scaffold(
       appBar: AppBar(
@@ -132,6 +133,15 @@ class _AddState extends State<Add> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
             bottom: Radius.elliptical(50.0, 50.0),
+          ),
+        ),
+        leading: Container(),
+        title: Center(
+          child: Text(
+            ' ส่วนที่1 ข้อมูลของผู้ป่วย ',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
       ),
@@ -143,18 +153,6 @@ class _AddState extends State<Add> {
           child: ListView(
             padding: EdgeInsets.only(top: 16, left: 16, right: 16),
             children: [
-              buildSaveBedridden(), //'บันทึก'
-              Container(
-                child: Center(
-                  child: Text(
-                    ' ส่วนที่1 ข้อมูลของผู้ป่วย ',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ),
               buildBedriddenTitle(), //'ข้อมูลผู้ป่วย'
               buildImageBedridden(context), //'รูปภาพ'
               buildNameNumBersexBedridden(), //'ชื่อ-นามสุกม,เลขบัตรประจำตัวประชาชน,เพศ'
@@ -170,7 +168,7 @@ class _AddState extends State<Add> {
               buildOccupationTalent(), //'อาชีพ,ความสามารถพิเศษ'
               groupPosition(), //'ฐานะ'
               buildlevel(), //'ระดับกการเจ็บป่วย'
-              buildNext1(context), //'หน้าถัดไป'
+              buildSaveBedridden(), //'บันทึก'
             ],
           ),
         ),
@@ -215,7 +213,7 @@ class _AddState extends State<Add> {
   Container buildSaveBedridden() {
     return Container(
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           MaterialButton(
             onPressed: () {
@@ -342,33 +340,6 @@ class _AddState extends State<Add> {
             ),
           ],
         ),
-      ],
-    );
-  }
-
-  Column buildNext1(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        MaterialButton(
-          onPressed: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => Addfamily()));
-          },
-          shape: RoundedRectangleBorder(
-              side: BorderSide(
-                color: const Color(0xffffede5),
-              ),
-              borderRadius: BorderRadius.circular(50)),
-          child: Text(
-            "หน้าถัดไป",
-            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
-          ),
-          color: const Color(0xffdfad98),
-        ),
-        const SizedBox(
-          height: 32,
-        )
       ],
     );
   }
@@ -1185,8 +1156,12 @@ class _AddState extends State<Add> {
               .collection('sick')
               .doc(model.idCard)
               .set(model.toMap())
-              .then((value) =>
-                  normalDialog(context, 'Insert Sick Database Success'));
+              .then((value) => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => Addhealth(
+                            idCard: idCardController.text,
+                          ))));
         });
       });
     });

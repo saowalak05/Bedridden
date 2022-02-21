@@ -126,8 +126,8 @@ class SickModel {
       race: map['race'] ?? '',
       nationality: map['nationality'] ?? '',
       religion: map['religion'] ?? '',
-      lat: map['lat'] ?? '',
-      lng: map['lng'] ?? '',
+      lat: map['lat'] ?? 0.0,
+      lng: map['lng'] ?? 0.0,
     );
   }
 
