@@ -66,7 +66,7 @@ class _AddfamilyState extends State<Addfamily> {
           child: Form(
             key: formkey,
             child: ListView(
-              padding: EdgeInsets.only(top: 16, left: 16, right: 16),
+              padding: EdgeInsets.only(top: 16, left: 8, right: 8),
               children: [
                 buildtitle(), //'ชื่อ-สกุล สมาชิกในครอบครัว '
                 filedOne(),

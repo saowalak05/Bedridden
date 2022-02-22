@@ -53,7 +53,7 @@ class _AddenvironmentState extends State<Addenvironment> {
           behavior: HitTestBehavior.opaque,
           child: Form(
             child: ListView(
-              padding: EdgeInsets.all(16.0),
+              padding: EdgeInsets.only(top: 16, left: 8, right: 8),
               children: [
                 buildaccommodation(),
                 buildtypeHouse(),

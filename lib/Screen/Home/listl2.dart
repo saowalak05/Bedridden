@@ -70,19 +70,8 @@ class _Listl2State extends State<Listl2> {
   Widget build(BuildContext context) {
     Intl.defaultLocale = 'th';
     initializeDateFormatting();
-    // ignore: unused_local_variable
-    Size size = MediaQuery.of(context).size;
-    // ignore: unused_local_variable
-    final IconThemeData data;
     return Scaffold(
       appBar: AppBar(
-        // leading: Padding(
-        //     padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
-        //     child: Image.asset(
-        //       'assets/images/bedridden.png',
-        //       fit: BoxFit.fitWidth,
-        //     ),
-        //   ),
         title: Text(
           'รายชื่อผู้ป่วย ระดับที่ 2',
           style: TextStyle(

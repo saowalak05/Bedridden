@@ -63,7 +63,7 @@ class _AddhealthState extends State<Addhealth> {
           child: Form(
             key: formkey,
             child: ListView(
-              padding: EdgeInsets.only(top: 16, left: 16, right: 16),
+              padding: EdgeInsets.only(top: 16, left: 8, right: 8),
               children: [
                 buildTitle3(), //'ส่วนที่ 2 ข้อมูลด้านสุขภาพ '
                 buildDisease(), //'โรคประจำตัวหรือปัญหาสุขภาพ '
