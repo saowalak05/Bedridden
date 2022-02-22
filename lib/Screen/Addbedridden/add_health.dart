@@ -47,7 +47,13 @@ class _AddhealthState extends State<Addhealth> {
           toolbarHeight: 90,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(
-              bottom: Radius.elliptical(50.0, 50.0),
+              bottom: Radius.elliptical(30.0, 30.0),
+            ),
+          ),
+          title: Text(
+            'ส่วนที่ 2 ข้อมูลด้านสุขภาพ',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
             ),
           ),
         ),
@@ -55,6 +61,7 @@ class _AddhealthState extends State<Addhealth> {
           onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
           behavior: HitTestBehavior.opaque,
           child: Form(
+            key: formkey,
             child: ListView(
               padding: EdgeInsets.only(top: 16, left: 16, right: 16),
               children: [
@@ -107,7 +114,7 @@ class _AddhealthState extends State<Addhealth> {
                 normalDialog(context, 'กรุณาเลือก ผลการตรวจสอบ');
               } else if (groupB == null) {
                 normalDialog(context, 'กรุณาเลือก การใช้ยา');
-              } else {
+              } else if (formkey.currentState!.validate()) {
                 proccessUplodhealth();
               }
             },

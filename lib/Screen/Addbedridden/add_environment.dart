@@ -38,7 +38,13 @@ class _AddenvironmentState extends State<Addenvironment> {
           toolbarHeight: 90,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(
-              bottom: Radius.elliptical(50.0, 50.0),
+              bottom: Radius.elliptical(30.0, 30.0),
+            ),
+          ),
+          title: Text(
+            'ส่วนที่ 3 ข้อมูลสภาพแวดล้อม',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
             ),
           ),
         ),
@@ -49,7 +55,6 @@ class _AddenvironmentState extends State<Addenvironment> {
             child: ListView(
               padding: EdgeInsets.all(16.0),
               children: [
-                buildTitle4(),
                 buildaccommodation(),
                 buildtypeHouse(),
                 buildHomeEnvironment(),
@@ -505,20 +510,6 @@ class _AddenvironmentState extends State<Addenvironment> {
           ),
         ),
       ],
-    );
-  }
-
-  Container buildTitle4() {
-    return Container(
-      child: Center(
-        child: Text(
-          'ส่วนที่ 3 ข้อมูลสภาพแวดล้อม ',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ),
     );
   }
 

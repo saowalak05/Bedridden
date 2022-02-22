@@ -68,7 +68,6 @@ class _AddState extends State<Add> {
     checkPermission();
   }
 
-
   Future<Null> checkPermission() async {
     bool locationService;
 
@@ -132,16 +131,14 @@ class _AddState extends State<Add> {
         toolbarHeight: 90,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
-            bottom: Radius.elliptical(50.0, 50.0),
+            bottom: Radius.elliptical(30.0, 30.0),
           ),
         ),
         leading: Container(),
-        title: Center(
-          child: Text(
-            ' ส่วนที่1 ข้อมูลของผู้ป่วย ',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-            ),
+        title: Text(
+          'ส่วนที่ 1 ข้อมูลของผู้ป่วย',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
           ),
         ),
       ),

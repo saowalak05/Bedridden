@@ -1,5 +1,9 @@
 import 'package:bedridden/Screen/Addbedridden/add_health.dart';
+import 'package:bedridden/Screen/Home/home.dart';
+import 'package:bedridden/models/family_model.dart';
 import 'package:bedridden/utility/dialog.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 class Addfamily extends StatefulWidget {
@@ -12,27 +16,28 @@ class Addfamily extends StatefulWidget {
 
 class _AddfamilyState extends State<Addfamily> {
   final formkey = GlobalKey<FormState>();
-  TextEditingController familynameController = TextEditingController(); //'ชื่อ'
-  TextEditingController familyrelationshipController =
+  TextEditingController familynameControllerone =
+      TextEditingController(); //'ชื่อ'
+  TextEditingController familyrelationshipControllerone =
       TextEditingController(); //'ความสัมพันธ์'
-  TextEditingController occupationContorller =
+  TextEditingController occupationContorllerone =
+      TextEditingController(); //'อาชีพ'
+  TextEditingController familynameControllertwo =
+      TextEditingController(); //'ชื่อ'
+  TextEditingController familyrelationshipControllertwo =
+      TextEditingController(); //'ความสัมพันธ์'
+  TextEditingController occupationContorllertwo =
+      TextEditingController(); //'อาชีพ'
+  TextEditingController familynameControllerthree =
+      TextEditingController(); //'ชื่อ'
+  TextEditingController familyrelationshipControllerthree =
+      TextEditingController(); //'ความสัมพันธ์'
+  TextEditingController occupationContorllerthree =
       TextEditingController(); //'อาชีพ'
 
-  List<Widget> widgets = [];
-  int index = 0;
   @override
   void initState() {
     super.initState();
-    widgets.add(filedOne());
-    widgets.add(filedTwo());
-    widgets.add(filedThree());
-    widgets.add(filedFour());
-    widgets.add(
-      filedfive(),
-    );
-    widgets.add(
-      filedsix(),
-    );
   }
 
   @override
@@ -45,7 +50,13 @@ class _AddfamilyState extends State<Addfamily> {
           toolbarHeight: 90,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(
-              bottom: Radius.elliptical(50.0, 50.0),
+              bottom: Radius.elliptical(30.0, 30.0),
+            ),
+          ),
+          title: Text(
+            'ส่วนที่ 4 ข้อมูลเครือญาติผู้ป่วย',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
             ),
           ),
         ),
@@ -53,37 +64,54 @@ class _AddfamilyState extends State<Addfamily> {
           onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
           behavior: HitTestBehavior.opaque,
           child: Form(
+            key: formkey,
             child: ListView(
               padding: EdgeInsets.only(top: 16, left: 16, right: 16),
               children: [
+                buildtitle(), //'ชื่อ-สกุล สมาชิกในครอบครัว '
+                filedOne(),
+                filedTwo(),
+                filedThree(),
                 buildSavefamily(),
-                buildTitle2(), //'ข้อมูลความสัมพันธ์กับสมาชิกในครอบครัว'
-                buildtitleform(), //'ชื่อ-สกุล สมาชิกในครอบครัว '
-                optionOne(), //'ชื่อ-สกุล สมาชิกในครอบครัว จำนวน 1 คน'
-                optionTwo(), //'ชื่อ-สกุล สมาชิกในครอบครัว จำนวน 2 คน'
-                optionThree(), //'ชื่อ-สกุล สมาชิกในครอบครัว จำนวน 3 คน'
-                optionFour(), //'ชื่อ-สกุล สมาชิกในครอบครัว จำนวน 4 คน'
-                optionfive(), //'ชื่อ-สกุล สมาชิกในครอบครัว จำนวน 5 คน'
-                optionsix(), //'ชื่อ-สกุล สมาชิกในครอบครัว จำนวน 6 คน'
-                widgets[index],
-                buildNext2(context), //'หน้าถัดไป'
               ],
             ),
           ),
         ));
   }
 
+  Future<Null> proccessUplodFamily() async {
+    await Firebase.initializeApp().then((value) async {
+      FamilyModel model = FamilyModel(
+          familynameone: familynameControllerone.text,
+          familynametwo: familynameControllertwo.text,
+          familynamethree: familynameControllerthree.text,
+          familyrelationshipone: familyrelationshipControllerone.text,
+          familyrelationshiptwo: familyrelationshipControllertwo.text,
+          familyrelationshipthree: familyrelationshipControllerthree.text,
+          occupationone: occupationContorllerone.text,
+          occupationtwo: occupationContorllertwo.text,
+          occupationthree: occupationContorllerthree.text);
+
+      await FirebaseFirestore.instance
+          .collection('Family')
+          .doc(
+            '${widget.idCard}',
+          )
+          .set(model.toMap())
+          .then((value) => Navigator.push(
+              context, MaterialPageRoute(builder: (context) => Home())));
+    });
+  }
+
   Container buildSavefamily() {
     return Container(
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           MaterialButton(
             onPressed: () {
-              if (index == 0) {
-                normalDialog(context, 'กรุณาเลือกจำนวนสมาชิก');
-              } else if (index == 1) {
-                normalDialog(context, 'กรุณาเลือกจำนวนสมาชิก 2');
+              if (formkey.currentState!.validate()) {
+                proccessUplodFamily();
               }
             },
             shape: RoundedRectangleBorder(
@@ -102,24 +130,42 @@ class _AddfamilyState extends State<Addfamily> {
     );
   }
 
-  Row buildtitleform() {
-    return Row(
+  Column buildtitle() {
+    return Column(
       children: [
-        const SizedBox(height: 16.0),
-        Container(
-          child: Row(
-            children: <Widget>[
-              Text(
-                'ชื่อ-สกุล สมาชิกในครอบครัว :',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                ),
-              )
-            ],
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const SizedBox(height: 30.0),
+            Text(
+              'ข้อมูลความสัมพันธ์กับสมาชิกในครอบครัว ',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w300,
+              ),
+            ),
+            const SizedBox(height: 30.0),
+          ],
         ),
-        const SizedBox(height: 16.0),
+        Row(
+          children: [
+            const SizedBox(height: 30.0),
+            Container(
+              child: Row(
+                children: <Widget>[
+                  Text(
+                    'ชื่อ-สกุล สมาชิกในครอบครัว :',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  )
+                ],
+              ),
+            ),
+            const SizedBox(height: 16.0),
+          ],
+        ),
       ],
     );
   }
@@ -151,7 +197,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: familynameController,
+          controller: familynameControllerone,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -170,7 +216,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: familyrelationshipController,
+          controller: familyrelationshipControllerone,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -189,7 +235,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: occupationContorller,
+          controller: occupationContorllerone,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -212,77 +258,6 @@ class _AddfamilyState extends State<Addfamily> {
           child: Row(
             children: <Widget>[
               Text(
-                'คนที่ 1 :',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก ชื่อ-สกุล';
-            } else {
-              return null;
-            }
-          },
-          controller: familynameController,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: '1.ชื่อ-สกุล',
-            labelText: '1.ชื่อ-สกุล *',
-            fillColor: const Color(0xfff7e4db),
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก ความสัมพันธ์กับผู้ป่วย';
-            } else {
-              return null;
-            }
-          },
-          controller: familyrelationshipController,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: 'ความสัมพันธ์กับผู้ป่วย',
-            labelText: 'ความสัมพันธ์กับผู้ป่วย ระบุ *',
-            fillColor: const Color(0xfff7e4db),
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก อาชีพ';
-            } else {
-              return null;
-            }
-          },
-          controller: occupationContorller,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: 'อาชีพ',
-            labelText: 'อาชีพ *',
-            fillColor: const Color(0xfff7e4db),
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        Container(
-          child: Row(
-            children: <Widget>[
-              Text(
                 'คนที่ 2 :',
                 style: TextStyle(
                   fontSize: 18,
@@ -301,7 +276,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: familynameController,
+          controller: familynameControllertwo,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -320,7 +295,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: familyrelationshipController,
+          controller: familyrelationshipControllertwo,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -339,7 +314,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: occupationContorller,
+          controller: occupationContorllertwo,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -362,148 +337,6 @@ class _AddfamilyState extends State<Addfamily> {
           child: Row(
             children: <Widget>[
               Text(
-                'คนที่ 1 :',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก ชื่อ-สกุล';
-            } else {
-              return null;
-            }
-          },
-          controller: familynameController,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: '1.ชื่อ-สกุล',
-            labelText: '1.ชื่อ-สกุล *',
-            fillColor: const Color(0xfff7e4db),
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก ความสัมพันธ์กับผู้ป่วย';
-            } else {
-              return null;
-            }
-          },
-          controller: familyrelationshipController,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: 'ความสัมพันธ์กับผู้ป่วย',
-            labelText: 'ความสัมพันธ์กับผู้ป่วย ระบุ *',
-            fillColor: const Color(0xfff7e4db),
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก อาชีพ';
-            } else {
-              return null;
-            }
-          },
-          controller: occupationContorller,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: 'อาชีพ',
-            labelText: 'อาชีพ *',
-            fillColor: const Color(0xfff7e4db),
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        Container(
-          child: Row(
-            children: <Widget>[
-              Text(
-                'คนที่ 2 :',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก ชื่อ-สกุล';
-            } else {
-              return null;
-            }
-          },
-          controller: familynameController,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: '2.ชื่อ-สกุล',
-            labelText: '2.ชื่อ-สกุล *',
-            fillColor: const Color(0xfff7e4db),
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก ความสัมพันธ์กับผู้ป่วย';
-            } else {
-              return null;
-            }
-          },
-          controller: familyrelationshipController,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: 'ความสัมพันธ์กับผู้ป่วย',
-            labelText: 'ความสัมพันธ์กับผู้ป่วย ระบุ *',
-            fillColor: const Color(0xfff7e4db),
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก อาชีพ';
-            } else {
-              return null;
-            }
-          },
-          controller: occupationContorller,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: 'อาชีพ',
-            labelText: 'อาชีพ *',
-            fillColor: const Color(0xfff7e4db),
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        Container(
-          child: Row(
-            children: <Widget>[
-              Text(
                 'คนที่ 3 :',
                 style: TextStyle(
                   fontSize: 18,
@@ -522,7 +355,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: familynameController,
+          controller: familynameControllerthree,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -541,7 +374,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: familyrelationshipController,
+          controller: familyrelationshipControllerthree,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -560,7 +393,7 @@ class _AddfamilyState extends State<Addfamily> {
               return null;
             }
           },
-          controller: occupationContorller,
+          controller: occupationContorllerthree,
           textCapitalization: TextCapitalization.words,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -571,1214 +404,6 @@ class _AddfamilyState extends State<Addfamily> {
           ),
         ),
       ],
-    );
-  }
-
-  Column filedFour() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        const SizedBox(height: 16.0),
-        Container(
-          child: Row(
-            children: <Widget>[
-              Text(
-                'คนที่ 1 :',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก ชื่อ-สกุล';
-            } else {
-              return null;
-            }
-          },
-          controller: familynameController,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: '1.ชื่อ-สกุล',
-            labelText: '1.ชื่อ-สกุล *',
-            fillColor: const Color(0xfff7e4db),
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก ความสัมพันธ์กับผู้ป่วย';
-            } else {
-              return null;
-            }
-          },
-          controller: familyrelationshipController,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: 'ความสัมพันธ์กับผู้ป่วย',
-            labelText: 'ความสัมพันธ์กับผู้ป่วย ระบุ *',
-            fillColor: const Color(0xfff7e4db),
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก อาชีพ';
-            } else {
-              return null;
-            }
-          },
-          controller: occupationContorller,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: 'อาชีพ',
-            labelText: 'อาชีพ *',
-            fillColor: const Color(0xfff7e4db),
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        Container(
-          child: Row(
-            children: <Widget>[
-              Text(
-                'คนที่ 2 :',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก ชื่อ-สกุล';
-            } else {
-              return null;
-            }
-          },
-          controller: familynameController,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: '2.ชื่อ-สกุล',
-            labelText: '2.ชื่อ-สกุล *',
-            fillColor: const Color(0xfff7e4db),
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก ความสัมพันธ์กับผู้ป่วย';
-            } else {
-              return null;
-            }
-          },
-          controller: familyrelationshipController,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: 'ความสัมพันธ์กับผู้ป่วย',
-            labelText: 'ความสัมพันธ์กับผู้ป่วย ระบุ *',
-            fillColor: const Color(0xfff7e4db),
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก อาชีพ';
-            } else {
-              return null;
-            }
-          },
-          controller: occupationContorller,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: 'อาชีพ',
-            labelText: 'อาชีพ *',
-            fillColor: const Color(0xfff7e4db),
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        Container(
-          child: Row(
-            children: <Widget>[
-              Text(
-                'คนที่ 3 :',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก ชื่อ-สกุล';
-            } else {
-              return null;
-            }
-          },
-          controller: familynameController,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: '3.ชื่อ-สกุล',
-            labelText: '3.ชื่อ-สกุล *',
-            fillColor: const Color(0xfff7e4db),
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก ความสัมพันธ์กับผู้ป่วย';
-            } else {
-              return null;
-            }
-          },
-          controller: familyrelationshipController,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: 'ความสัมพันธ์กับผู้ป่วย',
-            labelText: 'ความสัมพันธ์กับผู้ป่วย ระบุ *',
-            fillColor: const Color(0xfff7e4db),
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก อาชีพ';
-            } else {
-              return null;
-            }
-          },
-          controller: occupationContorller,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: 'อาชีพ',
-            labelText: 'อาชีพ *',
-            fillColor: const Color(0xfff7e4db),
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        Container(
-          child: Row(
-            children: <Widget>[
-              Text(
-                'คนที่ 4 :',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก ชื่อ-สกุล';
-            } else {
-              return null;
-            }
-          },
-          controller: familynameController,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: '4.ชื่อ-สกุล',
-            labelText: '4.ชื่อ-สกุล *',
-            fillColor: const Color(0xfff7e4db),
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก ความสัมพันธ์กับผู้ป่วย';
-            } else {
-              return null;
-            }
-          },
-          controller: familyrelationshipController,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: 'ความสัมพันธ์กับผู้ป่วย',
-            labelText: 'ความสัมพันธ์กับผู้ป่วย ระบุ *',
-            fillColor: const Color(0xfff7e4db),
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก อาชีพ';
-            } else {
-              return null;
-            }
-          },
-          controller: occupationContorller,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: 'อาชีพ',
-            labelText: 'อาชีพ *',
-            fillColor: const Color(0xfff7e4db),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Column filedfive() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        const SizedBox(height: 16.0),
-        Container(
-          child: Row(
-            children: <Widget>[
-              Text(
-                'คนที่ 1 :',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก ชื่อ-สกุล';
-            } else {
-              return null;
-            }
-          },
-          controller: familynameController,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: '1.ชื่อ-สกุล',
-            labelText: '1.ชื่อ-สกุล *',
-            fillColor: const Color(0xfff7e4db),
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก ความสัมพันธ์กับผู้ป่วย';
-            } else {
-              return null;
-            }
-          },
-          controller: familyrelationshipController,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: 'ความสัมพันธ์กับผู้ป่วย',
-            labelText: 'ความสัมพันธ์กับผู้ป่วย ระบุ *',
-            fillColor: const Color(0xfff7e4db),
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก อาชีพ';
-            } else {
-              return null;
-            }
-          },
-          controller: occupationContorller,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: 'อาชีพ',
-            labelText: 'อาชีพ *',
-            fillColor: const Color(0xfff7e4db),
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        Container(
-          child: Row(
-            children: <Widget>[
-              Text(
-                'คนที่ 2 :',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก ชื่อ-สกุล';
-            } else {
-              return null;
-            }
-          },
-          controller: familynameController,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: '2.ชื่อ-สกุล',
-            labelText: '2.ชื่อ-สกุล *',
-            fillColor: const Color(0xfff7e4db),
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก ความสัมพันธ์กับผู้ป่วย';
-            } else {
-              return null;
-            }
-          },
-          controller: familyrelationshipController,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: 'ความสัมพันธ์กับผู้ป่วย',
-            labelText: 'ความสัมพันธ์กับผู้ป่วย ระบุ *',
-            fillColor: const Color(0xfff7e4db),
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก อาชีพ';
-            } else {
-              return null;
-            }
-          },
-          controller: occupationContorller,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: 'อาชีพ',
-            labelText: 'อาชีพ *',
-            fillColor: const Color(0xfff7e4db),
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        Container(
-          child: Row(
-            children: <Widget>[
-              Text(
-                'คนที่ 3 :',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก ชื่อ-สกุล';
-            } else {
-              return null;
-            }
-          },
-          controller: familynameController,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: '3.ชื่อ-สกุล',
-            labelText: '3.ชื่อ-สกุล *',
-            fillColor: const Color(0xfff7e4db),
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก ความสัมพันธ์กับผู้ป่วย';
-            } else {
-              return null;
-            }
-          },
-          controller: familyrelationshipController,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: 'ความสัมพันธ์กับผู้ป่วย',
-            labelText: 'ความสัมพันธ์กับผู้ป่วย ระบุ *',
-            fillColor: const Color(0xfff7e4db),
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก อาชีพ';
-            } else {
-              return null;
-            }
-          },
-          controller: occupationContorller,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: 'อาชีพ',
-            labelText: 'อาชีพ *',
-            fillColor: const Color(0xfff7e4db),
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        Container(
-          child: Row(
-            children: <Widget>[
-              Text(
-                'คนที่ 4 :',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก ชื่อ-สกุล';
-            } else {
-              return null;
-            }
-          },
-          controller: familynameController,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: '4.ชื่อ-สกุล',
-            labelText: '4.ชื่อ-สกุล *',
-            fillColor: const Color(0xfff7e4db),
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก ความสัมพันธ์กับผู้ป่วย';
-            } else {
-              return null;
-            }
-          },
-          controller: familyrelationshipController,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: 'ความสัมพันธ์กับผู้ป่วย',
-            labelText: 'ความสัมพันธ์กับผู้ป่วย ระบุ *',
-            fillColor: const Color(0xfff7e4db),
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก อาชีพ';
-            } else {
-              return null;
-            }
-          },
-          controller: occupationContorller,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: 'อาชีพ',
-            labelText: 'อาชีพ *',
-            fillColor: const Color(0xfff7e4db),
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        Container(
-          child: Row(
-            children: <Widget>[
-              Text(
-                'คนที่ 5 :',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก ชื่อ-สกุล';
-            } else {
-              return null;
-            }
-          },
-          controller: familynameController,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: '5.ชื่อ-สกุล',
-            labelText: '5.ชื่อ-สกุล *',
-            fillColor: const Color(0xfff7e4db),
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก ความสัมพันธ์กับผู้ป่วย';
-            } else {
-              return null;
-            }
-          },
-          controller: familyrelationshipController,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: 'ความสัมพันธ์กับผู้ป่วย',
-            labelText: 'ความสัมพันธ์กับผู้ป่วย ระบุ *',
-            fillColor: const Color(0xfff7e4db),
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก อาชีพ';
-            } else {
-              return null;
-            }
-          },
-          controller: occupationContorller,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: 'อาชีพ',
-            labelText: 'อาชีพ *',
-            fillColor: const Color(0xfff7e4db),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Column filedsix() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        const SizedBox(height: 16.0),
-        Container(
-          child: Row(
-            children: <Widget>[
-              Text(
-                'คนที่ 1 :',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก ชื่อ-สกุล';
-            } else {
-              return null;
-            }
-          },
-          controller: familynameController,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: '1.ชื่อ-สกุล',
-            labelText: '1.ชื่อ-สกุล *',
-            fillColor: const Color(0xfff7e4db),
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก ความสัมพันธ์กับผู้ป่วย';
-            } else {
-              return null;
-            }
-          },
-          controller: familyrelationshipController,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: 'ความสัมพันธ์กับผู้ป่วย',
-            labelText: 'ความสัมพันธ์กับผู้ป่วย ระบุ *',
-            fillColor: const Color(0xfff7e4db),
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก อาชีพ';
-            } else {
-              return null;
-            }
-          },
-          controller: occupationContorller,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: 'อาชีพ',
-            labelText: 'อาชีพ *',
-            fillColor: const Color(0xfff7e4db),
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        Container(
-          child: Row(
-            children: <Widget>[
-              Text(
-                'คนที่ 2 :',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก ชื่อ-สกุล';
-            } else {
-              return null;
-            }
-          },
-          controller: familynameController,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: '2.ชื่อ-สกุล',
-            labelText: '2.ชื่อ-สกุล *',
-            fillColor: const Color(0xfff7e4db),
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก ความสัมพันธ์กับผู้ป่วย';
-            } else {
-              return null;
-            }
-          },
-          controller: familyrelationshipController,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: 'ความสัมพันธ์กับผู้ป่วย',
-            labelText: 'ความสัมพันธ์กับผู้ป่วย ระบุ *',
-            fillColor: const Color(0xfff7e4db),
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก อาชีพ';
-            } else {
-              return null;
-            }
-          },
-          controller: occupationContorller,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: 'อาชีพ',
-            labelText: 'อาชีพ *',
-            fillColor: const Color(0xfff7e4db),
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        Container(
-          child: Row(
-            children: <Widget>[
-              Text(
-                'คนที่ 3 :',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก ชื่อ-สกุล';
-            } else {
-              return null;
-            }
-          },
-          controller: familynameController,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: '3.ชื่อ-สกุล',
-            labelText: '3.ชื่อ-สกุล *',
-            fillColor: const Color(0xfff7e4db),
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก ความสัมพันธ์กับผู้ป่วย';
-            } else {
-              return null;
-            }
-          },
-          controller: familyrelationshipController,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: 'ความสัมพันธ์กับผู้ป่วย',
-            labelText: 'ความสัมพันธ์กับผู้ป่วย ระบุ *',
-            fillColor: const Color(0xfff7e4db),
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก อาชีพ';
-            } else {
-              return null;
-            }
-          },
-          controller: occupationContorller,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: 'อาชีพ',
-            labelText: 'อาชีพ *',
-            fillColor: const Color(0xfff7e4db),
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        Container(
-          child: Row(
-            children: <Widget>[
-              Text(
-                'คนที่ 4 :',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก ชื่อ-สกุล';
-            } else {
-              return null;
-            }
-          },
-          controller: familynameController,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: '4.ชื่อ-สกุล',
-            labelText: '4.ชื่อ-สกุล *',
-            fillColor: const Color(0xfff7e4db),
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก ความสัมพันธ์กับผู้ป่วย';
-            } else {
-              return null;
-            }
-          },
-          controller: familyrelationshipController,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: 'ความสัมพันธ์กับผู้ป่วย',
-            labelText: 'ความสัมพันธ์กับผู้ป่วย ระบุ *',
-            fillColor: const Color(0xfff7e4db),
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก อาชีพ';
-            } else {
-              return null;
-            }
-          },
-          controller: occupationContorller,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: 'อาชีพ',
-            labelText: 'อาชีพ *',
-            fillColor: const Color(0xfff7e4db),
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        Container(
-          child: Row(
-            children: <Widget>[
-              Text(
-                'คนที่ 5 :',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก ชื่อ-สกุล';
-            } else {
-              return null;
-            }
-          },
-          controller: familynameController,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: '5.ชื่อ-สกุล',
-            labelText: '5.ชื่อ-สกุล *',
-            fillColor: const Color(0xfff7e4db),
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก ความสัมพันธ์กับผู้ป่วย';
-            } else {
-              return null;
-            }
-          },
-          controller: familyrelationshipController,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: 'ความสัมพันธ์กับผู้ป่วย',
-            labelText: 'ความสัมพันธ์กับผู้ป่วย ระบุ *',
-            fillColor: const Color(0xfff7e4db),
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก อาชีพ';
-            } else {
-              return null;
-            }
-          },
-          controller: occupationContorller,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: 'อาชีพ',
-            labelText: 'อาชีพ *',
-            fillColor: const Color(0xfff7e4db),
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        Container(
-          child: Row(
-            children: <Widget>[
-              Text(
-                'คนที่ 6 :',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก ชื่อ-สกุล';
-            } else {
-              return null;
-            }
-          },
-          controller: familynameController,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: '6.ชื่อ-สกุล',
-            labelText: '6.ชื่อ-สกุล *',
-            fillColor: const Color(0xfff7e4db),
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก ความสัมพันธ์กับผู้ป่วย';
-            } else {
-              return null;
-            }
-          },
-          controller: familyrelationshipController,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: 'ความสัมพันธ์กับผู้ป่วย',
-            labelText: 'ความสัมพันธ์กับผู้ป่วย ระบุ *',
-            fillColor: const Color(0xfff7e4db),
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก อาชีพ';
-            } else {
-              return null;
-            }
-          },
-          controller: occupationContorller,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: 'อาชีพ',
-            labelText: 'อาชีพ *',
-            fillColor: const Color(0xfff7e4db),
-          ),
-        ),
-      ],
-    );
-  }
-
-  RadioListTile<int> optionsix() {
-    return RadioListTile(
-      title: Text('สมาชิกในครอบครัว จำนวน 6 คน'),
-      value: 5,
-      groupValue: index,
-      onChanged: (value) {
-        setState(() {
-          index = value!;
-        });
-      },
-    );
-  }
-
-  RadioListTile<int> optionfive() {
-    return RadioListTile(
-      title: Text('สมาชิกในครอบครัว จำนวน 5 คน'),
-      value: 4,
-      groupValue: index,
-      onChanged: (value) {
-        setState(() {
-          index = value!;
-        });
-      },
-    );
-  }
-
-  RadioListTile<int> optionFour() {
-    return RadioListTile(
-      title: Text('สมาชิกในครอบครัว จำนวน 4 คน'),
-      value: 3,
-      groupValue: index,
-      onChanged: (value) {
-        setState(() {
-          index = value!;
-        });
-      },
-    );
-  }
-
-  RadioListTile<int> optionThree() {
-    return RadioListTile(
-      title: Text('สมาชิกในครอบครัว จำนวน 3 คน'),
-      value: 2,
-      groupValue: index,
-      onChanged: (value) {
-        setState(() {
-          index = value!;
-        });
-      },
-    );
-  }
-
-  RadioListTile<int> optionTwo() {
-    return RadioListTile(
-      title: Text('สมาชิกในครอบครัว จำนวน 2 คน'),
-      value: 1,
-      groupValue: index,
-      onChanged: (value) {
-        setState(() {
-          index = value!;
-        });
-      },
-    );
-  }
-
-  RadioListTile<int> optionOne() {
-    return RadioListTile(
-      title: Text('สมาชิกในครอบครัว จำนวน 1 คน'),
-      value: 0,
-      groupValue: index,
-      onChanged: (value) {
-        setState(() {
-          index = value!;
-        });
-      },
-    );
-  }
-
-  Column buildNext2(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        MaterialButton(
-          onPressed: () {
-            // Navigator.push(
-            //     context, MaterialPageRoute(builder: (context) => Addhealth()));
-          },
-          shape: RoundedRectangleBorder(
-              side: BorderSide(
-                color: const Color(0xffffede5),
-              ),
-              borderRadius: BorderRadius.circular(50)),
-          child: Text(
-            "หน้าถัดไป",
-            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
-          ),
-          color: const Color(0xffdfad98),
-        ),
-        const SizedBox(
-          height: 32,
-        )
-      ],
-    );
-  }
-
-  Container buildTitle2() {
-    return Container(
-      child: Center(
-        child: Text(
-          'ข้อมูลความสัมพันธ์กับสมาชิกในครอบครัว ',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w300,
-          ),
-        ),
-      ),
     );
   }
 }

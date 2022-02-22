@@ -93,7 +93,7 @@ class _Listl2State extends State<Listl2> {
         toolbarHeight: 90,
         shape: RoundedRectangleBorder(
             borderRadius:
-                BorderRadius.vertical(bottom: Radius.elliptical(50.0, 50.0))),
+                BorderRadius.vertical(bottom: Radius.elliptical(30.0, 30.0))),
       ),
       body: SafeArea(
         child: Stack(

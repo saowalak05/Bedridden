@@ -32,7 +32,7 @@ class _ProfileState extends State<Profile> {
 
   Future<Null> findCurrentUser() async {
     await Firebase.initializeApp().then((value) async {
-       FirebaseAuth.instance.authStateChanges().listen((event) {
+      FirebaseAuth.instance.authStateChanges().listen((event) {
         setState(() {
           userNameController.text = event!.displayName!;
           email = event.email;
@@ -304,7 +304,7 @@ class _ProfileState extends State<Profile> {
         await reference.getDownloadURL().then((value) async {
           print('Upload Success access Token ==> $value');
           String urlProfile = value.toString();
-           FirebaseAuth.instance.authStateChanges().listen((event) async {
+          FirebaseAuth.instance.authStateChanges().listen((event) async {
             await event!.updatePhotoURL(urlProfile).then((value) =>
                 normalDialog(context, 'Update Image Profile Success'));
           });
@@ -315,7 +315,7 @@ class _ProfileState extends State<Profile> {
 
   Future<Null> processChangeDisplayName() async {
     await Firebase.initializeApp().then((value) async {
-       FirebaseAuth.instance.authStateChanges().listen((event) async {
+      FirebaseAuth.instance.authStateChanges().listen((event) async {
         await event!
             .updateDisplayName(userNameController.text)
             .then((value) => normalDialog(context, 'change Dsiplay Success'));
