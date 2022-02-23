@@ -141,7 +141,7 @@ class _AllState extends State<All> {
                       MaterialPageRoute(
                         builder: (context) => EditSick(
                           sickModel: model,
-                          docId: docIds[index],
+                          idCard: docIds[index],
                         ),
                       )).then((value) => readAllSick());
                 },

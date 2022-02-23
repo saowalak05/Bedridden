@@ -99,7 +99,7 @@ class _AddfamilyState extends State<Addfamily> {
           )
           .set(model.toMap())
           .then((value) => Navigator.push(
-              context, MaterialPageRoute(builder: (context) => Home())));
+              context, MaterialPageRoute(builder: (context) => Home( idCard: '${widget.idCard}',))));
     });
   }
 

@@ -15,7 +15,6 @@ class _SearchBarState extends State<SearchBar> {
   @override
   void initState() {
     super.initState();
-
     books = allBooks;
   }
 
@@ -23,19 +22,17 @@ class _SearchBarState extends State<SearchBar> {
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
           leading: Container(),
-          title: Center(
-            child: Text(
-              'Search',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
+          title: Text(
+            'Search',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
             ),
           ),
           backgroundColor: const Color(0xffdfad98),
           toolbarHeight: 90,
           shape: RoundedRectangleBorder(
               borderRadius:
-                  BorderRadius.vertical(bottom: Radius.elliptical(50.0, 50.0))),
+                  BorderRadius.vertical(bottom: Radius.elliptical(30.0, 30.0))),
         ),
         body: SafeArea(
             child: Padding(

@@ -22,12 +22,10 @@ class MapState extends State<Map> {
     return Scaffold(
       appBar: AppBar(
         leading: Container(),
-        title: Center(
-          child: Text(
-            'Map',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-            ),
+        title: Text(
+          'Map',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
           ),
         ),
         backgroundColor: const Color(0xffdfad98),

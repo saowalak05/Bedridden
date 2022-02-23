@@ -8,8 +8,8 @@ import 'package:intl/intl.dart';
 
 class EditSick extends StatefulWidget {
   final SickModel sickModel;
-  final String docId;
-  const EditSick({Key? key, required this.sickModel, required this.docId})
+  final String idCard;
+  const EditSick({Key? key, required this.sickModel, required this.idCard})
       : super(key: key);
 
   @override
@@ -55,7 +55,7 @@ class _EditSickState extends State<EditSick> {
     DateFormat dateFormat = DateFormat('dd MMMM yyyy', 'th');
     bondDateTimeStr = dateFormat.format(bondDateTime!);
 
-    docId = widget.docId;
+    docId = widget.idCard;
   }
 
   @override

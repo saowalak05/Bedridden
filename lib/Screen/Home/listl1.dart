@@ -141,7 +141,7 @@ class ListlState extends State<Listl> {
                       MaterialPageRoute(
                         builder: (context) => EditSick(
                           sickModel: model,
-                          docId: docIds[index],
+                          idCard: docIds[index],
                         ),
                       )).then((value) => readAllSick());
                 },

@@ -12,8 +12,11 @@ import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 
+import 'listledit.dart';
+
 class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+  final String idCard;
+  const Home({Key? key, required this.idCard}) : super(key: key);
 
   @override
   _HomeState createState() => _HomeState();
@@ -29,7 +32,7 @@ class _HomeState extends State<Home> {
   List<SickModel> sickmodelsLevel1 = [];
   List<SickModel> sickmodelsLevel2 = [];
   List<SickModel> sickmodelsLevel3 = [];
-  List<String> docIds = [];
+  List<String> idCard = [];
 
   @override
   void initState() {
@@ -43,7 +46,7 @@ class _HomeState extends State<Home> {
       sickmodelsLevel1.clear();
       sickmodelsLevel2.clear();
       sickmodelsLevel3.clear();
-      docIds.clear();
+      idCard.clear();
     }
 
     await Firebase.initializeApp().then((value) async {
@@ -55,15 +58,15 @@ class _HomeState extends State<Home> {
             sickmodels.add(model);
             if (model.level == '1') {
               sickmodelsLevel1.add(model);
-              docIds.add(item.id);
+              idCard.add(item.id);
             }
             if (model.level == '2') {
               sickmodelsLevel2.add(model);
-              docIds.add(item.id);
+              idCard.add(item.id);
             }
             if (model.level == '3') {
               sickmodelsLevel3.add(model);
-              docIds.add(item.id);
+              idCard.add(item.id);
             }
           });
         }
@@ -176,7 +179,7 @@ class _HomeState extends State<Home> {
                       MaterialPageRoute(
                         builder: (context) => EditSick(
                           sickModel: model,
-                          docId: docIds[index],
+                          idCard: idCard[index],
                         ),
                       )).then((value) => readAllSick());
                 },
@@ -597,7 +600,14 @@ class _HomeState extends State<Home> {
                 child: GestureDetector(
                   onTap: () {
                     print('## You Click index = $index');
-                    showSickDialog(sickmodels[index], index);
+                    // showSickDialog(sickmodels[index], index);
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (BuildContext context) {
+                          return LitlEdit(sickmodels[index], index);
+                        },
+                      ),
+                    );
                   },
                   child: ClipRRect(
                     borderRadius: BorderRadius.all(Radius.circular(28)),
@@ -725,7 +735,7 @@ class _HomeState extends State<Home> {
               Navigator.pop(context);
               await FirebaseFirestore.instance
                   .collection('sick')
-                  .doc(docIds[index])
+                  .doc(idCard[index])
                   .delete()
                   .then((value) => readAllSick());
             },
