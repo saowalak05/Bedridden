@@ -949,10 +949,13 @@ class _AddState extends State<Add> {
           validator: (value) {
             if (value!.isEmpty) {
               return 'กรุณากรอก เบอร์โทรศัพท์';
-            } else if (value.length != 10) {
-              return 'เบอร์โทรศัพท์ ไม่ครบ 10 หลัก';
+            } else {
+              if (value.length != 10) {
+                return 'เบอร์โทรศัพท์ ไม่ครบ 10 หลัก';
+              } else {
+                return null;
+              }
             }
-            return null;
           },
           controller: phoneController,
           maxLength: 10,
@@ -1152,22 +1155,23 @@ class _AddState extends State<Add> {
           Timestamp timestamp = Timestamp.fromDate(pickedDate);
 
           SickModel model = SickModel(
-              address: addressController.text,
-              bond: timestamp,
-              idCard: idCardController.text,
-              name: nameController.text,
-              phone: phoneController.text,
-              typeSex: _typesex!,
-              typeStatus: _typestatus!,
-              urlImage: urlImage,
-              level: level!,
-              nationality: nationality!,
-              patientoccupation: patientoccupationController.text,
-              race: race!,
-              religion: religion!,
-              talent: talentController.text,
-              typeeducation_level: typeeducation_level!,
-              typeposition: typeposition!);
+            address: addressController.text,
+            bond: timestamp,
+            idCard: idCardController.text,
+            name: nameController.text,
+            phone: phoneController.text,
+            typeSex: _typesex!,
+            typeStatus: _typestatus!,
+            urlImage: urlImage,
+            level: level!,
+            nationality: nationality!,
+            patientoccupation: patientoccupationController.text,
+            race: race!,
+            religion: religion!,
+            talent: talentController.text,
+            typeeducation_level: typeeducation_level!,
+            typeposition: typeposition!,
+          );
 
           await FirebaseFirestore.instance
               .collection('sick')

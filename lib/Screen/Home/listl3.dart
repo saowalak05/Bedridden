@@ -195,10 +195,10 @@ class _Listl3State extends State<Listl3> {
     return sickmodelsLevel3.length == 0
         ? ShowProgress()
         : Container(
-            height: 270,
+            height: 650,
             child: Expanded(
               child: ListView.builder(
-                scrollDirection: Axis.horizontal,
+                scrollDirection: Axis.vertical,
                 shrinkWrap: true,
                 physics: ScrollPhysics(),
                 itemCount: sickmodelsLevel3.length,

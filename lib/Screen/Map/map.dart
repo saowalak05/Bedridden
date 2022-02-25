@@ -37,8 +37,8 @@ class MapState extends State<Map> {
           backgroundColor: Color(0xffdfad98)),
       body: Stack(
         children: <Widget>[
-           showmap(),
-          // _buildGoogleMap(context),
+          
+          _buildGoogleMap(context),
 
           // _zoomminusfunction(),
           // _zoomplusfunction(),
@@ -47,17 +47,7 @@ class MapState extends State<Map> {
       ),
     );
   }
-  Container showmap() {
-  return Container(
-      child: GoogleMap(
-    mapType: MapType.normal,
-    initialCameraPosition: CameraPosition(
-      target: LatLng(19.030865, 99.925963),
-      zoom: 16,
-    ),
-    onMapCreated: (GoogleMapController controller) {},
-  ));
-}
+  
 
   // Widget _zoomminusfunction() {
   //   return Align(

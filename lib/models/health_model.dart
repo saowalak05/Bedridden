@@ -11,8 +11,8 @@ class HealthModel {
   final String otherdrugs;
   final String herb;
   final String foodsupplement;
-  final String typeexaminationresults;
-  final String typecorrectdruguse;
+  final String groupA;
+  final String groupB;
   HealthModel({
     required this.disease,
     required this.medicine,
@@ -22,9 +22,10 @@ class HealthModel {
     required this.otherdrugs,
     required this.herb,
     required this.foodsupplement,
-    required this.typeexaminationresults,
-    required this.typecorrectdruguse,
+    required this.groupA,
+    required this.groupB,
   });
+ 
 
   HealthModel copyWith({
     String? disease,
@@ -35,8 +36,8 @@ class HealthModel {
     String? otherdrugs,
     String? herb,
     String? foodsupplement,
-    String? typeexaminationresults,
-    String? typecorrectdruguse,
+    String? groupA,
+    String? groupB,
   }) {
     return HealthModel(
       disease: disease ?? this.disease,
@@ -47,8 +48,8 @@ class HealthModel {
       otherdrugs: otherdrugs ?? this.otherdrugs,
       herb: herb ?? this.herb,
       foodsupplement: foodsupplement ?? this.foodsupplement,
-      typeexaminationresults: typeexaminationresults ?? this.typeexaminationresults,
-      typecorrectdruguse: typecorrectdruguse ?? this.typecorrectdruguse,
+      groupA: groupA ?? this.groupA,
+      groupB: groupB ?? this.groupB,
     );
   }
 
@@ -62,8 +63,8 @@ class HealthModel {
       'otherdrugs': otherdrugs,
       'herb': herb,
       'foodsupplement': foodsupplement,
-      'typeexaminationresults': typeexaminationresults,
-      'typecorrectdruguse': typecorrectdruguse,
+      'groupA': groupA,
+      'groupB': groupB,
     };
   }
 
@@ -77,8 +78,8 @@ class HealthModel {
       otherdrugs: map['otherdrugs'],
       herb: map['herb'],
       foodsupplement: map['foodsupplement'],
-      typeexaminationresults: map['typeexaminationresults'],
-      typecorrectdruguse: map['typecorrectdruguse'],
+      groupA: map['groupA'],
+      groupB: map['groupB'],
     );
   }
 
@@ -88,7 +89,7 @@ class HealthModel {
 
   @override
   String toString() {
-    return 'HealthModel(disease: $disease, medicine: $medicine, inspectionresults: $inspectionresults, druguse: $druguse, correct: $correct, otherdrugs: $otherdrugs, herb: $herb, foodsupplement: $foodsupplement, typeexaminationresults: $typeexaminationresults, typecorrectdruguse: $typecorrectdruguse)';
+    return 'HealthModel(disease: $disease, medicine: $medicine, inspectionresults: $inspectionresults, druguse: $druguse, correct: $correct, otherdrugs: $otherdrugs, herb: $herb, foodsupplement: $foodsupplement, groupA: $groupA, groupB: $groupB)';
   }
 
   @override
@@ -104,8 +105,8 @@ class HealthModel {
       other.otherdrugs == otherdrugs &&
       other.herb == herb &&
       other.foodsupplement == foodsupplement &&
-      other.typeexaminationresults == typeexaminationresults &&
-      other.typecorrectdruguse == typecorrectdruguse;
+      other.groupA == groupA &&
+      other.groupB == groupB;
   }
 
   @override
@@ -118,7 +119,7 @@ class HealthModel {
       otherdrugs.hashCode ^
       herb.hashCode ^
       foodsupplement.hashCode ^
-      typeexaminationresults.hashCode ^
-      typecorrectdruguse.hashCode;
+      groupA.hashCode ^
+      groupB.hashCode;
   }
 }
