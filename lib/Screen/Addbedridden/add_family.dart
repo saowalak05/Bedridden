@@ -38,6 +38,7 @@ class _AddfamilyState extends State<Addfamily> {
   @override
   void initState() {
     super.initState();
+    print(widget.idCard);
   }
 
   @override
@@ -99,7 +100,7 @@ class _AddfamilyState extends State<Addfamily> {
           )
           .set(model.toMap())
           .then((value) => Navigator.push(
-              context, MaterialPageRoute(builder: (context) => Home( idCard: '${widget.idCard}',))));
+              context, MaterialPageRoute(builder: (context) => Home())));
     });
   }
 

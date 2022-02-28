@@ -15,8 +15,9 @@ import 'package:intl/intl.dart';
 import 'listledit.dart';
 
 class Home extends StatefulWidget {
-  final String idCard;
-  const Home({Key? key, required this.idCard}) : super(key: key);
+  const Home({
+    Key? key,
+  }) : super(key: key);
 
   @override
   _HomeState createState() => _HomeState();
@@ -39,6 +40,22 @@ class _HomeState extends State<Home> {
     super.initState();
     readAllSick();
   }
+  // var docidcard;
+  // getdocId().then((data){});
+
+  // Future<List<DocumentSnapshot>> getdocId() async{
+  //   var data = await FirebaseFirestore.instance.collection('sick').doc('${widget.idCard}').collection('Health').doc('${widget.idCard}').collection('environment').doc('${widget.idCard}').collection('Family').doc('${widget.idCard}');
+  //   var docId = data.id;
+  //   return docId;
+  // }
+
+  Future<Null> navigater(SickModel model, int index) async {
+    await FirebaseFirestore.instance
+        .collection('sick')
+        .doc(model.idCard)
+        .delete()
+        .then((value) => LitlEdit);
+  }
 
   Future<Null> readAllSick() async {
     if (sickmodels.length != 0) {
@@ -54,6 +71,7 @@ class _HomeState extends State<Home> {
         for (var item in event.docs) {
           SickModel model = SickModel.fromMap(item.data());
           print('## name ==> ${model.name}');
+          print('## idCard ==> ${model.idCard}');
           setState(() {
             sickmodels.add(model);
             if (model.level == '1') {
@@ -585,6 +603,7 @@ class _HomeState extends State<Home> {
   }
 
 //'รายชื่อผู้ป่วยติดเตียง'
+
   Widget buildtListNameAllBedridden() {
     return sickmodels.length == 0
         ? ShowProgress()
@@ -599,15 +618,12 @@ class _HomeState extends State<Home> {
                 width: 175,
                 child: GestureDetector(
                   onTap: () {
-                    print('## You Click index = $index');
-                    // showSickDialog(sickmodels[index], index);
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (BuildContext context) {
-                          return LitlEdit(sickmodels[index], index);
-                        },
-                      ),
-                    );
+                    var idcard = sickmodels[index].idCard;
+                    print('## idcard = $idcard');
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => LitlEdit(idcard: idcard)));
                   },
                   child: ClipRRect(
                     borderRadius: BorderRadius.all(Radius.circular(28)),
