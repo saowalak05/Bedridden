@@ -136,15 +136,13 @@ class _Listl2State extends State<Listl2> {
             children: [
               TextButton(
                 onPressed: () {
-                  Navigator.pop(context);
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => EditSick(
-                          sickModel: model,
-                          idCard: docIds[index],
-                        ),
-                      )).then((value) => readAllSick());
+                  // var idcard = sickmodels[index].idCard;
+                  // Navigator.pop(context);
+                  // Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //       builder: (context) => EditSick(idcard: idcard),
+                  //     )).then((value) => readAllSick());
                 },
                 child: Text(
                   'Edit',

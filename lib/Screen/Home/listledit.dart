@@ -1,3 +1,6 @@
+import 'package:bedridden/Screen/edit_environment.dart';
+import 'package:bedridden/Screen/edit_health.dart';
+import 'package:bedridden/Screen/edit_sick.dart';
 import 'package:bedridden/models/sick_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -14,6 +17,10 @@ class LitlEdit extends StatefulWidget {
   @override
   _LitlEditState createState() => _LitlEditState();
 }
+
+List<SickModel> sickmodels = [];
+
+List<String> idCard = [];
 
 //sick
 String? addressSick;
@@ -60,19 +67,13 @@ String? occupationthreeFamily;
 String? occupationtwoFamily;
 
 class _LitlEditState extends State<LitlEdit> {
-  List<SickModel> sickmodels = [];
-
   @override
   void initState() {
     super.initState();
-    readAllSick();
+    readAlldata();
   }
 
-  Future<Null> readAllSick() async {
-    if (sickmodels.length != 0) {
-      sickmodels.clear();
-    }
-
+  Future<Null> readAlldata() async {
     await Firebase.initializeApp().then((value) async {
       FirebaseFirestore.instance
           .collection('sick')
@@ -110,20 +111,53 @@ class _LitlEditState extends State<LitlEdit> {
           .doc(widget.idcard)
           .snapshots()
           .listen((event) {
-        print(widget.idcard);
-        print(event['medicine']);
+        Future.delayed(const Duration(seconds: 1), () {
+          setState(() {
+            diseaseHealth = event['disease'];
+            foodsupplementHealth = event['foodsupplement'];
+            groupAHealth = event['groupA'];
+            groupBHealth = event['groupB'];
+            herbHealth = event['herb'];
+            medicineHealth = event['medicine'];
+          });
+        });
       });
       FirebaseFirestore.instance
           .collection('environment')
           .doc('${widget.idcard}')
           .snapshots()
-          .listen((event) {});
+          .listen((event) {
+        Future.delayed(const Duration(seconds: 1), () {
+          setState(() {
+            accommodationenvironment = event['accommodation'];
+            typeHomeEnvironmentenvironment = event['typeHomeEnvironment'];
+            typeHouseenvironment = event['typeHouse'];
+            typeHousingSafetyenvironment = event['typeHousingSafety'];
+            typefacilitiesenvironment = event['typefacilities'];
+            urlenvironmentImageenvironment = event['urlenvironmentImage'];
+          });
+        });
+      });
 
       FirebaseFirestore.instance
           .collection('Family')
           .doc('${widget.idcard}')
           .snapshots()
-          .listen((event) {});
+          .listen((event) {
+        Future.delayed(const Duration(seconds: 1), () {
+          setState(() {
+            familynameoneFamily = event['familynameone'];
+            familynamethreeFamily = event['familynamethree'];
+            familynametwoFamily = event['familynametwo'];
+            familyrelationshiponeFamily = event['familyrelationshipone'];
+            familyrelationshipthreeFamily = event['familyrelationshipthree'];
+            familyrelationshiptwoFamily = event['familyrelationshiptwo'];
+            occupationoneFamily = event['occupationone'];
+            occupationtwoFamily = event['occupationtwo'];
+            occupationthreeFamily = event['occupationthree'];
+          });
+        });
+      });
     });
   }
 
@@ -167,13 +201,15 @@ class _LitlEditState extends State<LitlEdit> {
                 Container(
                   height: 100,
                   width: 100,
-                  decoration: BoxDecoration(
-                    color: Colors.blue,
-                    image: DecorationImage(
-                      image: NetworkImage('$urlImageSick'),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    child: Image.network(
+                      '$urlImageSick',
                       fit: BoxFit.cover,
+                      errorBuilder: (context, exception, stackTrack) => Icon(
+                        Icons.error,
+                      ),
                     ),
-                    borderRadius: BorderRadius.circular(30),
                   ),
                 ),
                 SizedBox(width: 20),
@@ -225,7 +261,14 @@ class _LitlEditState extends State<LitlEdit> {
                 MaterialButton(
                   minWidth: 50,
                   height: 30,
-                  onPressed: () {},
+                  onPressed: () {
+                    var idcard = widget.idcard;
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => EditSick(idcard: idcard),
+                        ));
+                  },
                   shape: RoundedRectangleBorder(
                       side: BorderSide(
                         color: const Color(0xffffede5),
@@ -320,16 +363,27 @@ class _LitlEditState extends State<LitlEdit> {
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             SizedBox(height: 10),
             Text('$typepositionSick', style: TextStyle(fontSize: 16)),
+            SizedBox(height: 10),
+            Divider(
+              color: Colors.black,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('ข้อมูลส่วนที่ 2 ',
+                Text('ส่วนที่ 2 ข้อมูลด้านสุขภาพ',
                     style:
                         TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                 MaterialButton(
                   minWidth: 50,
                   height: 30,
-                  onPressed: () {},
+                  onPressed: () {
+                    var idcard = widget.idcard;
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => EditHealth(idcard: idcard),
+                        ));
+                  },
                   shape: RoundedRectangleBorder(
                       side: BorderSide(
                         color: const Color(0xffffede5),
@@ -343,11 +397,125 @@ class _LitlEditState extends State<LitlEdit> {
                 ),
               ],
             ),
+            SizedBox(height: 10),
+            Text('โรคประจำตัวหรือปัญหาสุขภาพ',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            SizedBox(height: 10),
+            Text('$diseaseHealth', style: TextStyle(fontSize: 16)),
+            SizedBox(height: 10),
+            Text('ยาที่แพทย์สั่ง',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            SizedBox(height: 10),
+            Text('$medicineHealth', style: TextStyle(fontSize: 16)),
+            SizedBox(height: 10),
+            Text('ผลการตรวจสอบ',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            SizedBox(height: 10),
+            Text('$groupAHealth', style: TextStyle(fontSize: 16)),
+            SizedBox(height: 10),
+            Text('การใช้ยา',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            SizedBox(height: 10),
+            Text('$groupBHealth', style: TextStyle(fontSize: 16)),
+            SizedBox(height: 10),
+            Text('สมุนไพร',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            SizedBox(height: 10),
+            Text('$herbHealth', style: TextStyle(fontSize: 16)),
+            SizedBox(height: 10),
+            Text('อาหารเสริม',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            SizedBox(height: 10),
+            Text('$foodsupplementHealth', style: TextStyle(fontSize: 16)),
+            SizedBox(height: 10),
+            Divider(
+              color: Colors.black,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'ข้อมูลส่วนที่ 3 ',
+                  'ส่วนที่ 3 ข้อมูลสภาพแวดล้อม',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                MaterialButton(
+                  minWidth: 50,
+                  height: 30,
+                  onPressed: () {
+                    var idcard = widget.idcard;
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => EditEnvironment(idcard: idcard),
+                        ));
+                  },
+                  shape: RoundedRectangleBorder(
+                      side: BorderSide(
+                        color: const Color(0xffffede5),
+                      ),
+                      borderRadius: BorderRadius.circular(50)),
+                  child: Text(
+                    "แก้ไข",
+                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+                  ),
+                  color: const Color(0xffdfad98),
+                ),
+              ],
+            ),
+            SizedBox(height: 10),
+            Text('สถานะของที่พักอาศัย',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            SizedBox(height: 10),
+            Text('$accommodationenvironment', style: TextStyle(fontSize: 16)),
+            SizedBox(height: 10),
+            Text('ประเภทบ้าน',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            SizedBox(height: 10),
+            Text('$typeHouseenvironment', style: TextStyle(fontSize: 16)),
+            SizedBox(height: 10),
+            Text('สภาพสิ่งแวดล้อมในบ้าน',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            SizedBox(height: 10),
+            Text('$typeHomeEnvironmentenvironment',
+                style: TextStyle(fontSize: 16)),
+            SizedBox(height: 10),
+            Text('ความปลอดภัยของที่อยู่อาศัย',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            SizedBox(height: 10),
+            Text('$typeHousingSafetyenvironment',
+                style: TextStyle(fontSize: 16)),
+            SizedBox(height: 10),
+            Text('สิ่งอำนวยความสะดวก',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            SizedBox(height: 10),
+            Text('$typefacilitiesenvironment', style: TextStyle(fontSize: 16)),
+            SizedBox(height: 10),
+            Text('รูปสภาพแวดล้อม',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            SizedBox(height: 10),
+            Container(
+              height: 100,
+              width: 100,
+              child: ClipRRect(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                child: Image.network(
+                  '$urlenvironmentImageenvironment',
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, exception, stackTrack) => Icon(
+                    Icons.error,
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 10),
+            Divider(
+              color: Colors.black,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'ส่วนที่ 4 ข้อมูลเครือญาติผู้ป่วย',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 MaterialButton(
@@ -367,30 +535,69 @@ class _LitlEditState extends State<LitlEdit> {
                 ),
               ],
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'ข้อมูลส่วนที่ 4 ',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                MaterialButton(
-                  minWidth: 50,
-                  height: 30,
-                  onPressed: () {},
-                  shape: RoundedRectangleBorder(
-                      side: BorderSide(
-                        color: const Color(0xffffede5),
-                      ),
-                      borderRadius: BorderRadius.circular(50)),
-                  child: Text(
-                    "แก้ไข",
-                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
-                  ),
-                  color: const Color(0xffdfad98),
-                ),
-              ],
-            )
+            SizedBox(height: 10),
+            Text('ข้อมูลความสัมพันธ์กับสมาชิกในครอบครัว',
+                style: TextStyle(fontSize: 16)),
+            SizedBox(height: 10),
+            Text('ชื่อ-สกุล สมาชิกในครอบครัว', style: TextStyle(fontSize: 16)),
+            SizedBox(height: 20),
+            Text('คนที่ 1 :',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            SizedBox(height: 10),
+            Text('ชื่อ-สกุล',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            SizedBox(height: 10),
+            Text('$familynameoneFamily', style: TextStyle(fontSize: 16)),
+            SizedBox(height: 10),
+            Text('ความสัมพันธ์กับผู้ป่วย',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            SizedBox(height: 10),
+            Text('$familyrelationshiponeFamily',
+                style: TextStyle(fontSize: 16)),
+            SizedBox(height: 10),
+            Text('อาชีพ',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            SizedBox(height: 10),
+            Text('$occupationoneFamily', style: TextStyle(fontSize: 16)),
+            SizedBox(height: 10),
+            Text('คนที่ 2 :',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            SizedBox(height: 10),
+            Text('ชื่อ-สกุล',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            SizedBox(height: 10),
+            Text('$familynametwoFamily', style: TextStyle(fontSize: 16)),
+            SizedBox(height: 10),
+            Text('ความสัมพันธ์กับผู้ป่วย',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            SizedBox(height: 10),
+            Text('$familyrelationshiptwoFamily',
+                style: TextStyle(fontSize: 16)),
+            SizedBox(height: 10),
+            Text('อาชีพ',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            SizedBox(height: 10),
+            Text('$occupationtwoFamily', style: TextStyle(fontSize: 16)),
+            SizedBox(height: 10),
+            Text('คนที่ 3 :',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            SizedBox(height: 10),
+            Text('ชื่อ-สกุล',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            SizedBox(height: 10),
+            Text('$familynamethreeFamily', style: TextStyle(fontSize: 16)),
+            SizedBox(height: 10),
+            Text('ความสัมพันธ์กับผู้ป่วย',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            SizedBox(height: 10),
+            Text('$familyrelationshipthreeFamily',
+                style: TextStyle(fontSize: 16)),
+            SizedBox(height: 10),
+            Text('อาชีพ',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            SizedBox(height: 10),
+            Text('$occupationthreeFamily', style: TextStyle(fontSize: 16)),
+            SizedBox(height: 20),
           ],
         ),
       )),

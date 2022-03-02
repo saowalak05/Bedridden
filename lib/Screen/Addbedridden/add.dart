@@ -148,7 +148,7 @@ class _AddState extends State<Add> {
         child: Form(
           key: formkey,
           child: ListView(
-            padding: EdgeInsets.only(top: 16, left: 8, right: 8),
+            padding: EdgeInsets.only(top: 16, left: 16, right: 16),
             children: [
               buildBedriddenTitle(), //'ข้อมูลผู้ป่วย'
               buildImageBedridden(context), //'รูปภาพ'
@@ -392,7 +392,6 @@ class _AddState extends State<Add> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Container(
-          // width: 120,
           child: Row(
             children: <Widget>[
               Text(
@@ -624,7 +623,6 @@ class _AddState extends State<Add> {
             });
           },
           value: nationality,
-          // hint: Text('nationality'),
           items: nationalitys
               .map(
                 (e) => DropdownMenuItem(
@@ -667,7 +665,6 @@ class _AddState extends State<Add> {
             });
           },
           value: race,
-          // hint: Text('เลือก'),
           items: races
               .map(
                 (e) => DropdownMenuItem(

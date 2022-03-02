@@ -191,14 +191,12 @@ class _HomeState extends State<Home> {
             children: [
               TextButton(
                 onPressed: () {
+                  var idcard = sickmodels[index].idCard;
                   Navigator.pop(context);
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => EditSick(
-                          sickModel: model,
-                          idCard: idCard[index],
-                        ),
+                        builder: (context) => EditSick(idcard: idcard),
                       )).then((value) => readAllSick());
                 },
                 child: Text(
