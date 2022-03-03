@@ -1,4 +1,7 @@
-import 'package:bedridden/Screen/edit_sick.dart';
+import 'package:bedridden/Screen/Home/listledit.dart';
+import 'package:bedridden/models/environment_model.dart';
+import 'package:bedridden/models/family_model.dart';
+import 'package:bedridden/models/health_model.dart';
 import 'package:bedridden/models/sick_model.dart';
 import 'package:bedridden/widgets/show_progess.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -26,6 +29,10 @@ class _Listl3State extends State<Listl3> {
   List<SickModel> sickmodelsLevel3 = [];
   List<String> docIds = [];
 
+  List<HealthModel> healthModel = [];
+  List<EnvironmentModel> environmentModel = [];
+  List<FamilyModel> familyModel = [];
+
   @override
   void initState() {
     super.initState();
@@ -39,6 +46,9 @@ class _Listl3State extends State<Listl3> {
       sickmodelsLevel2.clear();
       sickmodelsLevel3.clear();
       docIds.clear();
+      healthModel.clear();
+      environmentModel.clear();
+      familyModel.clear();
     }
 
     await Firebase.initializeApp().then((value) async {
@@ -98,162 +108,90 @@ class _Listl3State extends State<Listl3> {
     );
   }
 
-  // ignore: non_constant_identifier_names
-  Future<Null> showSickDialog(SickModel model, int index) async {
-    DateTime dateTime = model.bond.toDate();
-    DateFormat dateFormat = DateFormat('dd-MMMM-yyyy', 'th');
-    String bondStr = dateFormat.format(dateTime);
-
-    showDialog(
-      context: context,
-      builder: (context) => SimpleDialog(
-        contentPadding: EdgeInsets.all(16),
-        title: ListTile(
-          leading: Container(
-            width: 100,
-            child: ClipRRect(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-              child: Image.network(
-                model.urlImage,
-                fit: BoxFit.cover,
-                errorBuilder: (context, exception, stackTrack) =>
-                    Icon(Icons.error),
-              ),
-            ),
-          ),
-          title: Text(model.name),
-          subtitle: Text('ระดับที่ = ${model.level}'),
-        ),
-        children: [
-          Text('รหัสบัตรประชาชน : ${model.idCard}'),
-          Text('ที่อยู่ : ${model.address}'),
-          Text('เบอร์โทรศัพท์ : ${model.phone}'),
-          Text('เพศ : ${model.typeSex}'),
-          Text('สถานภาพ : ${model.typeStatus}'),
-          Text('วัน/เดือน/ปี เกิด : $bondStr'),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              TextButton(
-                onPressed: () {
-                //  var idcard = sickmodels[index].idCard;
-                //   Navigator.pop(context);
-                //   Navigator.push(
-                //       context,
-                //       MaterialPageRoute(
-                //         builder: (context) => EditSick(idcard: idcard),
-                //       )).then((value) => readAllSick());
-                },
-                child: Text(
-                  'Edit',
-                  style: TextStyle(color: Colors.green),
-                ),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                  confirmDelete(model, index);
-                },
-                child: Text(
-                  'Delete',
-                  style: TextStyle(color: Colors.red),
-                ),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text('Cancel'),
-              ),
-            ],
-          )
-        ],
-      ),
-    );
-  }
-
   Widget buildtListNameAllBedriddenLevel3() {
     return sickmodelsLevel3.length == 0
         ? ShowProgress()
         : Container(
             height: 650,
-            child: Expanded(
-              child: ListView.builder(
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                physics: ScrollPhysics(),
-                itemCount: sickmodelsLevel3.length,
-                itemBuilder: (context, index) => Container(
-                  width: 175,
-                  child: GestureDetector(
-                    onTap: () {
-                      print('## You Click index = $index');
-                      showSickDialog(sickmodelsLevel3[index], index);
-                    },
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.all(Radius.circular(28)),
-                      child: Card(
-                        color: Color(0xffFFD1BB),
-                        child: Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: Column(
-                            children: [
-                              Container(
-                                margin: EdgeInsets.symmetric(vertical: 12),
-                                width: 130,
-                                height: 80,
-                                child: ClipRRect(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10)),
-                                  child: Image.network(
-                                    sickmodelsLevel3[index].urlImage,
-                                    fit: BoxFit.cover,
-                                    errorBuilder:
-                                        (context, exception, stackTrack) =>
-                                            Icon(Icons.error),
-                                  ),
+            child: ListView.builder(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              physics: ScrollPhysics(),
+              itemCount: sickmodelsLevel3.length,
+              itemBuilder: (context, index) => Container(
+                width: 175,
+                child: GestureDetector(
+                  onTap: () {
+                    print('## You Click index = $index');
+                    var idcard = sickmodels[index].idCard;
+                    print('## idcard = $idcard');
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => LitlEdit(idcard: idcard)));
+                  },
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.all(Radius.circular(28)),
+                    child: Card(
+                      color: Color(0xffFFD1BB),
+                      child: Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Column(
+                          children: [
+                            Container(
+                              margin: EdgeInsets.symmetric(vertical: 12),
+                              width: 130,
+                              height: 80,
+                              child: ClipRRect(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                                child: Image.network(
+                                  sickmodelsLevel3[index].urlImage,
+                                  fit: BoxFit.cover,
+                                  errorBuilder:
+                                      (context, exception, stackTrack) =>
+                                          Icon(Icons.error),
                                 ),
                               ),
-                              Row(
-                                children: [
-                                  Container(
-                                    margin: EdgeInsets.symmetric(
-                                        vertical: 5, horizontal: 8),
-                                    width: 140,
-                                    child: Text(
-                                      sickmodelsLevel3[index].name,
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                            ),
+                            Row(
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.symmetric(
+                                      vertical: 5, horizontal: 8),
+                                  width: 140,
+                                  child: Text(
+                                    sickmodelsLevel3[index].name,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Container(
-                                    margin: EdgeInsets.symmetric(
-                                        vertical: 5, horizontal: 8),
-                                    width: 140,
-                                    child:
-                                        Text(sickmodelsLevel3[index].address),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Container(
-                                    margin: EdgeInsets.symmetric(
-                                        vertical: 5, horizontal: 8),
-                                    width: 140,
-                                    child: Text(
-                                        'ระดับที่ ${sickmodelsLevel3[index].level}'),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.symmetric(
+                                      vertical: 5, horizontal: 8),
+                                  width: 140,
+                                  child: Text(sickmodelsLevel3[index].address),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.symmetric(
+                                      vertical: 5, horizontal: 8),
+                                  width: 140,
+                                  child: Text(
+                                      'ระดับที่ ${sickmodelsLevel3[index].level}'),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -262,44 +200,5 @@ class _Listl3State extends State<Listl3> {
               ),
             ),
           );
-  }
-
-  Future<Null> confirmDelete(SickModel model, int index) async {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: ListTile(
-          leading: Icon(
-            Icons.delete,
-            size: 48,
-            color: Colors.red,
-          ),
-          title: Text('ต้องการลบข้อมูล ${model.name} หรือไม่ ?'),
-          subtitle: Text('ถ้าลบแล้ว ไม่สามารถ กู้ คืนข้อมูลได้'),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () async {
-              Navigator.pop(context);
-              await FirebaseFirestore.instance
-                  .collection('sick')
-                  .doc(docIds[index])
-                  .delete()
-                  .then((value) => readAllSick());
-            },
-            child: Text(
-              'Delete',
-              style: TextStyle(color: Colors.red),
-            ),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: Text('Cancel'),
-          ),
-        ],
-      ),
-    );
   }
 }

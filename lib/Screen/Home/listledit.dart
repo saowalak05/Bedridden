@@ -2,6 +2,9 @@ import 'package:bedridden/Screen/edit_environment.dart';
 import 'package:bedridden/Screen/edit_family.dart';
 import 'package:bedridden/Screen/edit_health.dart';
 import 'package:bedridden/Screen/edit_sick.dart';
+import 'package:bedridden/models/environment_model.dart';
+import 'package:bedridden/models/family_model.dart';
+import 'package:bedridden/models/health_model.dart';
 import 'package:bedridden/models/sick_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -20,6 +23,12 @@ class LitlEdit extends StatefulWidget {
 }
 
 List<SickModel> sickmodels = [];
+List<SickModel> sickmodelsLevel1 = [];
+List<SickModel> sickmodelsLevel2 = [];
+List<SickModel> sickmodelsLevel3 = [];
+List<HealthModel> healthModel = [];
+List<EnvironmentModel> environmentModel = [];
+List<FamilyModel> familyModel = [];
 
 List<String> idCard = [];
 
@@ -76,6 +85,17 @@ class _LitlEditState extends State<LitlEdit> {
 
   Future<Null> readAlldata() async {
     await Firebase.initializeApp().then((value) async {
+      setState(() {
+        sickmodels.clear();
+        healthModel.clear();
+        environmentModel.clear();
+        familyModel.clear();
+        sickmodelsLevel1.clear();
+        sickmodelsLevel2.clear();
+        sickmodelsLevel3.clear();
+        idCard.clear();
+      });
+
       FirebaseFirestore.instance
           .collection('sick')
           .doc(widget.idcard)
@@ -175,14 +195,17 @@ class _LitlEditState extends State<LitlEdit> {
           ),
         ),
         actions: [
-          TextButton(
-            onPressed: () {},
-            child: Text(
-              "ลบข้อมูล  ",
-              style: TextStyle(
-                  fontWeight: FontWeight.w600, fontSize: 14, color: Colors.red),
+          IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+              confirmDelete();
+            },
+            icon: Icon(
+              Icons.delete,
+              size: 28,
+              color: Colors.white,
             ),
-          ),
+          )
         ],
         backgroundColor: const Color(0xffdfad98),
         toolbarHeight: 90,
@@ -613,6 +636,60 @@ class _LitlEditState extends State<LitlEdit> {
           ],
         ),
       )),
+    );
+  }
+
+  Future<Null> confirmDelete() async {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: ListTile(
+          leading: Icon(
+            Icons.delete,
+            size: 48,
+            color: Colors.red,
+          ),
+          title: Text('ต้องการลบข้อมูล $nameSick หรือไม่ ?'),
+          subtitle: Text('ถ้าลบแล้ว ไม่สามารถ กู้ คืนข้อมูลได้'),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () async {
+              Navigator.pop(context);
+              FirebaseFirestore.instance
+                  .collection('sick')
+                  .doc(widget.idcard)
+                  .delete()
+                  .then((value) => readAlldata());
+              FirebaseFirestore.instance
+                  .collection('Health')
+                  .doc(widget.idcard)
+                  .delete()
+                  .then((value) => readAlldata());
+              FirebaseFirestore.instance
+                  .collection('environment')
+                  .doc(widget.idcard)
+                  .delete()
+                  .then((value) => readAlldata());
+              FirebaseFirestore.instance
+                  .collection('Family')
+                  .doc(widget.idcard)
+                  .delete()
+                  .then((value) => readAlldata());
+            },
+            child: Text(
+              'Delete',
+              style: TextStyle(color: Colors.red),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text('Cancel'),
+          ),
+        ],
+      ),
     );
   }
 }

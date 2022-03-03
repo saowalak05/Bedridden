@@ -3,7 +3,9 @@ import 'package:bedridden/Screen/Home/listall.dart';
 import 'package:bedridden/Screen/Home/listl1.dart';
 import 'package:bedridden/Screen/Home/listl2.dart';
 import 'package:bedridden/Screen/Home/listl3.dart';
-import 'package:bedridden/Screen/edit_sick.dart';
+import 'package:bedridden/models/environment_model.dart';
+import 'package:bedridden/models/family_model.dart';
+import 'package:bedridden/models/health_model.dart';
 import 'package:bedridden/models/sick_model.dart';
 import 'package:bedridden/widgets/show_progess.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -35,19 +37,15 @@ class _HomeState extends State<Home> {
   List<SickModel> sickmodelsLevel3 = [];
   List<String> idCard = [];
 
+  List<HealthModel> healthModel = [];
+  List<EnvironmentModel> environmentModel = [];
+  List<FamilyModel> familyModel = [];
+
   @override
   void initState() {
     super.initState();
     readAllSick();
   }
-  // var docidcard;
-  // getdocId().then((data){});
-
-  // Future<List<DocumentSnapshot>> getdocId() async{
-  //   var data = await FirebaseFirestore.instance.collection('sick').doc('${widget.idCard}').collection('Health').doc('${widget.idCard}').collection('environment').doc('${widget.idCard}').collection('Family').doc('${widget.idCard}');
-  //   var docId = data.id;
-  //   return docId;
-  // }
 
   Future<Null> navigater(SickModel model, int index) async {
     await FirebaseFirestore.instance
@@ -58,13 +56,18 @@ class _HomeState extends State<Home> {
   }
 
   Future<Null> readAllSick() async {
-    if (sickmodels.length != 0) {
-      sickmodels.clear();
-      sickmodelsLevel1.clear();
-      sickmodelsLevel2.clear();
-      sickmodelsLevel3.clear();
-      idCard.clear();
-    }
+    setState(() {
+      if (sickmodels.length != 0) {
+        sickmodels.clear();
+        sickmodelsLevel1.clear();
+        sickmodelsLevel2.clear();
+        sickmodelsLevel3.clear();
+        idCard.clear();
+        healthModel.clear();
+        environmentModel.clear();
+        familyModel.clear();
+      }
+    });
 
     await Firebase.initializeApp().then((value) async {
       FirebaseFirestore.instance.collection('sick').snapshots().listen((event) {
@@ -154,78 +157,6 @@ class _HomeState extends State<Home> {
   }
 
   // ignore: non_constant_identifier_names
-  Future<Null> showSickDialog(SickModel model, int index) async {
-    DateTime dateTime = model.bond.toDate();
-    DateFormat dateFormat = DateFormat('dd-MMMM-yyyy', 'th');
-    String bondStr = dateFormat.format(dateTime);
-
-    showDialog(
-      context: context,
-      builder: (context) => SimpleDialog(
-        contentPadding: EdgeInsets.all(16),
-        title: ListTile(
-          leading: Container(
-            width: 100,
-            child: ClipRRect(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-              child: Image.network(
-                model.urlImage,
-                fit: BoxFit.cover,
-                errorBuilder: (context, exception, stackTrack) =>
-                    Icon(Icons.error),
-              ),
-            ),
-          ),
-          title: Text(model.name),
-          subtitle: Text('ระดับที่ = ${model.level}'),
-        ),
-        children: [
-          Text('รหัสบัตรประชาชน : ${model.idCard}'),
-          Text('ที่อยู่ : ${model.address}'),
-          Text('เบอร์โทรศัพท์ : ${model.phone}'),
-          Text('เพศ : ${model.typeSex}'),
-          Text('สถานภาพ : ${model.typeStatus}'),
-          Text('วัน/เดือน/ปี เกิด : $bondStr'),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              TextButton(
-                onPressed: () {
-                  var idcard = sickmodels[index].idCard;
-                  Navigator.pop(context);
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => EditSick(idcard: idcard),
-                      )).then((value) => readAllSick());
-                },
-                child: Text(
-                  'Edit',
-                  style: TextStyle(color: Colors.green),
-                ),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                  confirmDelete(model, index);
-                },
-                child: Text(
-                  'Delete',
-                  style: TextStyle(color: Colors.red),
-                ),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text('Cancel'),
-              ),
-            ],
-          )
-        ],
-      ),
-    );
-  }
 
   Widget buildtListNameAllBedriddenLevel3() {
     return sickmodelsLevel3.length == 0
@@ -241,8 +172,12 @@ class _HomeState extends State<Home> {
                 width: 175,
                 child: GestureDetector(
                   onTap: () {
-                    print('## You Click index = $index');
-                    showSickDialog(sickmodelsLevel3[index], index);
+                    var idcard = sickmodels[index].idCard;
+                    print('## idcard = $idcard');
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => LitlEdit(idcard: idcard)));
                   },
                   child: ClipRRect(
                     borderRadius: BorderRadius.all(Radius.circular(28)),
@@ -364,8 +299,12 @@ class _HomeState extends State<Home> {
                 width: 175,
                 child: GestureDetector(
                   onTap: () {
-                    print('## You Click index = $index');
-                    showSickDialog(sickmodelsLevel2[index], index);
+                    var idcard = sickmodels[index].idCard;
+                    print('## idcard = $idcard');
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => LitlEdit(idcard: idcard)));
                   },
                   child: ClipRRect(
                     borderRadius: BorderRadius.all(Radius.circular(28)),
@@ -488,8 +427,12 @@ class _HomeState extends State<Home> {
                 width: 175,
                 child: GestureDetector(
                   onTap: () {
-                    print('## You Click index = $index');
-                    showSickDialog(sickmodelsLevel1[index], index);
+                    var idcard = sickmodels[index].idCard;
+                    print('## idcard = $idcard');
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => LitlEdit(idcard: idcard)));
                   },
                   child: ClipRRect(
                     borderRadius: BorderRadius.all(Radius.circular(28)),
@@ -727,45 +670,6 @@ class _HomeState extends State<Home> {
               ),
             )),
       ],
-    );
-  }
-
-  Future<Null> confirmDelete(SickModel model, int index) async {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: ListTile(
-          leading: Icon(
-            Icons.delete,
-            size: 48,
-            color: Colors.red,
-          ),
-          title: Text('ต้องการลบข้อมูล ${model.name} หรือไม่ ?'),
-          subtitle: Text('ถ้าลบแล้ว ไม่สามารถ กู้ คืนข้อมูลได้'),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () async {
-              Navigator.pop(context);
-              await FirebaseFirestore.instance
-                  .collection('sick')
-                  .doc(idCard[index])
-                  .delete()
-                  .then((value) => readAllSick());
-            },
-            child: Text(
-              'Delete',
-              style: TextStyle(color: Colors.red),
-            ),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: Text('Cancel'),
-          ),
-        ],
-      ),
     );
   }
 }
