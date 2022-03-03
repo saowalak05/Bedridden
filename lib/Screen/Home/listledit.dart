@@ -1,4 +1,5 @@
 import 'package:bedridden/Screen/edit_environment.dart';
+import 'package:bedridden/Screen/edit_family.dart';
 import 'package:bedridden/Screen/edit_health.dart';
 import 'package:bedridden/Screen/edit_sick.dart';
 import 'package:bedridden/models/sick_model.dart';
@@ -213,41 +214,45 @@ class _LitlEditState extends State<LitlEdit> {
                   ),
                 ),
                 SizedBox(width: 20),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          'ชื่อ',
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(width: 10),
-                        Text(
-                          '$nameSick',
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 10),
-                    Row(
-                      children: [
-                        Text(
-                          'ระดับ',
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(width: 10),
-                        Text(
-                          '$levelSick',
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                  ],
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            'ชื่อ',
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(width: 10),
+                          Expanded(
+                            child: Text(
+                              '$nameSick',
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 10),
+                      Row(
+                        children: [
+                          Text(
+                            'ระดับ',
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(width: 10),
+                          Text(
+                            '$levelSick',
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -521,7 +526,14 @@ class _LitlEditState extends State<LitlEdit> {
                 MaterialButton(
                   minWidth: 50,
                   height: 30,
-                  onPressed: () {},
+                  onPressed: () {
+                    var idcard = widget.idcard;
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => EditFamily(idcard: idcard),
+                        ));
+                  },
                   shape: RoundedRectangleBorder(
                       side: BorderSide(
                         color: const Color(0xffffede5),

@@ -193,14 +193,16 @@ class _EditSickState extends State<EditSick> {
           ),
         ),
         actions: [
-          IconButton(onPressed: () => processEditData(), icon: Icon(Icons.edit))
+          IconButton(
+              onPressed: () => processEditData(),
+              icon: Icon(Icons.save_as_rounded))
         ],
       ),
       body: Center(
         child: Container(
           margin: EdgeInsets.only(top: 16),
           child: SingleChildScrollView(
-            padding: EdgeInsets.only(top: 16, left: 16, right: 16),
+            padding: EdgeInsets.only(top: 16, left: 16, right: 8),
             child: Column(
               children: [
                 titleImage(),
@@ -294,13 +296,13 @@ class _EditSickState extends State<EditSick> {
       map['level'] = levelSick;
     }
 
-    if (bondStatus) {
-      Timestamp timestamp = Timestamp.fromDate(pickedDate);
-      setState(() {
-        bondSick = timestamp as String?;
-        map['bond'] = bondSick;
-      });
-    }
+    // if (bondStatus) {
+    //   Timestamp timestamp = Timestamp.fromDate(pickedDate);
+    //   setState(() {
+    //     bondSick = timestamp as String?;
+    //     map['bond'] = bondSick;
+    //   });
+    // }
 
     print('### map ==>> $map');
     if (map.isEmpty) {
@@ -657,7 +659,7 @@ class _EditSickState extends State<EditSick> {
         Row(
           children: [
             Container(
-              width: 170,
+              width: 160,
               child: RadioListTile(
                 title: const Text(
                   'ไม่ได้รับการศึกษา',
@@ -676,7 +678,7 @@ class _EditSickState extends State<EditSick> {
               ),
             ),
             Container(
-              width: 170,
+              width: 160,
               child: RadioListTile(
                 title: const Text(
                   'ประถมศึกษาตอนต้น',
@@ -699,7 +701,7 @@ class _EditSickState extends State<EditSick> {
         Row(
           children: [
             Container(
-              width: 170,
+              width: 160,
               child: RadioListTile(
                 title: const Text(
                   'ประถมศึกษาตอนปลาย',
@@ -718,7 +720,7 @@ class _EditSickState extends State<EditSick> {
               ),
             ),
             Container(
-              width: 170,
+              width: 160,
               child: RadioListTile(
                 title: const Text(
                   'มัธยมศึกษาตอนต้น',
@@ -741,7 +743,7 @@ class _EditSickState extends State<EditSick> {
         Row(
           children: [
             Container(
-              width: 170,
+              width: 160,
               child: RadioListTile(
                 title: const Text(
                   'มัธยมศึกษาตอนปลาย',
@@ -760,7 +762,7 @@ class _EditSickState extends State<EditSick> {
               ),
             ),
             Container(
-              width: 170,
+              width: 160,
               child: RadioListTile(
                 title: const Text(
                   'ปวช',
@@ -783,7 +785,7 @@ class _EditSickState extends State<EditSick> {
         Row(
           children: [
             Container(
-              width: 170,
+              width: 160,
               child: RadioListTile(
                 title: const Text(
                   'ปวส',
@@ -802,7 +804,7 @@ class _EditSickState extends State<EditSick> {
               ),
             ),
             Container(
-              width: 170,
+              width: 160,
               child: RadioListTile(
                 title: const Text(
                   'ปริญญาตรี',
@@ -903,7 +905,7 @@ class _EditSickState extends State<EditSick> {
             onChanged: (value) {
               setState(() {
                 typeSexSick = value as String?;
-                typeSexBol = false;
+                typeSexBol = true;
               });
             },
           ),
@@ -917,7 +919,7 @@ class _EditSickState extends State<EditSick> {
             onChanged: (value) {
               setState(() {
                 typeSexSick = value as String?;
-                typeSexBol = false;
+                typeSexBol = true;
               });
             },
           ),

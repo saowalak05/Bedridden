@@ -262,7 +262,7 @@ class ListlState extends State<Listl> {
               ),
             ),
           );
-  }
+  }      
 
   Future<Null> confirmDelete(SickModel model, int index) async {
     showDialog(

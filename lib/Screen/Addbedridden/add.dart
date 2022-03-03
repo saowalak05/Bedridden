@@ -1016,7 +1016,7 @@ class _AddState extends State<Add> {
               width: 120,
               child: RadioListTile(
                 title: const Text('ชาย'),
-                value: 'man',
+                value: 'ชาย',
                 groupValue: _typesex,
                 onChanged: (value) {
                   setState(
@@ -1031,7 +1031,7 @@ class _AddState extends State<Add> {
               width: 120,
               child: RadioListTile(
                 title: const Text('หญิง'),
-                value: 'female',
+                value: 'หญิง',
                 groupValue: _typesex,
                 onChanged: (value) {
                   setState(

@@ -1,20 +1,19 @@
-import 'package:bedridden/Screen/Addbedridden/add_health.dart';
-import 'package:bedridden/Screen/Home/home.dart';
-import 'package:bedridden/models/family_model.dart';
 import 'package:bedridden/utility/dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-class Addfamily extends StatefulWidget {
-  final String idCard;
-  const Addfamily({Key? key, required this.idCard}) : super(key: key);
+class EditFamily extends StatefulWidget {
+  final String idcard;
+  const EditFamily({Key? key, required this.idcard});
 
   @override
-  _AddfamilyState createState() => _AddfamilyState();
+  State<EditFamily> createState() => _EditFamilyState();
 }
 
-class _AddfamilyState extends State<Addfamily> {
+class _EditFamilyState extends State<EditFamily> {
+  Map<String, dynamic> map = {};
+
   final formkey = GlobalKey<FormState>();
   TextEditingController familynameControllerone =
       TextEditingController(); //'ชื่อ'
@@ -35,18 +34,71 @@ class _AddfamilyState extends State<Addfamily> {
   TextEditingController occupationContorllerthree =
       TextEditingController(); //'อาชีพ'
 
+  //Family
+  String? familynameoneFamily;
+  String? familynamethreeFamily;
+  String? familynametwoFamily;
+  String? familyrelationshiponeFamily;
+  String? familyrelationshipthreeFamily;
+  String? familyrelationshiptwoFamily;
+  String? occupationoneFamily;
+  String? occupationthreeFamily;
+  String? occupationtwoFamily;
+
+  Future<Null> processEditData() async {
+    if (map.isEmpty) {
+      normalDialog(context, 'ไม่มีการเปลี่ยนแปลง');
+    } else {
+      await Firebase.initializeApp().then((value) async {
+        await FirebaseFirestore.instance
+            .collection('Family')
+            .doc(widget.idcard)
+            .update(map)
+            .then((value) => Navigator.pop(context));
+      });
+    }
+  }
+
+  Future<Null> readAlldata() async {
+    await Firebase.initializeApp().then((value) async {
+      FirebaseFirestore.instance
+          .collection('Family')
+          .doc('${widget.idcard}')
+          .snapshots()
+          .listen((event) {
+        Future.delayed(const Duration(seconds: 1), () {
+          setState(() {
+            familynameoneFamily = event['familynameone'];
+            familynamethreeFamily = event['familynamethree'];
+            familynametwoFamily = event['familynametwo'];
+            familyrelationshiponeFamily = event['familyrelationshipone'];
+            familyrelationshipthreeFamily = event['familyrelationshipthree'];
+            familyrelationshiptwoFamily = event['familyrelationshiptwo'];
+            occupationoneFamily = event['occupationone'];
+            occupationtwoFamily = event['occupationtwo'];
+            occupationthreeFamily = event['occupationthree'];
+          });
+        });
+      });
+    });
+  }
+
   @override
   void initState() {
     super.initState();
-    print(widget.idCard);
+    print(widget.idcard);
+    readAlldata();
   }
 
   @override
   Widget build(BuildContext context) {
-    // Size size = MediaQuery.of(context).size;
-    // final IconThemeData data;
     return Scaffold(
         appBar: AppBar(
+          title: Center(
+              child: Text(
+            'แก้ไขข้อมูล',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          )),
           backgroundColor: const Color(0xffdfad98),
           toolbarHeight: 90,
           shape: RoundedRectangleBorder(
@@ -54,80 +106,30 @@ class _AddfamilyState extends State<Addfamily> {
               bottom: Radius.elliptical(30.0, 30.0),
             ),
           ),
-          title: Text(
-            'ส่วนที่ 4 ข้อมูลเครือญาติผู้ป่วย',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          actions: [
+            IconButton(
+                onPressed: () => processEditData(),
+                icon: Icon(Icons.save_as_rounded))
+          ],
         ),
-        body: GestureDetector(
-          onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
-          behavior: HitTestBehavior.opaque,
-          child: Form(
-            key: formkey,
-            child: ListView(
-              padding: EdgeInsets.only(top: 16, left: 16, right: 16),
-              children: [
-                buildtitle(), //'ชื่อ-สกุล สมาชิกในครอบครัว '
-                filedOne(),
-                filedTwo(),
-                filedThree(),
-                buildSavefamily(),
-              ],
-            ),
+        body: Container(
+          margin: EdgeInsets.only(top: 16),
+          child: SingleChildScrollView(
+            padding: EdgeInsets.only(top: 16, left: 16, right: 16),
+            child: Column(children: [
+              buildtitle(),
+              filedOne(),
+              filedTwo(),
+              filedThree(),
+              buildSizeBox(),
+            ]),
           ),
         ));
   }
 
-  Future<Null> proccessUplodFamily() async {
-    await Firebase.initializeApp().then((value) async {
-      FamilyModel model = FamilyModel(
-          familynameone: familynameControllerone.text,
-          familynametwo: familynameControllertwo.text,
-          familynamethree: familynameControllerthree.text,
-          familyrelationshipone: familyrelationshipControllerone.text,
-          familyrelationshiptwo: familyrelationshipControllertwo.text,
-          familyrelationshipthree: familyrelationshipControllerthree.text,
-          occupationone: occupationContorllerone.text,
-          occupationtwo: occupationContorllertwo.text,
-          occupationthree: occupationContorllerthree.text);
-
-      await FirebaseFirestore.instance
-          .collection('Family')
-          .doc(
-            '${widget.idCard}',
-          )
-          .set(model.toMap())
-          .then((value) => Navigator.push(
-              context, MaterialPageRoute(builder: (context) => Home())));
-    });
-  }
-
-  Container buildSavefamily() {
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          MaterialButton(
-            onPressed: () {
-              if (formkey.currentState!.validate()) {
-                proccessUplodFamily();
-              }
-            },
-            shape: RoundedRectangleBorder(
-                side: BorderSide(
-                  color: const Color(0xffffede5),
-                ),
-                borderRadius: BorderRadius.circular(50)),
-            child: Text(
-              "บันทึก",
-              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
-            ),
-            color: const Color(0xffdfad98),
-          ),
-        ],
-      ),
+  SizedBox buildSizeBox() {
+    return SizedBox(
+      height: 20,
     );
   }
 
@@ -141,8 +143,8 @@ class _AddfamilyState extends State<Addfamily> {
             Text(
               'ข้อมูลความสัมพันธ์กับสมาชิกในครอบครัว ',
               style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w300,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
               ),
             ),
             const SizedBox(height: 30.0),
@@ -157,8 +159,8 @@ class _AddfamilyState extends State<Addfamily> {
                   Text(
                     'ชื่อ-สกุล สมาชิกในครอบครัว :',
                     style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
                     ),
                   )
                 ],
@@ -191,6 +193,9 @@ class _AddfamilyState extends State<Addfamily> {
         ),
         const SizedBox(height: 16.0),
         TextFormField(
+          onChanged: (value) {
+            map['familynameone'] = value;
+          },
           validator: (value) {
             if (value!.isEmpty) {
               return 'กรุณากรอก ชื่อ-สกุล';
@@ -205,11 +210,13 @@ class _AddfamilyState extends State<Addfamily> {
             filled: true,
             hintText: '1.ชื่อ-สกุล',
             labelText: '1.ชื่อ-สกุล *',
-            fillColor: const Color(0xfff7e4db),
           ),
         ),
         const SizedBox(height: 16.0),
         TextFormField(
+          onChanged: (value) {
+            map['familyrelationshipone'] = value;
+          },
           validator: (value) {
             if (value!.isEmpty) {
               return 'กรุณากรอก ความสัมพันธ์กับผู้ป่วย';
@@ -224,11 +231,13 @@ class _AddfamilyState extends State<Addfamily> {
             filled: true,
             hintText: 'ความสัมพันธ์กับผู้ป่วย',
             labelText: 'ความสัมพันธ์กับผู้ป่วย ระบุ *',
-            fillColor: const Color(0xfff7e4db),
           ),
         ),
         const SizedBox(height: 16.0),
         TextFormField(
+          onChanged: (value) {
+            map['occupationone'] = value;
+          },
           validator: (value) {
             if (value!.isEmpty) {
               return 'กรุณากรอก อาชีพ';
@@ -243,7 +252,6 @@ class _AddfamilyState extends State<Addfamily> {
             filled: true,
             hintText: 'อาชีพ',
             labelText: 'อาชีพ *',
-            fillColor: const Color(0xfff7e4db),
           ),
         ),
       ],
@@ -270,6 +278,9 @@ class _AddfamilyState extends State<Addfamily> {
         ),
         const SizedBox(height: 16.0),
         TextFormField(
+          onChanged: (value) {
+            map['familynametwo'] = value;
+          },
           validator: (value) {
             if (value!.isEmpty) {
               return 'กรุณากรอก ชื่อ-สกุล';
@@ -284,11 +295,13 @@ class _AddfamilyState extends State<Addfamily> {
             filled: true,
             hintText: '2.ชื่อ-สกุล',
             labelText: '2.ชื่อ-สกุล *',
-            fillColor: const Color(0xfff7e4db),
           ),
         ),
         const SizedBox(height: 16.0),
         TextFormField(
+          onChanged: (value) {
+            map['familyrelationshiptwo'] = value;
+          },
           validator: (value) {
             if (value!.isEmpty) {
               return 'กรุณากรอก ความสัมพันธ์กับผู้ป่วย';
@@ -303,11 +316,13 @@ class _AddfamilyState extends State<Addfamily> {
             filled: true,
             hintText: 'ความสัมพันธ์กับผู้ป่วย',
             labelText: 'ความสัมพันธ์กับผู้ป่วย ระบุ *',
-            fillColor: const Color(0xfff7e4db),
           ),
         ),
         const SizedBox(height: 16.0),
         TextFormField(
+          onChanged: (value) {
+            map['occupationtwo'] = value;
+          },
           validator: (value) {
             if (value!.isEmpty) {
               return 'กรุณากรอก อาชีพ';
@@ -322,7 +337,6 @@ class _AddfamilyState extends State<Addfamily> {
             filled: true,
             hintText: 'อาชีพ',
             labelText: 'อาชีพ *',
-            fillColor: const Color(0xfff7e4db),
           ),
         ),
       ],
@@ -349,6 +363,9 @@ class _AddfamilyState extends State<Addfamily> {
         ),
         const SizedBox(height: 16.0),
         TextFormField(
+          onChanged: (value) {
+            map['familynamethree'] = value;
+          },
           validator: (value) {
             if (value!.isEmpty) {
               return 'กรุณากรอก ชื่อ-สกุล';
@@ -363,11 +380,13 @@ class _AddfamilyState extends State<Addfamily> {
             filled: true,
             hintText: '3.ชื่อ-สกุล',
             labelText: '3.ชื่อ-สกุล *',
-            fillColor: const Color(0xfff7e4db),
           ),
         ),
         const SizedBox(height: 16.0),
         TextFormField(
+          onChanged: (value) {
+            map['familyrelationshipthree'] = value;
+          },
           validator: (value) {
             if (value!.isEmpty) {
               return 'กรุณากรอก ความสัมพันธ์กับผู้ป่วย';
@@ -382,11 +401,13 @@ class _AddfamilyState extends State<Addfamily> {
             filled: true,
             hintText: 'ความสัมพันธ์กับผู้ป่วย',
             labelText: 'ความสัมพันธ์กับผู้ป่วย ระบุ *',
-            fillColor: const Color(0xfff7e4db),
           ),
         ),
         const SizedBox(height: 16.0),
         TextFormField(
+          onChanged: (value) {
+            map['occupationthree'] = value;
+          },
           validator: (value) {
             if (value!.isEmpty) {
               return 'กรุณากรอก อาชีพ';
@@ -401,7 +422,6 @@ class _AddfamilyState extends State<Addfamily> {
             filled: true,
             hintText: 'อาชีพ',
             labelText: 'อาชีพ *',
-            fillColor: const Color(0xfff7e4db),
           ),
         ),
       ],

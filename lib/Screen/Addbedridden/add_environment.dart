@@ -160,7 +160,7 @@ class _AddenvironmentState extends State<Addenvironment> {
         Row(
           children: [
             Container(
-              width: 170,
+              width: 160,
               child: RadioListTile(
                 title: const Text('ไม่มี'),
                 value: 'ไม่มี',
@@ -229,7 +229,7 @@ class _AddenvironmentState extends State<Addenvironment> {
         Row(
           children: [
             Container(
-              width: 170,
+              width: 160,
               child: RadioListTile(
                 title: const Text('ปลอดภัย'),
                 value: 'ปลอดภัย',
@@ -286,7 +286,7 @@ class _AddenvironmentState extends State<Addenvironment> {
         Row(
           children: [
             Container(
-              width: 170,
+              width: 160,
               child: RadioListTile(
                 title: const Text('สะอาด'),
                 value: 'สะอาด',
@@ -301,7 +301,7 @@ class _AddenvironmentState extends State<Addenvironment> {
               ),
             ),
             Container(
-              width: 170,
+              width: 160,
               child: RadioListTile(
                 title: const Text('สะอาดปานกลาง'),
                 value: 'สะอาดปานกลาง',
@@ -358,7 +358,7 @@ class _AddenvironmentState extends State<Addenvironment> {
         Row(
           children: [
             Container(
-              width: 170,
+              width: 160,
               child: RadioListTile(
                 title: const Text('บ้านชั้นเดียว'),
                 value: 'บ้านชั้นเดียว',
@@ -373,7 +373,7 @@ class _AddenvironmentState extends State<Addenvironment> {
               ),
             ),
             Container(
-              width: 170,
+              width: 160,
               child: RadioListTile(
                 title: const Text('บ้านสองชั้นขึ้นไป'),
                 value: 'บ้านสองชั้นขึ้นไป',
@@ -429,7 +429,7 @@ class _AddenvironmentState extends State<Addenvironment> {
         Row(
           children: [
             Container(
-              width: 170,
+              width: 160,
               child: RadioListTile(
                 title: const Text('บ้านพ่อแม่'),
                 value: 'บ้านพ่อแม่',
@@ -444,7 +444,7 @@ class _AddenvironmentState extends State<Addenvironment> {
               ),
             ),
             Container(
-              width: 170,
+              width: 160,
               child: RadioListTile(
                 title: const Text('บ้านตนเอง'),
                 value: 'บ้านตนเอง',
@@ -463,7 +463,7 @@ class _AddenvironmentState extends State<Addenvironment> {
         Row(
           children: [
             Container(
-              width: 170,
+              width: 160,
               child: RadioListTile(
                 title: const Text('บ้านญาติ'),
                 value: 'บ้านญาติ',
@@ -478,7 +478,7 @@ class _AddenvironmentState extends State<Addenvironment> {
               ),
             ),
             Container(
-              width: 170,
+              width: 160,
               child: RadioListTile(
                 title: const Text('บ้านเช่า'),
                 value: 'บ้านเช่า',

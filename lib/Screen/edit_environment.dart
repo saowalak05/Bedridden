@@ -149,7 +149,8 @@ class _EditEnvironmentState extends State<EditEnvironment> {
           ),
           actions: [
             IconButton(
-                onPressed: () => processEditData(), icon: Icon(Icons.edit))
+                onPressed: () => processEditData(),
+                icon: Icon(Icons.save_as_rounded))
           ],
         ),
         body: Container(
@@ -366,7 +367,7 @@ class _EditEnvironmentState extends State<EditEnvironment> {
         Row(
           children: [
             Container(
-              width: 170,
+              width: 160,
               child: RadioListTile(
                 title: const Text('สะอาด'),
                 value: 'สะอาด',
@@ -382,7 +383,7 @@ class _EditEnvironmentState extends State<EditEnvironment> {
               ),
             ),
             Container(
-              width: 170,
+              width: 160,
               child: RadioListTile(
                 title: const Text('สะอาดปานกลาง'),
                 value: 'สะอาดปานกลาง',
@@ -441,7 +442,7 @@ class _EditEnvironmentState extends State<EditEnvironment> {
         Row(
           children: [
             Container(
-              width: 170,
+              width: 160,
               child: RadioListTile(
                 title: const Text('บ้านชั้นเดียว'),
                 value: 'บ้านชั้นเดียว',
@@ -457,7 +458,7 @@ class _EditEnvironmentState extends State<EditEnvironment> {
               ),
             ),
             Container(
-              width: 170,
+              width: 160,
               child: RadioListTile(
                 title: const Text('บ้านสองชั้นขึ้นไป'),
                 value: 'บ้านสองชั้นขึ้นไป',
@@ -515,7 +516,7 @@ class _EditEnvironmentState extends State<EditEnvironment> {
         Row(
           children: [
             Container(
-              width: 170,
+              width: 160,
               child: RadioListTile(
                 title: const Text('บ้านพ่อแม่'),
                 value: 'บ้านพ่อแม่',
@@ -531,7 +532,7 @@ class _EditEnvironmentState extends State<EditEnvironment> {
               ),
             ),
             Container(
-              width: 170,
+              width: 160,
               child: RadioListTile(
                 title: const Text('บ้านตนเอง'),
                 value: 'บ้านตนเอง',
@@ -551,7 +552,7 @@ class _EditEnvironmentState extends State<EditEnvironment> {
         Row(
           children: [
             Container(
-              width: 170,
+              width: 160,
               child: RadioListTile(
                 title: const Text('บ้านญาติ'),
                 value: 'บ้านญาติ',
@@ -567,7 +568,7 @@ class _EditEnvironmentState extends State<EditEnvironment> {
               ),
             ),
             Container(
-              width: 170,
+              width: 160,
               child: RadioListTile(
                 title: const Text('บ้านเช่า'),
                 value: 'บ้านเช่า',

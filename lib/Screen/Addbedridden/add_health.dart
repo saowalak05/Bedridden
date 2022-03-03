@@ -237,7 +237,6 @@ class _AddhealthState extends State<Addhealth> {
                   ),
                   value: 'ถูกต้อง',
                   groupValue: groupB,
-                  selected: groupB == 0,
                   onChanged: (value) {
                     setState(() {
                       groupB = value as String;
@@ -250,7 +249,6 @@ class _AddhealthState extends State<Addhealth> {
                   ),
                   value: 'ไม่ถูกต้อง',
                   groupValue: groupB,
-                  selected: groupB == 1,
                   onChanged: (value) {
                     setState(() {
                       groupB = value as String;

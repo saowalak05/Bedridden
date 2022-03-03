@@ -101,7 +101,7 @@ class _EditHealthState extends State<EditHealth> {
           ),
         ),
         actions: [
-          IconButton(onPressed: () => processEditData(), icon: Icon(Icons.edit))
+          IconButton(onPressed: () => processEditData(), icon: Icon(Icons.save_as_rounded))
         ],
       ),
       body: Container(
