@@ -40,7 +40,7 @@ class ListlState extends State<Listl> {
   }
 
   Future<Null> readAllSick() async {
-    setState(() {
+    
       if (sickmodels.length != 0) {
         sickmodels.clear();
         sickmodelsLevel1.clear();
@@ -51,7 +51,7 @@ class ListlState extends State<Listl> {
         environmentModel.clear();
         familyModel.clear();
       }
-    });
+
 
     await Firebase.initializeApp().then((value) async {
       FirebaseFirestore.instance.collection('sick').snapshots().listen((event) {

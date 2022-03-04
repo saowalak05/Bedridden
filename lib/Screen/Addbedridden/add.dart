@@ -1114,6 +1114,7 @@ class _AddState extends State<Add> {
   Future<Null> processUploadImageAndInsertValue() async {
     String nameImage = 'sick${Random().nextInt(1000000)}.jpg';
 
+
     await Firebase.initializeApp().then((value) async {
       FirebaseStorage storage = FirebaseStorage.instance;
       Reference reference = storage.ref().child('sick/$nameImage');

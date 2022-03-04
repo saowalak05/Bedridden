@@ -28,7 +28,6 @@ class _Listl3State extends State<Listl3> {
   List<SickModel> sickmodelsLevel2 = [];
   List<SickModel> sickmodelsLevel3 = [];
   List<String> docIds = [];
-
   List<HealthModel> healthModel = [];
   List<EnvironmentModel> environmentModel = [];
   List<FamilyModel> familyModel = [];

@@ -1,5 +1,6 @@
 import 'package:bedridden/Data/book_data.dart';
 import 'package:bedridden/models/book.dart';
+import 'package:bedridden/models/sick_model.dart';
 import 'package:bedridden/widgets/search_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -12,10 +13,12 @@ class _SearchBarState extends State<SearchBar> {
   late List<Book> books;
   String query = '';
 
+  List<SickModel> sickmodels = [];
+
   @override
   void initState() {
     super.initState();
-    books = allBooks;
+    sickmodels = sickmodels;
   }
 
   @override
@@ -42,10 +45,10 @@ class _SearchBarState extends State<SearchBar> {
               buildSearch(),
               Expanded(
                 child: ListView.builder(
-                  itemCount: books.length,
+                  itemCount: sickmodels.length,
                   itemBuilder: (context, index) {
-                    final book = books[index];
-                    return buildBook(book);
+                    final sick = sickmodels[index];
+                    return buildBook(sick);
                   },
                 ),
               ),
@@ -60,22 +63,22 @@ class _SearchBarState extends State<SearchBar> {
         onChanged: searchBook,
       );
 
-  Widget buildBook(Book book) => ListTile(
+  Widget buildBook(SickModel sick) => ListTile(
         leading: Image.network(
-          book.urlImage,
+          sick.urlImage,
           fit: BoxFit.cover,
           width: 50,
           height: 50,
           errorBuilder: (context, exception, stackTrack) => Icon(Icons.error),
         ),
-        title: Text(book.title),
-        subtitle: Text(book.author),
+        title: Text(sick.name),
+        subtitle: Text(sick.level),
       );
 
   void searchBook(String query) {
-    final books = allBooks.where((book) {
-      final titleLower = book.title.toLowerCase();
-      final authorLower = book.author.toLowerCase();
+    final sickmodel = sickmodels.where((model) {
+      final titleLower = model.name.toLowerCase();
+      final authorLower = model.level.toLowerCase();
       final searchLower = query.toLowerCase();
 
       return titleLower.contains(searchLower) ||
@@ -84,7 +87,7 @@ class _SearchBarState extends State<SearchBar> {
 
     setState(() {
       this.query = query;
-      this.books = books;
+      this.sickmodels = sickmodels;
     });
   }
 }

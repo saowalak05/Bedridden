@@ -13,10 +13,7 @@ import 'package:intl/intl.dart';
 
 class LitlEdit extends StatefulWidget {
   final String idcard;
-  const LitlEdit({
-    Key? key,
-    required this.idcard,
-  }) : super(key: key);
+  const LitlEdit({Key? key, required this.idcard}) : super(key: key);
 
   @override
   _LitlEditState createState() => _LitlEditState();
@@ -29,8 +26,7 @@ List<SickModel> sickmodelsLevel3 = [];
 List<HealthModel> healthModel = [];
 List<EnvironmentModel> environmentModel = [];
 List<FamilyModel> familyModel = [];
-
-List<String> idCard = [];
+List<String> docIds = [];
 
 //sick
 String? addressSick;
@@ -84,8 +80,8 @@ class _LitlEditState extends State<LitlEdit> {
   }
 
   Future<Null> readAlldata() async {
-    await Firebase.initializeApp().then((value) async {
-      setState(() {
+    setState(() {
+      if (sickmodels.length != 0) {
         sickmodels.clear();
         healthModel.clear();
         environmentModel.clear();
@@ -93,9 +89,10 @@ class _LitlEditState extends State<LitlEdit> {
         sickmodelsLevel1.clear();
         sickmodelsLevel2.clear();
         sickmodelsLevel3.clear();
-        idCard.clear();
-      });
-
+        docIds.clear();
+      }
+    });
+    await Firebase.initializeApp().then((value) async {
       FirebaseFirestore.instance
           .collection('sick')
           .doc(widget.idcard)

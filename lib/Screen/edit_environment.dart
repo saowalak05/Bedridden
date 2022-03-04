@@ -36,6 +36,8 @@ class _EditEnvironmentState extends State<EditEnvironment> {
   bool typeaccommodation = true;
 
   Future<Null> processEditData() async {
+    String nameImage = 'environment${Random().nextInt(1000000)}.jpg';
+
     if (typeHouse) {
       map['typeHouse'] = typeHouseenvironment;
     }
@@ -60,35 +62,21 @@ class _EditEnvironmentState extends State<EditEnvironment> {
       normalDialog(context, 'ไม่มีการเปลี่ยนแปลง');
     } else {
       await Firebase.initializeApp().then((value) async {
-        await FirebaseFirestore.instance
-            .collection('environment')
-            .doc(widget.idcard)
-            .update(map)
-            .then((value) => Navigator.pop(context));
+        FirebaseStorage storage = FirebaseStorage.instance;
+        Reference reference = storage.ref().child('environment/$nameImage');
+        UploadTask task = reference.putFile(files!);
+        await task.whenComplete(() async {
+          String urlImage = value.toString();
+          map['urlenvironmentImage'] = urlImage;
+          await FirebaseFirestore.instance
+              .collection('environment')
+              .doc(widget.idcard)
+              .update(map)
+              .then((value) => Navigator.pop(context));
+        });
       });
     }
   }
-
-  // Future<Null> processChangeImageProfile() async {
-  //   String Imagevnv = 'urlenvironmentImage${Random().nextInt(100000)}.jpg';
-  //   print('## nameImage ==>> $Image');
-  //   await Firebase.initializeApp().then((value) async {
-  //     FirebaseStorage storage = FirebaseStorage.instance;
-  //     Reference reference =
-  //         storage.ref().child('urlenvironmentImage/$Imagevnv');
-  //     UploadTask task = reference.putFile(files!);
-  //     await task.whenComplete(() async {
-  //       await reference.getDownloadURL().then((value) async {
-  //         print('Upload Success access Token ==> $value');
-  //         FirebaseAuth.instance.authStateChanges().listen((event) async {
-  //           await event!
-  //               .updatePhotoURL(urlenvironmentImageenvironment)
-  //               .then((value) => normalDialog(context, 'Update Success'));
-  //         });
-  //       });
-  //     });
-  //   });
-  // }
 
   Future<Null> readAlldata() async {
     await Firebase.initializeApp().then((value) async {

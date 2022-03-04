@@ -27,7 +27,7 @@ class _EditSickState extends State<EditSick> {
   Map<String, dynamic> map = {};
 
   late DateTime pickedDate;
-  bool bondStatus = true; // true => ยังไม่ได้เลือกวันเกิด
+  bool bondStatus = false; // true => ยังไม่ได้เลือกวันเกิด
 
   bool typeSexBol = true;
   bool typeStatusBol = false;
@@ -159,8 +159,6 @@ class _EditSickState extends State<EditSick> {
       setState(() {
         lat = position!.latitude;
         lng = position.longitude;
-        latSick = lat as String?;
-        lngSick = lng as String?;
         print('lat = $lat, lng = $lng');
       });
     }
@@ -251,7 +249,6 @@ class _EditSickState extends State<EditSick> {
                 buildreligion(),
                 buildlevel(),
                 buildMap(),
-                buttonEdit(),
               ],
             ),
           ),
@@ -296,13 +293,9 @@ class _EditSickState extends State<EditSick> {
       map['level'] = levelSick;
     }
 
-    // if (bondStatus) {
-    //   Timestamp timestamp = Timestamp.fromDate(pickedDate);
-    //   setState(() {
-    //     bondSick = timestamp as String?;
-    //     map['bond'] = bondSick;
-    //   });
-    // }
+    map['bond'] = pickedDate;
+    map['lat'] = lat;
+    map['lng'] = lng;
 
     print('### map ==>> $map');
     if (map.isEmpty) {
@@ -318,14 +311,14 @@ class _EditSickState extends State<EditSick> {
     }
   }
 
-  Set<Marker> setMarker() => <Marker>[
+  Set<Marker> setMarker() => <Marker>{
         Marker(
           markerId: MarkerId('id'),
           position: LatLng(lat!, lng!),
           infoWindow: InfoWindow(
               title: 'พิกัด ' + '$nameSick', snippet: 'Lat = $lat, lng = $lng'),
         ),
-      ].toSet();
+      }.toSet();
 
   Widget buildMap() => Container(
         decoration: BoxDecoration(
@@ -341,8 +334,6 @@ class _EditSickState extends State<EditSick> {
                   setState(() {
                     lat = latLng.latitude;
                     lng = latLng.longitude;
-                    latSick = lat as String?;
-                    lngSick = lng as String?;
                   });
                 },
                 initialCameraPosition: CameraPosition(
@@ -535,16 +526,6 @@ class _EditSickState extends State<EditSick> {
             ),
           )
         ],
-      ),
-    );
-  }
-
-  Container buttonEdit() {
-    return Container(
-      width: 250,
-      child: ElevatedButton(
-        onPressed: () => processEditData(),
-        child: Text('Edit Data'),
       ),
     );
   }

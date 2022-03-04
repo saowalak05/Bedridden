@@ -35,7 +35,7 @@ class _HomeState extends State<Home> {
   List<SickModel> sickmodelsLevel1 = [];
   List<SickModel> sickmodelsLevel2 = [];
   List<SickModel> sickmodelsLevel3 = [];
-  List<String> idCard = [];
+  List<String> docIds = [];
 
   List<HealthModel> healthModel = [];
   List<EnvironmentModel> environmentModel = [];
@@ -55,19 +55,18 @@ class _HomeState extends State<Home> {
         .then((value) => LitlEdit);
   }
 
-  Future<Null> readAllSick() async {
-    setState(() {
+  Future<Null> readAllSick() async { 
       if (sickmodels.length != 0) {
         sickmodels.clear();
         sickmodelsLevel1.clear();
         sickmodelsLevel2.clear();
         sickmodelsLevel3.clear();
-        idCard.clear();
+        docIds.clear();
         healthModel.clear();
         environmentModel.clear();
         familyModel.clear();
       }
-    });
+    
 
     await Firebase.initializeApp().then((value) async {
       FirebaseFirestore.instance.collection('sick').snapshots().listen((event) {
@@ -79,15 +78,15 @@ class _HomeState extends State<Home> {
             sickmodels.add(model);
             if (model.level == '1') {
               sickmodelsLevel1.add(model);
-              idCard.add(item.id);
+              docIds.add(item.id);
             }
             if (model.level == '2') {
               sickmodelsLevel2.add(model);
-              idCard.add(item.id);
+              docIds.add(item.id);
             }
             if (model.level == '3') {
               sickmodelsLevel3.add(model);
-              idCard.add(item.id);
+              docIds.add(item.id);
             }
           });
         }
