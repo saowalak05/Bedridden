@@ -8,6 +8,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+
 class EditEnvironment extends StatefulWidget {
   final String idcard;
   const EditEnvironment({Key? key, required this.idcard});
@@ -34,10 +35,13 @@ class _EditEnvironmentState extends State<EditEnvironment> {
   bool typeHousingSafety = true;
   bool typefacilities = true;
   bool typeaccommodation = true;
+  bool statusImage = false;
 
   Future<Null> processEditData() async {
-    String nameImage = 'environment${Random().nextInt(1000000)}.jpg';
 
+      final dateTime = DateTime.now();
+        final userid = (widget.idcard);
+        final path = '$userid/$dateTime';
     if (typeHouse) {
       map['typeHouse'] = typeHouseenvironment;
     }
@@ -58,22 +62,21 @@ class _EditEnvironmentState extends State<EditEnvironment> {
       map['accommodation'] = accommodationenvironment;
     }
 
+    if (statusImage) {
+      map['urlenvironmentImage'  ] = urlenvironmentImageenvironment;
+    }
+
     if (map.isEmpty) {
       normalDialog(context, 'ไม่มีการเปลี่ยนแปลง');
     } else {
       await Firebase.initializeApp().then((value) async {
-        FirebaseStorage storage = FirebaseStorage.instance;
-        Reference reference = storage.ref().child('environment/$nameImage');
-        UploadTask task = reference.putFile(files!);
-        await task.whenComplete(() async {
-          String urlImage = value.toString();
-          map['urlenvironmentImage'] = urlImage;
-          await FirebaseFirestore.instance
-              .collection('environment')
-              .doc(widget.idcard)
-              .update(map)
-              .then((value) => Navigator.pop(context));
-        });
+      
+
+        await FirebaseFirestore.instance
+            .collection('environment')
+            .doc(widget.idcard)
+            .update(map)
+            .then((value) => Navigator.pop(context));
       });
     }
   }
@@ -108,6 +111,7 @@ class _EditEnvironmentState extends State<EditEnvironment> {
       );
       setState(() {
         files = File(result!.path);
+        statusImage = false;
       });
     } catch (e) {}
   }
@@ -184,13 +188,11 @@ class _EditEnvironmentState extends State<EditEnvironment> {
       children: [
         IconButton(
             onPressed: () {
-              Navigator.pop(context);
               processGetImage(ImageSource.camera);
             },
             icon: Icon(Icons.add_a_photo)),
         IconButton(
             onPressed: () {
-              Navigator.pop(context);
               processGetImage(ImageSource.gallery);
             },
             icon: Icon(Icons.add_photo_alternate)),
@@ -200,12 +202,14 @@ class _EditEnvironmentState extends State<EditEnvironment> {
 
   Container buildImage() {
     return Container(
-      width: 200,
-      child: Image.network(
-        '$urlenvironmentImageenvironment',
-        errorBuilder: (context, exception, stackTrack) => Icon(Icons.error),
-      ),
-    );
+        width: 200,
+        child: files == null
+            ? Image.network(
+                '$urlenvironmentImageenvironment',
+                errorBuilder: (context, exception, stackTrack) =>
+                    Icon(Icons.error),
+              )
+            : Image.file(files!));
   }
 
   Column buildFacilities() {

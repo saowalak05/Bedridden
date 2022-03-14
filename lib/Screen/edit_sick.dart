@@ -37,6 +37,7 @@ class _EditSickState extends State<EditSick> {
   bool typeposition = true;
   bool typereligions = true;
   bool typelevel = true;
+  bool statusImage = false;
 
   double? lat;
   double? lng;

@@ -6,10 +6,15 @@ import 'package:bedridden/models/environment_model.dart';
 import 'package:bedridden/models/family_model.dart';
 import 'package:bedridden/models/health_model.dart';
 import 'package:bedridden/models/sick_model.dart';
+import 'package:bedridden/utility/dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
+import 'dart:io';
+
+import 'package:url_launcher/url_launcher.dart';
 
 class LitlEdit extends StatefulWidget {
   final String idcard;
@@ -72,11 +77,26 @@ String? occupationoneFamily;
 String? occupationthreeFamily;
 String? occupationtwoFamily;
 
+double? lat;
+double? lng;
+
 class _LitlEditState extends State<LitlEdit> {
   @override
   void initState() {
     super.initState();
     readAlldata();
+  }
+
+  _launchMap() async {
+    print('mapppp $latSick $lngSick');
+    final String googleMapsUrl =
+        "https://www.google.com/maps/search/?api=1&query=$latSick,$lngSick";
+
+    if (await canLaunch(googleMapsUrl)) {
+      await launch(googleMapsUrl);
+    } else {
+      throw 'could not open the map';
+    }
   }
 
   Future<Null> readAlldata() async {
@@ -216,6 +236,27 @@ class _LitlEditState extends State<LitlEdit> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Row(
+              children: [
+                MaterialButton(
+                  minWidth: 50,
+                  height: 30,
+                  onPressed: () {
+                    _launchMap();
+                  },
+                  shape: RoundedRectangleBorder(
+                      side: BorderSide(
+                        color: const Color(0xffffede5),
+                      ),
+                      borderRadius: BorderRadius.circular(50)),
+                  child: Text(
+                    "นำทาง",
+                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+                  ),
+                  color: Color.fromARGB(255, 57, 226, 122),
+                ),
+              ],
+            ),
             SizedBox(height: 15),
             Row(
               children: [
@@ -276,6 +317,7 @@ class _LitlEditState extends State<LitlEdit> {
                 ),
               ],
             ),
+            SizedBox(width: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

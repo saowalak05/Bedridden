@@ -1,5 +1,3 @@
-import 'package:bedridden/Data/book_data.dart';
-import 'package:bedridden/models/book.dart';
 import 'package:bedridden/models/sick_model.dart';
 import 'package:bedridden/widgets/search_widget.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +8,6 @@ class SearchBar extends StatefulWidget {
 }
 
 class _SearchBarState extends State<SearchBar> {
-  late List<Book> books;
   String query = '';
 
   List<SickModel> sickmodels = [];
@@ -18,7 +15,6 @@ class _SearchBarState extends State<SearchBar> {
   @override
   void initState() {
     super.initState();
-    sickmodels = sickmodels;
   }
 
   @override
@@ -60,7 +56,7 @@ class _SearchBarState extends State<SearchBar> {
   Widget buildSearch() => SearchWidget(
         text: query,
         hintText: 'Search',
-        onChanged: searchBook,
+        onChanged: searcdata,
       );
 
   Widget buildBook(SickModel sick) => ListTile(
@@ -75,7 +71,7 @@ class _SearchBarState extends State<SearchBar> {
         subtitle: Text(sick.level),
       );
 
-  void searchBook(String query) {
+  void searcdata(String query) {
     final sickmodel = sickmodels.where((model) {
       final titleLower = model.name.toLowerCase();
       final authorLower = model.level.toLowerCase();
