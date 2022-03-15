@@ -6,13 +6,10 @@ import 'package:bedridden/models/environment_model.dart';
 import 'package:bedridden/models/family_model.dart';
 import 'package:bedridden/models/health_model.dart';
 import 'package:bedridden/models/sick_model.dart';
-import 'package:bedridden/utility/dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
-import 'dart:io';
 
 import 'package:url_launcher/url_launcher.dart';
 
@@ -31,7 +28,6 @@ List<SickModel> sickmodelsLevel3 = [];
 List<HealthModel> healthModel = [];
 List<EnvironmentModel> environmentModel = [];
 List<FamilyModel> familyModel = [];
-List<String> docIds = [];
 
 //sick
 String? addressSick;
@@ -109,7 +105,6 @@ class _LitlEditState extends State<LitlEdit> {
         sickmodelsLevel1.clear();
         sickmodelsLevel2.clear();
         sickmodelsLevel3.clear();
-        docIds.clear();
       }
     });
     await Firebase.initializeApp().then((value) async {

@@ -3,9 +3,6 @@ import 'package:bedridden/Screen/Home/listall.dart';
 import 'package:bedridden/Screen/Home/listl1.dart';
 import 'package:bedridden/Screen/Home/listl2.dart';
 import 'package:bedridden/Screen/Home/listl3.dart';
-import 'package:bedridden/models/environment_model.dart';
-import 'package:bedridden/models/family_model.dart';
-import 'package:bedridden/models/health_model.dart';
 import 'package:bedridden/models/sick_model.dart';
 import 'package:bedridden/widgets/show_progess.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -37,9 +34,7 @@ class _HomeState extends State<Home> {
   List<SickModel> sickmodelsLevel3 = [];
   List<String> docIds = [];
 
-  List<HealthModel> healthModel = [];
-  List<EnvironmentModel> environmentModel = [];
-  List<FamilyModel> familyModel = [];
+
 
   @override
   void initState() {
@@ -62,9 +57,6 @@ class _HomeState extends State<Home> {
         sickmodelsLevel2.clear();
         sickmodelsLevel3.clear();
         docIds.clear();
-        healthModel.clear();
-        environmentModel.clear();
-        familyModel.clear();
       }
     
 

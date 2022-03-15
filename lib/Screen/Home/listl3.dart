@@ -79,7 +79,6 @@ class _Listl3State extends State<Listl3> {
   Widget build(BuildContext context) {
     Intl.defaultLocale = 'th';
     initializeDateFormatting();
-    final IconThemeData data;
     return Scaffold(
       appBar: AppBar(
         title: Text(

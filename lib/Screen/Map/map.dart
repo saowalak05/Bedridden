@@ -1,8 +1,11 @@
 import 'dart:async';
 import 'package:bedridden/models/sick_model.dart';
+import 'package:bedridden/widgets/show_progess.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 
 class Map extends StatefulWidget {
   @override
@@ -11,12 +14,50 @@ class Map extends StatefulWidget {
 
 class MapState extends State<Map> {
   Completer<GoogleMapController> _controller = Completer();
+  final Set<Marker> markers = new Set(); //markers for google map
 
   List<SickModel> sickmodels = [];
+
+
+
+  Future<Null> readAlldata() async {
+    setState(() {
+      if (sickmodels.length != 0) {
+        sickmodels.clear();
+      }
+    });
+    await Firebase.initializeApp().then((value) async {
+      FirebaseFirestore.instance.collection('sick').snapshots().listen((event) {
+        for (var item in event.docs) {
+          SickModel model = SickModel.fromMap(item.data());
+          print('sickmodels ====>>>${sickmodels.length}');
+          setState(() {
+            sickmodels.add(model);
+            print('sickmodels ==${sickmodels.length}');
+          });
+          if (event.docs.isNotEmpty) {
+            for (var i = 0; i < sickmodels.length; i++) {
+              setState(() {
+                markers.add(Marker(
+                  markerId: MarkerId(sickmodels[i].name),
+                  position: LatLng(sickmodels[i].lat, sickmodels[i].lng),
+                  infoWindow: InfoWindow(
+                      title: 'พิกัด ${sickmodels[i].name}',
+                      snippet:
+                          'Lat = ${sickmodels[i].lat}  lng = ${sickmodels[i].lng}'),
+                ));
+              });
+            }
+          }
+        }
+      });
+    });
+  }
 
   @override
   void initState() {
     super.initState();
+    readAlldata();
   }
 
   double zoomVal = 5.0;
@@ -39,82 +80,26 @@ class MapState extends State<Map> {
       ),
       body: Stack(
         children: <Widget>[
-          // _buildGoogleMap(context),
+          _buildGoogleMap(context),
         ],
       ),
     );
-  
-
-  // Widget boxes(String _image, double lat, double long, String restaurantName) {
-  //   return GestureDetector(
-  //     onTap: () {
-  //       _gotoLocation(lat, long);
-  //     },
-  //     child: Container(
-  //       child: new FittedBox(
-  //         child: Material(
-  //             color: Colors.white,
-  //             elevation: 14.0,
-  //             borderRadius: BorderRadius.circular(24.0),
-  //             shadowColor: Color(0xffdfad98),
-  //             child: Row(
-  //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //               children: <Widget>[
-  //                 Container(
-  //                   width: 180,
-  //                   height: 200,
-  //                   child: ClipRRect(
-  //                     borderRadius: new BorderRadius.circular(24.0),
-  //                     child: Image(
-  //                       fit: BoxFit.fill,
-  //                       image: NetworkImage(_image),
-  //                     ),
-  //                   ),
-  //                 ),
-  //                 Container(
-  //                   child: Padding(
-  //                     padding: const EdgeInsets.all(8.0),
-  //                   ),
-  //                 ),
-  //               ],
-  //             )),
-  //       ),
-  //     ),
-  //   );
   }
 
-  // Set<Marker> setMarker() => <Marker>{
-  //       Marker(
-  //         markerId: MarkerId('id'),
-  //         position: LatLng(lat!, lng!),
-  //         infoWindow: InfoWindow(
-  //             title: 'พิกัด ' + '$nameSick', snippet: 'Lat = $lat, lng = $lng'),
-  //       ),
-  //     }.toSet();
-
-  // Widget _buildGoogleMap(BuildContext context) {
-  //   return Container(
-  //     height: MediaQuery.of(context).size.height,
-  //     width: MediaQuery.of(context).size.width,
-  //     child: GoogleMap(
-  //       mapType: MapType.normal,
-  //       initialCameraPosition:
-  //           CameraPosition(target: LatLng(40.712776, -74.005974), zoom: 12),
-  //       onMapCreated: (GoogleMapController controller) {
-  //         _controller.complete(controller);
-  //       },
-  //       markers: {},
-  //     ),
-  //   );
-  // }
-
-  // Future<void> _gotoLocation(double lat, double long) async {
-  //   final GoogleMapController controller = await _controller.future;
-  //   controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
-  //     target: LatLng(lat, long),
-  //     zoom: 15,
-  //     tilt: 50.0,
-  //     bearing: 45.0,
-  //   )));
-  // }
+  Widget _buildGoogleMap(
+    BuildContext context,
+  ) {
+    return sickmodels.length == 0
+        ? ShowProgress()
+        : GoogleMap(
+            mapType: MapType.normal,
+            initialCameraPosition: CameraPosition(
+                target: LatLng(13.730583745661047, 100.4742379568907),
+                zoom: 12),
+            onMapCreated: (GoogleMapController controller) {
+              _controller.complete(controller);
+            },
+            markers: markers,
+          );
+  }
 }
