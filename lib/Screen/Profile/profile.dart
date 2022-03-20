@@ -87,8 +87,8 @@ class _ProfileState extends State<Profile> {
             ),
             Container(
               // padding: EdgeInsets.all(50.0),
-              width: MediaQuery.of(context).size.width / 3,
-              height: MediaQuery.of(context).size.width / 3,
+              width: MediaQuery.of(context).size.width / 2.5,
+              height: MediaQuery.of(context).size.width / 2.5,
               child: file != null
                   ? circleFile()
                   : urlImage != null
@@ -159,17 +159,18 @@ class _ProfileState extends State<Profile> {
                   SizedBox(
                     height: 20,
                   ),
-                  ListTile(
-                    onTap: () async {
+                  ElevatedButton(
+                    child: const Text('ออกจากระบบ'),
+                    onPressed: () async {
                       await Firebase.initializeApp().then((value) async {
                         await FirebaseAuth.instance.signOut().then((value) =>
                             Navigator.pushNamedAndRemoveUntil(
                                 context, '/LoginPage', (route) => false));
                       });
                     },
-                    title: Text("log out"),
-                    subtitle: Text("you can logout from here"),
-                    leading: Icon(Icons.exit_to_app),
+                    style: ElevatedButton.styleFrom(
+                      primary: Color(0xffdfad98),
+                    ),
                   ),
                 ],
               ),
@@ -257,9 +258,9 @@ class _ProfileState extends State<Profile> {
 
   Padding buildEditImage() {
     return Padding(
-      padding: EdgeInsets.only(bottom: 260, left: 110),
+      padding: EdgeInsets.only(bottom: 260, left: 170),
       child: CircleAvatar(
-        backgroundColor: Colors.black54,
+        backgroundColor: Colors.grey,
         child: IconButton(
           icon: Icon(
             Icons.edit,
@@ -275,7 +276,7 @@ class _ProfileState extends State<Profile> {
     return Padding(
       padding: EdgeInsets.only(bottom: 260, left: 4),
       child: CircleAvatar(
-        backgroundColor: Colors.black54,
+        backgroundColor: Colors.grey,
         child: IconButton(
           icon: Icon(
             Icons.arrow_forward_ios,
@@ -329,9 +330,9 @@ class HeaderCurvedContainer extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     Paint paint = Paint()..color = Color(0xffdfad98);
     Path path = Path()
-      ..relativeLineTo(0, 150)
-      ..quadraticBezierTo(size.width / 2, 225, size.width, 150)
-      ..relativeLineTo(0, -150)
+      ..relativeLineTo(0, 230)
+      ..quadraticBezierTo(size.width, 230, size.width, 230)
+      ..relativeLineTo(0, -230)
       ..close();
     canvas.drawPath(path, paint);
   }

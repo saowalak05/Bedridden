@@ -108,17 +108,24 @@ class ListlState extends State<Listl> {
       ),
     );
   }
+  
 
 //'รายชื่อผู้ป่วยติดเตียง ระดับที่ 1'
   Widget buildtListNameAllBedriddenLevel1() {
     return sickmodelsLevel1.length == 0
         ? ShowProgress()
         : Container(
-            height: 650,
-            child: ListView.builder(
+            
+            height: 1000,
+            child: GridView.builder(
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
               physics: ScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                  maxCrossAxisExtent: 300,
+                  childAspectRatio: 200 / 300,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10),
               itemCount: sickmodelsLevel1.length,
               itemBuilder: (context, index) => Container(
                 width: 175,

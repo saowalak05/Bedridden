@@ -114,11 +114,16 @@ class _Listl2State extends State<Listl2> {
     return sickmodelsLevel2.length == 0
         ? ShowProgress()
         : Container(
-            height: 650,
-            child: ListView.builder(
+             height: 1000,
+            child: GridView.builder(
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
               physics: ScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                  maxCrossAxisExtent: 300,
+                  childAspectRatio: 200 / 300,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10),
               itemCount: sickmodelsLevel2.length,
               itemBuilder: (context, index) => Container(
                 width: 100,

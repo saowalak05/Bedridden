@@ -34,8 +34,6 @@ class _HomeState extends State<Home> {
   List<SickModel> sickmodelsLevel3 = [];
   List<String> docIds = [];
 
-
-
   @override
   void initState() {
     super.initState();
@@ -50,15 +48,14 @@ class _HomeState extends State<Home> {
         .then((value) => LitlEdit);
   }
 
-  Future<Null> readAllSick() async { 
-      if (sickmodels.length != 0) {
-        sickmodels.clear();
-        sickmodelsLevel1.clear();
-        sickmodelsLevel2.clear();
-        sickmodelsLevel3.clear();
-        docIds.clear();
-      }
-    
+  Future<Null> readAllSick() async {
+    if (sickmodels.length != 0) {
+      sickmodels.clear();
+      sickmodelsLevel1.clear();
+      sickmodelsLevel2.clear();
+      sickmodelsLevel3.clear();
+      docIds.clear();
+    }
 
     await Firebase.initializeApp().then((value) async {
       FirebaseFirestore.instance.collection('sick').snapshots().listen((event) {
@@ -96,18 +93,6 @@ class _HomeState extends State<Home> {
     final IconThemeData data;
     return Scaffold(
       appBar: AppBar(
-        actions: [
-          TextButton(
-              onPressed: () {
-                Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => Add()));
-              },
-              child: Text(
-                'Add',
-                style: TextStyle(color: Colors.white),
-              ))
-        ],
-        leading: Container(),
         title: Center(
           child: Text(
             'Home',
@@ -143,6 +128,14 @@ class _HomeState extends State<Home> {
             ),
           ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => Add()));
+        },
+        backgroundColor: Color(0xfff29a94),
+        child: const Icon(Icons.add),
       ),
     );
   }

@@ -29,7 +29,6 @@ class _AllState extends State<All> {
   List<SickModel> sickmodelsLevel3 = [];
   List<String> docIds = [];
 
-  
   List<HealthModel> healthModel = [];
   List<EnvironmentModel> environmentModel = [];
   List<FamilyModel> familyModel = [];
@@ -41,18 +40,16 @@ class _AllState extends State<All> {
   }
 
   Future<Null> readAllSick() async {
-    
-      if (sickmodels.length != 0) {
-        sickmodels.clear();
-        sickmodelsLevel1.clear();
-        sickmodelsLevel2.clear();
-        sickmodelsLevel3.clear();
-        docIds.clear();
-        healthModel.clear();
-        environmentModel.clear();
-        familyModel.clear();
-      }
-
+    if (sickmodels.length != 0) {
+      sickmodels.clear();
+      sickmodelsLevel1.clear();
+      sickmodelsLevel2.clear();
+      sickmodelsLevel3.clear();
+      docIds.clear();
+      healthModel.clear();
+      environmentModel.clear();
+      familyModel.clear();
+    }
 
     await Firebase.initializeApp().then((value) async {
       FirebaseFirestore.instance.collection('sick').snapshots().listen((event) {
@@ -115,11 +112,16 @@ class _AllState extends State<All> {
     return sickmodels.length == 0
         ? ShowProgress()
         : Container(
-            height: 650,
-            child: ListView.builder(
+            height: 1000,
+            child: GridView.builder(
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
               physics: ScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                  maxCrossAxisExtent: 300,
+                  childAspectRatio: 200 / 300,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10),
               itemCount: sickmodels.length,
               itemBuilder: (context, index) => Container(
                 width: 175,
@@ -141,9 +143,9 @@ class _AllState extends State<All> {
                         child: Column(
                           children: [
                             Container(
-                              margin: EdgeInsets.symmetric(vertical: 12),
-                              width: 130,
-                              height: 80,
+                              margin: EdgeInsets.symmetric(vertical: 10),
+                              width: 150,
+                              height: 100,
                               child: ClipRRect(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10)),

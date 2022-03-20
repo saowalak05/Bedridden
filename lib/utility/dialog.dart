@@ -1,6 +1,4 @@
-
 import 'dart:io';
-
 import 'package:bedridden/widgets/show_image.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -37,7 +35,8 @@ class MyDialog {
                 // Navigator.pop(context);
                 await Geolocator.openLocationSettings();
                 exit(0);
-              }, child: Text('OK'))
+              },
+              child: Text('OK'))
         ],
       ),
     );

@@ -10,8 +10,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
+import 'package:image_picker/image_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'dart:io';
+import 'dart:math';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LitlEdit extends StatefulWidget {
   final String idcard;
@@ -47,6 +51,7 @@ String? typeSexSick;
 String? typeStatusSick;
 String? typeeducationlevelSick;
 String? typepositionSick;
+
 String? urlImageSick;
 //Health
 String? diseaseHealth;
@@ -76,6 +81,8 @@ String? occupationtwoFamily;
 double? lat;
 double? lng;
 
+File? file;
+
 class _LitlEditState extends State<LitlEdit> {
   @override
   void initState() {
@@ -93,6 +100,52 @@ class _LitlEditState extends State<LitlEdit> {
     } else {
       throw 'could not open the map';
     }
+  }
+
+  CircleAvatar circleFile() {
+    return CircleAvatar(
+      backgroundImage: FileImage(file!),
+    );
+  }
+
+  CircleAvatar circleNetwork() {
+    return CircleAvatar(
+      backgroundImage: NetworkImage(urlImageSick!),
+    );
+  }
+
+  Container circleAsset() {
+    return Container(
+      width: 200,
+      child: Image.network(
+        '$urlImageSick',
+        errorBuilder: (context, exception, stackTrack) => Icon(Icons.error),
+      ),
+    );
+  }
+
+  Future<Null> processChangeImageProfile() async {
+    String urlImage = 'sick${Random().nextInt(100000)}.jpg';
+    print('## nameImage ==>> $urlImage');
+    await Firebase.initializeApp().then((value) async {
+      FirebaseStorage storage = FirebaseStorage.instance;
+      Reference reference = storage.ref().child('sick/$urlImage');
+      UploadTask task = reference.putFile(file!);
+      await task.whenComplete(() async {});
+    });
+  }
+
+  Future<Null> processGetImage(ImageSource source) async {
+    try {
+      var result = await ImagePicker().pickImage(
+        source: source,
+        maxWidth: 800,
+        maxHeight: 800,
+      );
+      setState(() {
+        file = File(result!.path);
+      });
+    } catch (e) {}
   }
 
   Future<Null> readAlldata() async {
@@ -231,43 +284,18 @@ class _LitlEditState extends State<LitlEdit> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                MaterialButton(
-                  minWidth: 50,
-                  height: 30,
-                  onPressed: () {
-                    _launchMap();
-                  },
-                  shape: RoundedRectangleBorder(
-                      side: BorderSide(
-                        color: const Color(0xffffede5),
-                      ),
-                      borderRadius: BorderRadius.circular(50)),
-                  child: Text(
-                    "นำทาง",
-                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
-                  ),
-                  color: Color.fromARGB(255, 57, 226, 122),
-                ),
-              ],
-            ),
             SizedBox(height: 15),
             Row(
               children: [
                 Container(
-                  height: 100,
-                  width: 100,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                    child: Image.network(
-                      '$urlImageSick',
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, exception, stackTrack) => Icon(
-                        Icons.error,
-                      ),
-                    ),
-                  ),
+                  // padding: EdgeInsets.all(50.0),
+                  width: MediaQuery.of(context).size.width / 2.5,
+                  height: MediaQuery.of(context).size.width / 2.5,
+                  child: file != null
+                      ? circleFile()
+                      : urlImageSick != null
+                          ? circleNetwork()
+                          : circleAsset(),
                 ),
                 SizedBox(width: 20),
                 Expanded(
@@ -670,6 +698,14 @@ class _LitlEditState extends State<LitlEdit> {
           ],
         ),
       )),
+      //นำทาง
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _launchMap();
+        },
+        backgroundColor: Color(0xfff29a94),
+        child: const Icon(Icons.navigation),
+      ),
     );
   }
 

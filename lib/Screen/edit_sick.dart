@@ -7,6 +7,11 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+import 'dart:math';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class EditSick extends StatefulWidget {
   final String idcard;
@@ -23,7 +28,13 @@ class _EditSickState extends State<EditSick> {
   TextEditingController phoneController = TextEditingController();
   TextEditingController patientoccupationController = TextEditingController();
   TextEditingController talentController = TextEditingController();
+  TextEditingController userNameController = TextEditingController();
 
+  bool load = true;
+  String? email;
+  bool changeDisplayName = true; // true => ยังไม่มีการเปลี่ยน DisplayName
+  String? urlImageSick;
+  File? file;
   Map<String, dynamic> map = {};
 
   late DateTime pickedDate;
@@ -71,7 +82,6 @@ class _EditSickState extends State<EditSick> {
   String? typeStatusSick;
   String? typeeducationlevelSick;
   String? typepositionSick;
-  String? urlImageSick;
 
   @override
   void initState() {
@@ -80,7 +90,7 @@ class _EditSickState extends State<EditSick> {
     readAlldata();
     pickedDate = DateTime.now();
     checkPermission();
-
+    findCurrentUser();
     Intl.defaultLocale = 'th';
     initializeDateFormatting();
   }
@@ -165,6 +175,118 @@ class _EditSickState extends State<EditSick> {
     }
   }
 
+  Future<Null> confirmImageDialog() async {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: ListTile(
+          title: Text('กรุณาเลือกแหล่งภาพ'),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              processGetImage(ImageSource.camera);
+            },
+            child: Text('Camera'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              processGetImage(ImageSource.gallery);
+            },
+            child: Text('Gallery'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text('Cancel'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<Null> findCurrentUser() async {
+    await Firebase.initializeApp().then((value) async {
+      FirebaseAuth.instance.authStateChanges().listen((event) {
+        setState(() {
+          userNameController.text = event!.displayName!;
+          email = event.email;
+          urlImageSick = event.photoURL;
+          print('### urlImage = $urlImageSick');
+          load = false;
+        });
+      });
+    });
+  }
+
+  Padding buildUpdateImage() {
+    return Padding(
+      padding: EdgeInsets.only(bottom: 260, left: 4),
+      child: CircleAvatar(
+        backgroundColor: Colors.grey,
+        child: IconButton(
+          icon: Icon(
+            Icons.arrow_forward_ios,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            if (file == null) {
+              normalDialog(context, 'กรุณาใส่ภาพ');
+            } else {
+              processChangeImageProfile();
+            }
+          },
+        ),
+      ),
+    );
+  }
+
+  Future<Null> processChangeImageProfile() async {
+    String urlImage = 'sick${Random().nextInt(100000)}.jpg';
+    print('## nameImage ==>> $urlImage');
+    await Firebase.initializeApp().then((value) async {
+      FirebaseStorage storage = FirebaseStorage.instance;
+      Reference reference = storage.ref().child('sick/$urlImage');
+      UploadTask task = reference.putFile(file!);
+      await task.whenComplete(() async {
+        await reference.getDownloadURL().then((value) async {
+          print('Upload Success access Token ==> $value');
+          String urlImage = value.toString();
+          FirebaseAuth.instance.authStateChanges().listen((event) async {
+            await event!.updatePhotoURL(urlImage).then((value) =>
+                normalDialog(context, 'Update Image Profile Success'));
+          });
+        });
+      });
+    });
+  }
+
+  Future<Null> processChangeDisplayName() async {
+    await Firebase.initializeApp().then((value) async {
+      FirebaseAuth.instance.authStateChanges().listen((event) async {
+        await event!
+            .updateDisplayName(userNameController.text)
+            .then((value) => normalDialog(context, 'change Dsiplay Success'));
+      });
+    });
+  } // end
+
+  Future<Null> processGetImage(ImageSource source) async {
+    try {
+      var result = await ImagePicker().pickImage(
+        source: source,
+        maxWidth: 800,
+        maxHeight: 800,
+      );
+      setState(() {
+        file = File(result!.path);
+      });
+    } catch (e) {}
+  }
+
   Future<Position?> findPostion() async {
     Position position;
     try {
@@ -173,6 +295,36 @@ class _EditSickState extends State<EditSick> {
     } catch (e) {
       return null;
     }
+  }
+
+  CircleAvatar circleFile() {
+    return CircleAvatar(
+      backgroundImage: FileImage(file!),
+    );
+  }
+
+  CircleAvatar circleNetwork() {
+    return CircleAvatar(
+      backgroundImage: NetworkImage(urlImageSick!),
+    );
+  }
+
+  // CircleAvatar circleAsset() {
+  //   return CircleAvatar(
+  //     backgroundColor: Colors.white,
+  //     backgroundImage: AssetImage(
+  //       '$urlImageSick',
+  //     ),
+  //   );
+  // }
+  Container circleAsset() {
+    return Container(
+      width: 200,
+      child: Image.network(
+        '$urlImageSick',
+        errorBuilder: (context, exception, stackTrack) => Icon(Icons.error),
+      ),
+    );
   }
 
   @override
@@ -270,6 +422,10 @@ class _EditSickState extends State<EditSick> {
   }
 
   Future<Null> processEditData() async {
+    if (changeDisplayName) {
+      processChangeDisplayName();
+    }
+
     if (typeSexBol) {
       map['typeSex'] = typeSexSick;
     }
@@ -932,19 +1088,29 @@ class _EditSickState extends State<EditSick> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        IconButton(onPressed: () {}, icon: Icon(Icons.add_a_photo)),
-        IconButton(onPressed: () {}, icon: Icon(Icons.add_photo_alternate)),
+        IconButton(
+            onPressed: () => confirmImageDialog(),
+            icon: Icon(Icons.add_photo_alternate)),
       ],
     );
   }
 
   Container buildImage() {
     return Container(
-      width: 200,
-      child: Image.network(
-        '$urlImageSick',
-        errorBuilder: (context, exception, stackTrack) => Icon(Icons.error),
-      ),
+      // width: 200,
+      // child: Image.network(
+      //   '$urlImageSick',
+      //   errorBuilder: (context, exception, stackTrack) => Icon(Icons.error),
+      // ),
+
+      // padding: EdgeInsets.all(50.0),
+      width: MediaQuery.of(context).size.width / 2.5,
+      height: MediaQuery.of(context).size.width / 2.5,
+      child: file != null
+          ? circleFile()
+          : urlImageSick != null
+              ? circleNetwork()
+              : circleAsset(),
     );
   }
 
