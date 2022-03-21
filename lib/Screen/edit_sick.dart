@@ -264,22 +264,12 @@ class _EditSickState extends State<EditSick> {
     });
   }
 
-  Future<Null> processChangeDisplayName() async {
-    await Firebase.initializeApp().then((value) async {
-      FirebaseAuth.instance.authStateChanges().listen((event) async {
-        await event!
-            .updateDisplayName(userNameController.text)
-            .then((value) => normalDialog(context, 'change Dsiplay Success'));
-      });
-    });
-  } // end
-
   Future<Null> processGetImage(ImageSource source) async {
     try {
       var result = await ImagePicker().pickImage(
         source: source,
-        maxWidth: 800,
-        maxHeight: 800,
+        maxWidth: 600,
+        maxHeight: 600,
       );
       setState(() {
         file = File(result!.path);
@@ -345,7 +335,14 @@ class _EditSickState extends State<EditSick> {
         ),
         actions: [
           IconButton(
-              onPressed: () => processEditData(),
+              onPressed: () {
+                processEditData();
+                if (file == null) {
+                  normalDialog(context, 'กรุณาใส่ภาพ');
+                } else {
+                  processChangeImageProfile();
+                }
+              },
               icon: Icon(Icons.save_as_rounded))
         ],
       ),
@@ -422,10 +419,6 @@ class _EditSickState extends State<EditSick> {
   }
 
   Future<Null> processEditData() async {
-    if (changeDisplayName) {
-      processChangeDisplayName();
-    }
-
     if (typeSexBol) {
       map['typeSex'] = typeSexSick;
     }
