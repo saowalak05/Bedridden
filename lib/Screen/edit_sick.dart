@@ -53,7 +53,7 @@ class _EditSickState extends State<EditSick> {
   double? lat;
   double? lng;
 
-  List<String> races = ['ไทย'];
+  List<String> races = ['ไทย', 'ไทย'];
   List<String> nationalitys = ['ไทย'];
   List<String> religions = [
     'พุทธ',

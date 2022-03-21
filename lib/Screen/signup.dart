@@ -15,7 +15,7 @@ class _SignupPageState extends State<SignupPage> {
   bool statusRedEye = true;
   bool statusRedEye2 = true;
   // ignore: non_constant_identifier_names
-  String? Username, Email, Password;
+  String? Username, Email, Password, Name, Surname;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +37,8 @@ class _SignupPageState extends State<SignupPage> {
         // ),
       ),
       body: SingleChildScrollView(
-        child: GestureDetector(onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+        child: GestureDetector(
+          onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
           behavior: HitTestBehavior.opaque,
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 20),
@@ -49,7 +50,7 @@ class _SignupPageState extends State<SignupPage> {
                 Column(
                   children: <Widget>[
                     Text(
-                      "Sign up",
+                      "สมัครสมาชิก",
                       style: TextStyle(
                         fontSize: 30,
                         fontWeight: FontWeight.bold,
@@ -57,10 +58,6 @@ class _SignupPageState extends State<SignupPage> {
                     ),
                     SizedBox(
                       height: 20,
-                    ),
-                    Text(
-                      "Create an account, It's free ",
-                      style: TextStyle(fontSize: 15, color: Colors.grey[700]),
                     ),
                     SizedBox(
                       height: 40,
@@ -74,8 +71,60 @@ class _SignupPageState extends State<SignupPage> {
                               onChanged: (value) => Username = value.trim(),
                               keyboardType: TextInputType.emailAddress,
                               decoration: InputDecoration(
-                                labelText: "Username",
-                                hintText: "Enter your username",
+                                labelText: "ชื่อผู้ใช้",
+                                hintText: "กรุณาใส่ชื่อผู้ใช้ของคุณ",
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.always,
+                                contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 45,
+                                  vertical: 20,
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(28),
+                                  borderSide: BorderSide(color: Colors.black87),
+                                  gapPadding: 10,
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(28),
+                                  borderSide: BorderSide(color: Colors.black87),
+                                  gapPadding: 10,
+                                ),
+                              )),
+                          SizedBox(
+                            height: 30,
+                          ),
+                          TextFormField(
+                              onChanged: (value) => Name = value.trim(),
+                              keyboardType: TextInputType.emailAddress,
+                              decoration: InputDecoration(
+                                labelText: "ชื่อ",
+                                hintText: "กรุณาใส่ชื่อของคุณ",
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.always,
+                                contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 45,
+                                  vertical: 20,
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(28),
+                                  borderSide: BorderSide(color: Colors.black87),
+                                  gapPadding: 10,
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(28),
+                                  borderSide: BorderSide(color: Colors.black87),
+                                  gapPadding: 10,
+                                ),
+                              )),
+                          SizedBox(
+                            height: 30,
+                          ),
+                          TextFormField(
+                              onChanged: (value) => Surname = value.trim(),
+                              keyboardType: TextInputType.emailAddress,
+                              decoration: InputDecoration(
+                                labelText: "นามสกุล",
+                                hintText: "กรุณาใส่นามสกุลของคุณ",
                                 floatingLabelBehavior:
                                     FloatingLabelBehavior.always,
                                 contentPadding: EdgeInsets.symmetric(
@@ -100,8 +149,8 @@ class _SignupPageState extends State<SignupPage> {
                               keyboardType: TextInputType.emailAddress,
                               onChanged: (value) => Email = value.trim(),
                               decoration: InputDecoration(
-                                labelText: "Email",
-                                hintText: "Enter your email",
+                                labelText: "อีเมล",
+                                hintText: "กรุณาใส่อีเมลของคุณ",
                                 floatingLabelBehavior:
                                     FloatingLabelBehavior.always,
                                 contentPadding: EdgeInsets.symmetric(
@@ -142,8 +191,8 @@ class _SignupPageState extends State<SignupPage> {
                                           Icons.remove_red_eye_outlined,
                                           color: Colors.black87,
                                         )),
-                              labelText: "Password",
-                              hintText: "Enter your Password",
+                              labelText: "รหัส",
+                              hintText: "กรุณาใส่รหัสของคุณ",
                               floatingLabelBehavior:
                                   FloatingLabelBehavior.always,
                               contentPadding: EdgeInsets.symmetric(
@@ -176,7 +225,7 @@ class _SignupPageState extends State<SignupPage> {
                               textDirection: TextDirection.ltr,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
-                                Text("Already have an account?"),
+                                Text("มีบัญชีอยู่แล้ว? "),
                                 TextButton(
                                     style: TextButton.styleFrom(
                                         primary: Colors.black87),
@@ -187,7 +236,7 @@ class _SignupPageState extends State<SignupPage> {
                                             builder: (context) => LoginPage()),
                                       );
                                     },
-                                    child: Text("Login",
+                                    child: Text("เข้าสู่ระบบ",
                                         style: TextStyle(
                                           fontWeight: FontWeight.w600,
                                           fontSize: 18,
@@ -211,10 +260,13 @@ class _SignupPageState extends State<SignupPage> {
       minWidth: double.infinity,
       height: 60,
       onPressed: () {
-        print('Username = $Username, Email = $Email, Password =$Password');
+        print(
+            'Username = $Username,Name = $Name,Surname = $Surname, Email = $Email, Password =$Password');
         if ((Username?.isEmpty ?? true) ||
             (Email?.isEmpty ?? true) ||
-            (Password?.isEmpty ?? true)) {
+            (Password?.isEmpty ?? true) ||
+            (Name?.isEmpty ?? true) ||
+            (Surname?.isEmpty ?? true)) {
           print('ใส่ข้อมูลไม่ครบ');
           normalDialog(context, 'กรุณากรอกข้อมูล');
         } else {
@@ -228,7 +280,7 @@ class _SignupPageState extends State<SignupPage> {
         borderRadius: BorderRadius.circular(50),
       ),
       child: Text(
-        "Sign up",
+        "สมัครสมาชิก",
         style: TextStyle(
           fontWeight: FontWeight.w600,
           fontSize: 18,

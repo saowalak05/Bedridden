@@ -84,10 +84,12 @@ class _SearchBarState extends State<SearchBar> {
     initializeDateFormatting();
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'ค้นหา',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
+        title: Center(
+          child: Text(
+            'ค้นหา',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
         backgroundColor: const Color(0xffdfad98),

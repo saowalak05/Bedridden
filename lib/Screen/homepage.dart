@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 // ignore: unused_import
 import 'package:firebase_core/firebase_core.dart';
@@ -22,7 +21,7 @@ class Homepage extends StatelessWidget {
               Column(
                 children: <Widget>[
                   Text(
-                    "Welcome",
+                    "ยินดีต้อนรับ",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 30,
@@ -51,7 +50,7 @@ class Homepage extends StatelessWidget {
                         ),
                         borderRadius: BorderRadius.circular(50)),
                     child: Text(
-                      "Login",
+                      "เข้าสู่ระบบ",
                       style:
                           TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
                     ),
@@ -77,7 +76,7 @@ class Homepage extends StatelessWidget {
                             ),
                             borderRadius: BorderRadius.circular(50)),
                         child: Text(
-                          "SignUp",
+                          "สมัครสมาชิก",
                           style: TextStyle(
                               fontWeight: FontWeight.w600, fontSize: 18),
                         ),

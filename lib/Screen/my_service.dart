@@ -10,12 +10,9 @@ import 'Home/home.dart';
 // Adapted from offical flutter gallery:
 // https://github.com/flutter/flutter/blob/master/examples/flutter_gallery/lib/demo/material/bottom_app_bar_demo.dart
 class MyService extends StatefulWidget {
-
   const MyService({
     Key? key,
-
   }) : super(key: key);
-
 
   @override
   State<StatefulWidget> createState() => _MyServiceState();
@@ -24,8 +21,7 @@ class MyService extends StatefulWidget {
 class _MyServiceState extends State<MyService> {
   int selectedpage = 0;
 
-  final _pageOption = [Home(),SearchBar() , Map(), Profile()];
-
+  final _pageOption = [Home(), SearchBar(), Map(), Profile()];
 
   @override
   Widget build(BuildContext context) {
@@ -35,11 +31,11 @@ class _MyServiceState extends State<MyService> {
         body: _pageOption[selectedpage],
         bottomNavigationBar: ConvexAppBar(
           items: [
-            TabItem(icon: Icons.home, title: 'Home'),
-            TabItem(icon: Icons.search, title: 'Search'),
+            TabItem(icon: Icons.home),
+            TabItem(icon: Icons.search),
             // TabItem(icon: Icons.add_location, title: 'Add'),
-            TabItem(icon: Icons.map, title: 'map'),
-            TabItem(icon: Icons.account_circle, title: 'Profile'),
+            TabItem(icon: Icons.map),
+            TabItem(icon: Icons.account_circle),
           ],
           initialActiveIndex: selectedpage, //optional, default as 0
           onTap: (int index) {
@@ -51,6 +47,3 @@ class _MyServiceState extends State<MyService> {
         ));
   }
 }
-
-
-

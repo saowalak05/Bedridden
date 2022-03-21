@@ -6,7 +6,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-
 class Map extends StatefulWidget {
   @override
   MapState createState() => MapState();
@@ -17,8 +16,6 @@ class MapState extends State<Map> {
   final Set<Marker> markers = new Set(); //markers for google map
 
   List<SickModel> sickmodels = [];
-
-
 
   Future<Null> readAlldata() async {
     setState(() {
@@ -65,11 +62,12 @@ class MapState extends State<Map> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Container(),
-        title: Text(
-          'Map',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
+        title: Center(
+          child: Text(
+            'แผนที่',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
         backgroundColor: const Color(0xffdfad98),
@@ -103,4 +101,3 @@ class MapState extends State<Map> {
           );
   }
 }
-
