@@ -95,7 +95,7 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         title: Center(
           child: Text(
-            'Home',
+            'หน้าหลัก',
             style: TextStyle(
               fontWeight: FontWeight.bold,
             ),

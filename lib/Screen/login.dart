@@ -41,7 +41,7 @@ class _LoginPageState extends State<LoginPage> {
                 Column(
                   children: <Widget>[
                     Text(
-                      "Login",
+                      "เข้าสู่ระบบ",
                       style:
                           TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                     ),
@@ -49,7 +49,7 @@ class _LoginPageState extends State<LoginPage> {
                       height: 20,
                     ),
                     Text(
-                      "Login to your account",
+                      "ลงชื่อเข้าใช้บัญชีของคุณ",
                       style: TextStyle(fontSize: 15, color: Colors.grey[700]),
                     ),
                   ],
@@ -63,8 +63,8 @@ class _LoginPageState extends State<LoginPage> {
                           onChanged: (value) => email = value.trim(),
                           keyboardType: TextInputType.emailAddress,
                           decoration: InputDecoration(
-                            labelText: "Email",
-                            hintText: "Enter your email",
+                            labelText: "อีเมล",
+                            hintText: "กรุณาใส่อีเมลของคุณ",
                             floatingLabelBehavior: FloatingLabelBehavior.always,
                             contentPadding: EdgeInsets.symmetric(
                               horizontal: 45,
@@ -104,8 +104,8 @@ class _LoginPageState extends State<LoginPage> {
                                         Icons.remove_red_eye_outlined,
                                         color: Colors.black87,
                                       )),
-                            labelText: "Password",
-                            hintText: "Enter your Password",
+                            labelText: "รหัส",
+                            hintText: "กรุณาใส่รหัสของคุณ",
                             floatingLabelBehavior: FloatingLabelBehavior.always,
                             contentPadding: EdgeInsets.symmetric(
                               horizontal: 45,
@@ -160,7 +160,7 @@ class _LoginPageState extends State<LoginPage> {
                     textDirection: TextDirection.ltr,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Text("Don't have an account?"),
+                      Text("ไม่มีบัญชี?"),
                       TextButton(
                           style: TextButton.styleFrom(primary: Colors.black87),
                           onPressed: () {
@@ -170,7 +170,7 @@ class _LoginPageState extends State<LoginPage> {
                                   builder: (context) => SignupPage()),
                             );
                           },
-                          child: Text("Sign up",
+                          child: Text("สมัครสมาชิก",
                               style: TextStyle(
                                 fontWeight: FontWeight.w600,
                                 fontSize: 18,

@@ -20,6 +20,8 @@ class _ProfileState extends State<Profile> {
 
   bool load = true;
   String? email;
+  String? name;
+  String? surname;
   bool changeDisplayName = true; // true => ยังไม่มีการเปลี่ยน DisplayName
   String? urlImage;
   File? file;
@@ -36,6 +38,8 @@ class _ProfileState extends State<Profile> {
         setState(() {
           userNameController.text = event!.displayName!;
           email = event.email;
+          name = event.email;
+          surname = event.email;
           urlImage = event.photoURL;
           print('### urlImage = $urlImage');
           load = false;
@@ -50,10 +54,10 @@ class _ProfileState extends State<Profile> {
       appBar: AppBar(
         elevation: 0.0,
         backgroundColor: Color(0xffdfad98),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {},
-        ),
+        // leading: IconButton(
+        //   icon: Icon(Icons.arrow_back),
+        //   onPressed: () {},
+        // ),
       ),
       body: load ? ShowProgress() : buildContent(context),
     );
@@ -74,9 +78,9 @@ class _ProfileState extends State<Profile> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
-              padding: EdgeInsets.all(20),
+              padding: EdgeInsets.all(10),
               child: Text(
-                "Profile",
+                "ข้อมูลส่วนตัว",
                 style: TextStyle(
                   fontSize: 20,
                   letterSpacing: 1.5,
@@ -87,8 +91,8 @@ class _ProfileState extends State<Profile> {
             ),
             Container(
               // padding: EdgeInsets.all(50.0),
-              width: MediaQuery.of(context).size.width / 2.5,
-              height: MediaQuery.of(context).size.width / 2.5,
+              width: MediaQuery.of(context).size.width / 2,
+              height: MediaQuery.of(context).size.width / 2,
               child: file != null
                   ? circleFile()
                   : urlImage != null
@@ -108,7 +112,7 @@ class _ProfileState extends State<Profile> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Container(
-              height: 400,
+              height: 450,
               width: double.infinity,
               margin: EdgeInsets.symmetric(horizontal: 15),
               child: Column(
@@ -141,23 +145,14 @@ class _ProfileState extends State<Profile> {
                         ),
                       )),
                   SizedBox(
-                    height: 20,
+                    height: 30,
                   ),
                   ListTile(
                     leading: Icon(Icons.email_outlined),
                     title: Text(email!),
-                    trailing: Icon(Icons.arrow_forward_ios),
                   ),
                   SizedBox(
-                    height: 20,
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.help_outline_outlined),
-                    title: Text('Help'),
-                    trailing: Icon(Icons.arrow_forward_ios),
-                  ),
-                  SizedBox(
-                    height: 20,
+                    height: 100,
                   ),
                   ElevatedButton(
                     child: const Text('ออกจากระบบ'),
@@ -330,9 +325,14 @@ class HeaderCurvedContainer extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     Paint paint = Paint()..color = Color(0xffdfad98);
     Path path = Path()
-      ..relativeLineTo(0, 230)
-      ..quadraticBezierTo(size.width, 230, size.width, 230)
-      ..relativeLineTo(0, -230)
+      ..relativeLineTo(0, 280)
+      ..quadraticBezierTo(
+        size.width,
+        280,
+        size.width,
+        280,
+      )
+      ..relativeLineTo(0, -280)
       ..close();
     canvas.drawPath(path, paint);
   }

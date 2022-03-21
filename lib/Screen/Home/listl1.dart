@@ -1,14 +1,12 @@
-import 'package:bedridden/Screen/Home/listledit.dart';
-import 'package:bedridden/models/environment_model.dart';
-import 'package:bedridden/models/family_model.dart';
-import 'package:bedridden/models/health_model.dart';
-import 'package:bedridden/models/sick_model.dart';
+import 'dart:io';
+import 'dart:math';
+import 'package:bedridden/utility/dialog.dart';
 import 'package:bedridden/widgets/show_progess.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/date_symbol_data_local.dart';
-import 'package:intl/intl.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:image_picker/image_picker.dart';
 
 class Listl extends StatefulWidget {
   const Listl({Key? key}) : super(key: key);
@@ -18,195 +16,327 @@ class Listl extends StatefulWidget {
 }
 
 class ListlState extends State<Listl> {
-  final primary = Color(0xffdfad98);
-  final secondary = Color(0xfff29a94);
+  TextEditingController userNameController = TextEditingController();
 
-  get padding => null;
-
-  List<SickModel> sickmodels = [];
-  List<SickModel> sickmodelsLevel1 = [];
-  List<SickModel> sickmodelsLevel2 = [];
-  List<SickModel> sickmodelsLevel3 = [];
-  List<String> docIds = [];
-
-  List<HealthModel> healthModel = [];
-  List<EnvironmentModel> environmentModel = [];
-  List<FamilyModel> familyModel = [];
+  bool load = true;
+  String? email;
+  String? name;
+  String? surname;
+  bool changeDisplayName = true; // true => ยังไม่มีการเปลี่ยน DisplayName
+  String? urlImage;
+  File? file;
 
   @override
   void initState() {
     super.initState();
-    readAllSick();
+    findCurrentUser();
   }
 
-  Future<Null> readAllSick() async {
-    
-      if (sickmodels.length != 0) {
-        sickmodels.clear();
-        sickmodelsLevel1.clear();
-        sickmodelsLevel2.clear();
-        sickmodelsLevel3.clear();
-        docIds.clear();
-        healthModel.clear();
-        environmentModel.clear();
-        familyModel.clear();
-      }
-
-
+  Future<Null> findCurrentUser() async {
     await Firebase.initializeApp().then((value) async {
-      FirebaseFirestore.instance.collection('sick').snapshots().listen((event) {
-        for (var item in event.docs) {
-          SickModel model = SickModel.fromMap(item.data());
-          print('## name ==> ${model.name}');
-          setState(() {
-            sickmodels.add(model);
-            if (model.level == '1') {
-              sickmodelsLevel1.add(model);
-              docIds.add(item.id);
-            }
-            if (model.level == '2') {
-              sickmodelsLevel2.add(model);
-              docIds.add(item.id);
-            }
-            if (model.level == '3') {
-              sickmodelsLevel3.add(model);
-              docIds.add(item.id);
-            }
-          });
-        }
+      FirebaseAuth.instance.authStateChanges().listen((event) {
+        setState(() {
+          userNameController.text = event!.displayName!;
+          email = event.email;
+          name = event.email;
+          surname = event.email;
+          urlImage = event.photoURL;
+          print('### urlImage = $urlImage');
+          load = false;
+        });
       });
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    Intl.defaultLocale = 'th';
-    initializeDateFormatting();
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'รายชื่อผู้ป่วย ระดับที่ 1',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        backgroundColor: const Color(0xffdfad98),
-        toolbarHeight: 90,
-        shape: RoundedRectangleBorder(
-            borderRadius:
-                BorderRadius.vertical(bottom: Radius.elliptical(30.0, 30.0))),
+        elevation: 0.0,
+        backgroundColor: Color(0xffdfad98),
+        // leading: IconButton(
+        //   icon: Icon(Icons.arrow_back),
+        //   onPressed: () {},
+        // ),
       ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [buildtListNameAllBedriddenLevel1()],
-            ),
+      body: load ? ShowProgress() : buildContent(context),
+    );
+  }
+
+  Widget buildContent(BuildContext context) {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        CustomPaint(
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
           ),
+          painter: HeaderCurvedContainer(),
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Padding(
+              padding: EdgeInsets.all(10),
+              child: Text(
+                "ข้อมูลส่วนตัว",
+                style: TextStyle(
+                  fontSize: 20,
+                  letterSpacing: 1.5,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            Container(
+              // padding: EdgeInsets.all(50.0),
+              width: MediaQuery.of(context).size.width / 2,
+              height: MediaQuery.of(context).size.width / 2,
+              child: file != null
+                  ? circleFile()
+                  : urlImage != null
+                      ? circleNetwork()
+                      : circleAsset(),
+            ),
+          ],
+        ),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            buildEditImage(),
+            buildUpdateImage(),
+          ],
+        ),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Container(
+              height: 450,
+              width: double.infinity,
+              margin: EdgeInsets.symmetric(horizontal: 15),
+              child: Column(
+                // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  TextFormField(
+                      onChanged: (value) {
+                        changeDisplayName = false;
+                      },
+                      controller: userNameController,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.account_circle_outlined),
+                        hintText: "username",
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 45,
+                          vertical: 20,
+                        ),
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            if (changeDisplayName) {
+                              normalDialog(
+                                  context, 'Display ยังไม่มีการเปลี่ยนแปลง ?');
+                            } else {
+                              processChangeDisplayName();
+                            }
+                          },
+                          icon: const Icon(Icons.arrow_forward_ios),
+                        ),
+                      )),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.email_outlined),
+                    title: Text(email!),
+                  ),
+                  SizedBox(
+                    height: 100,
+                  ),
+                  ElevatedButton(
+                    child: const Text('ออกจากระบบ'),
+                    onPressed: () async {
+                      await Firebase.initializeApp().then((value) async {
+                        await FirebaseAuth.instance.signOut().then((value) =>
+                            Navigator.pushNamedAndRemoveUntil(
+                                context, '/LoginPage', (route) => false));
+                      });
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: Color(0xffdfad98),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      ],
+    );
+  }
+
+  CircleAvatar circleFile() {
+    return CircleAvatar(
+      backgroundImage: FileImage(file!),
+    );
+  }
+
+  CircleAvatar circleNetwork() {
+    return CircleAvatar(
+      backgroundImage: NetworkImage(urlImage!),
+    );
+  }
+
+  CircleAvatar circleAsset() {
+    return CircleAvatar(
+      backgroundColor: Colors.white,
+      backgroundImage: AssetImage(
+        'assets/images/bedridden.png',
+      ),
+    );
+  }
+
+  DecorationImage showLogo() {
+    return DecorationImage(
+      fit: BoxFit.cover,
+      image: AssetImage("assets/images/bedridden.png"),
+    );
+  }
+
+  Future<Null> processGetImage(ImageSource source) async {
+    try {
+      var result = await ImagePicker().pickImage(
+        source: source,
+        maxWidth: 800,
+        maxHeight: 800,
+      );
+      setState(() {
+        file = File(result!.path);
+      });
+    } catch (e) {}
+  }
+
+  Future<Null> confirmImageDialog() async {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: ListTile(
+          leading: Image.asset("assets/images/bedridden.png"),
+          title: Text('กรุณาเลือกแหล่งภาพ'),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              processGetImage(ImageSource.camera);
+            },
+            child: Text('Camera'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              processGetImage(ImageSource.gallery);
+            },
+            child: Text('Gallery'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text('Cancel'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Padding buildEditImage() {
+    return Padding(
+      padding: EdgeInsets.only(bottom: 260, left: 170),
+      child: CircleAvatar(
+        backgroundColor: Colors.grey,
+        child: IconButton(
+          icon: Icon(
+            Icons.edit,
+            color: Colors.white,
+          ),
+          onPressed: () => confirmImageDialog(),
         ),
       ),
     );
   }
-  
 
-//'รายชื่อผู้ป่วยติดเตียง ระดับที่ 1'
-  Widget buildtListNameAllBedriddenLevel1() {
-    return sickmodelsLevel1.length == 0
-        ? ShowProgress()
-        : Container(
-            
-            height: 1000,
-            child: GridView.builder(
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              physics: ScrollPhysics(),
-              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                  maxCrossAxisExtent: 300,
-                  childAspectRatio: 200 / 300,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10),
-              itemCount: sickmodelsLevel1.length,
-              itemBuilder: (context, index) => Container(
-                width: 175,
-                child: GestureDetector(
-                  onTap: () {
-                    var idcard = sickmodels[index].idCard;
-                    print('## idcard = $idcard');
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => LitlEdit(idcard: idcard)));
-                  },
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.all(Radius.circular(28)),
-                    child: Card(
-                      color: Color(0xffFFD1BB),
-                      child: Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: Column(
-                          children: [
-                            Container(
-                              margin: EdgeInsets.symmetric(vertical: 12),
-                              width: 130,
-                              height: 80,
-                              child: ClipRRect(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10)),
-                                child: Image.network(
-                                  sickmodelsLevel1[index].urlImage,
-                                  fit: BoxFit.cover,
-                                  errorBuilder:
-                                      (context, exception, stackTrack) =>
-                                          Icon(Icons.error),
-                                ),
-                              ),
-                            ),
-                            Row(
-                              children: [
-                                Container(
-                                  margin: EdgeInsets.symmetric(
-                                      vertical: 5, horizontal: 8),
-                                  width: 140,
-                                  child: Text(
-                                    sickmodelsLevel1[index].name,
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Container(
-                                  margin: EdgeInsets.symmetric(
-                                      vertical: 5, horizontal: 8),
-                                  width: 140,
-                                  child: Text(sickmodelsLevel1[index].address),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Container(
-                                  margin: EdgeInsets.symmetric(
-                                      vertical: 5, horizontal: 8),
-                                  width: 140,
-                                  child: Text(
-                                      'ระดับที่ ${sickmodelsLevel1[index].level}'),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          );
+  Padding buildUpdateImage() {
+    return Padding(
+      padding: EdgeInsets.only(bottom: 260, left: 4),
+      child: CircleAvatar(
+        backgroundColor: Colors.grey,
+        child: IconButton(
+          icon: Icon(
+            Icons.arrow_forward_ios,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            if (file == null) {
+              normalDialog(context, 'กรุณาใส่ภาพ');
+            } else {
+              processChangeImageProfile();
+            }
+          },
+        ),
+      ),
+    );
   }
+
+  Future<Null> processChangeImageProfile() async {
+    String nameImage = 'profile${Random().nextInt(100000)}.jpg';
+    print('## nameImage ==>> $nameImage');
+    await Firebase.initializeApp().then((value) async {
+      FirebaseStorage storage = FirebaseStorage.instance;
+      Reference reference = storage.ref().child('profile/$nameImage');
+      UploadTask task = reference.putFile(file!);
+      await task.whenComplete(() async {
+        await reference.getDownloadURL().then((value) async {
+          print('Upload Success access Token ==> $value');
+          String urlProfile = value.toString();
+          FirebaseAuth.instance.authStateChanges().listen((event) async {
+            await event!.updatePhotoURL(urlProfile).then((value) =>
+                normalDialog(context, 'Update Image Profile Success'));
+          });
+        });
+      });
+    });
+  }
+
+  Future<Null> processChangeDisplayName() async {
+    await Firebase.initializeApp().then((value) async {
+      FirebaseAuth.instance.authStateChanges().listen((event) async {
+        await event!
+            .updateDisplayName(userNameController.text)
+            .then((value) => normalDialog(context, 'change Dsiplay Success'));
+      });
+    });
+  } // end build
+}
+
+class HeaderCurvedContainer extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    Paint paint = Paint()..color = Color(0xffdfad98);
+    Path path = Path()
+      ..relativeLineTo(0, 280)
+      ..quadraticBezierTo(
+        size.width,
+        280,
+        size.width,
+        280,
+      )
+      ..relativeLineTo(0, -280)
+      ..close();
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) => false;
 }
