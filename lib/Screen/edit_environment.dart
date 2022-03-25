@@ -2,12 +2,10 @@ import 'dart:io';
 import 'dart:math';
 import 'package:bedridden/utility/dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-
 
 class EditEnvironment extends StatefulWidget {
   final String idcard;
@@ -37,48 +35,86 @@ class _EditEnvironmentState extends State<EditEnvironment> {
   bool typeaccommodation = true;
   bool statusImage = false;
 
+  
+  Future<Null> confirmImageDialog() async {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: ListTile(
+          title: Text('กรุณาเลือกแหล่งภาพ'),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              processGetImage(ImageSource.camera);
+            },
+            child: Text('Camera'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              processGetImage(ImageSource.gallery);
+            },
+            child: Text('Gallery'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text('Cancel'),
+          ),
+        ],
+      ),
+    );
+  }
+
   Future<Null> processEditData() async {
+    String environmentImage = 'environment${Random().nextInt(1000000)}.jpg';
+    FirebaseStorage storage = FirebaseStorage.instance;
+    Reference reference = storage.ref().child('environment/$environmentImage');
+    UploadTask task = reference.putFile(files!);
+    await task.whenComplete(() async {
+      await reference.getDownloadURL().then((value) async {
+        String urlImage = value.toString();
 
-      final dateTime = DateTime.now();
-        final userid = (widget.idcard);
-        final path = '$userid/$dateTime';
-    if (typeHouse) {
-      map['typeHouse'] = typeHouseenvironment;
-    }
+        if (typeHouse) {
+          map['typeHouse'] = typeHouseenvironment;
+        }
 
-    if (typeHomeEnvironment) {
-      map['typeHomeEnvironment'] = typeHomeEnvironmentenvironment;
-    }
+        if (typeHomeEnvironment) {
+          map['typeHomeEnvironment'] = typeHomeEnvironmentenvironment;
+        }
 
-    if (typeHousingSafety) {
-      map['typeHousingSafety'] = typeHousingSafetyenvironment;
-    }
+        if (typeHousingSafety) {
+          map['typeHousingSafety'] = typeHousingSafetyenvironment;
+        }
 
-    if (typefacilities) {
-      map['typefacilities'] = typefacilitiesenvironment;
-    }
+        if (typefacilities) {
+          map['typefacilities'] = typefacilitiesenvironment;
+        }
 
-    if (typeaccommodation) {
-      map['accommodation'] = accommodationenvironment;
-    }
+        if (typeaccommodation) {
+          map['accommodation'] = accommodationenvironment;
+        }
 
-    if (statusImage) {
-      map['urlenvironmentImage'  ] = urlenvironmentImageenvironment;
-    }
+        if (files != null) {
+          map['urlenvironmentImage'] = urlImage;
+        }
 
-    if (map.isEmpty) {
-      normalDialog(context, 'ไม่มีการเปลี่ยนแปลง');
-    } else {
-      await Firebase.initializeApp().then((value) async {
-      
-
-        await FirebaseFirestore.instance
-            .collection('environment')
-            .doc(widget.idcard)
-            .update(map)
-            .then((value) => Navigator.pop(context));
+        if (map.isEmpty) {
+          normalDialog(context, 'ไม่มีการเปลี่ยนแปลง');
+        } else {
+          await Firebase.initializeApp().then((value) async {
+            await FirebaseFirestore.instance
+                .collection('environment')
+                .doc(widget.idcard)
+                .update(map)
+                .then((value) => Navigator.pop(context));
+          });
+        }
       });
-    }
+    });
   }
 
   Future<Null> readAlldata() async {
@@ -187,14 +223,7 @@ class _EditEnvironmentState extends State<EditEnvironment> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         IconButton(
-            onPressed: () {
-              processGetImage(ImageSource.camera);
-            },
-            icon: Icon(Icons.add_a_photo)),
-        IconButton(
-            onPressed: () {
-              processGetImage(ImageSource.gallery);
-            },
+            onPressed: () => confirmImageDialog(),
             icon: Icon(Icons.add_photo_alternate)),
       ],
     );

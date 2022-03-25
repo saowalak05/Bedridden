@@ -135,8 +135,8 @@ class _ProfileState extends State<Profile> {
                         suffixIcon: IconButton(
                           onPressed: () {
                             if (changeDisplayName) {
-                              normalDialog(
-                                  context, 'Display ยังไม่มีการเปลี่ยนแปลง ?');
+                              normalDialog(context,
+                                  'Display ยังไม่มีการเปลี่ยนแปลง ?');
                             } else {
                               processChangeDisplayName();
                             }

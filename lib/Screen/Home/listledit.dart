@@ -15,7 +15,6 @@ import 'package:url_launcher/url_launcher.dart';
 import 'dart:io';
 import 'dart:math';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class LitlEdit extends StatefulWidget {
   final String idcard;

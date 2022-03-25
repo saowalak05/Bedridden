@@ -11,7 +11,7 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'dart:math';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 
 class EditSick extends StatefulWidget {
   final String idcard;
@@ -53,7 +53,7 @@ class _EditSickState extends State<EditSick> {
   double? lat;
   double? lng;
 
-  List<String> races = ['ไทย', 'ไทย'];
+  List<String> races = ['ไทย'];
   List<String> nationalitys = ['ไทย'];
   List<String> religions = [
     'พุทธ',
@@ -90,7 +90,6 @@ class _EditSickState extends State<EditSick> {
     readAlldata();
     pickedDate = DateTime.now();
     checkPermission();
-    findCurrentUser();
     Intl.defaultLocale = 'th';
     initializeDateFormatting();
   }
@@ -208,61 +207,6 @@ class _EditSickState extends State<EditSick> {
     );
   }
 
-  Future<Null> findCurrentUser() async {
-    await Firebase.initializeApp().then((value) async {
-      FirebaseAuth.instance.authStateChanges().listen((event) {
-        setState(() {
-          userNameController.text = event!.displayName!;
-          email = event.email;
-          urlImageSick = event.photoURL;
-          print('### urlImage = $urlImageSick');
-          load = false;
-        });
-      });
-    });
-  }
-
-  Padding buildUpdateImage() {
-    return Padding(
-      padding: EdgeInsets.only(bottom: 260, left: 4),
-      child: CircleAvatar(
-        backgroundColor: Colors.grey,
-        child: IconButton(
-          icon: Icon(
-            Icons.arrow_forward_ios,
-            color: Colors.white,
-          ),
-          onPressed: () {
-            if (file == null) {
-              normalDialog(context, 'กรุณาใส่ภาพ');
-            } else {
-              processChangeImageProfile();
-            }
-          },
-        ),
-      ),
-    );
-  }
-
-  Future<Null> processChangeImageProfile() async {
-    String urlImage = 'sick${Random().nextInt(100000)}.jpg';
-    print('## nameImage ==>> $urlImage');
-    await Firebase.initializeApp().then((value) async {
-      FirebaseStorage storage = FirebaseStorage.instance;
-      Reference reference = storage.ref().child('sick/$urlImage');
-      UploadTask task = reference.putFile(file!);
-      await task.whenComplete(() async {
-        await reference.getDownloadURL().then((value) async {
-          print('Upload Success access Token ==> $value');
-          String urlImage = value.toString();
-          FirebaseAuth.instance.authStateChanges().listen((event) async {
-            await event!.updatePhotoURL(urlImage).then((value) =>
-                normalDialog(context, 'Update Image Profile Success'));
-          });
-        });
-      });
-    });
-  }
 
   Future<Null> processGetImage(ImageSource source) async {
     try {
@@ -299,14 +243,6 @@ class _EditSickState extends State<EditSick> {
     );
   }
 
-  // CircleAvatar circleAsset() {
-  //   return CircleAvatar(
-  //     backgroundColor: Colors.white,
-  //     backgroundImage: AssetImage(
-  //       '$urlImageSick',
-  //     ),
-  //   );
-  // }
   Container circleAsset() {
     return Container(
       width: 200,
@@ -337,11 +273,7 @@ class _EditSickState extends State<EditSick> {
           IconButton(
               onPressed: () {
                 processEditData();
-                if (file == null) {
-                  normalDialog(context, 'กรุณาใส่ภาพ');
-                } else {
-                  processChangeImageProfile();
-                }
+                // processChangeImageProfile();
               },
               icon: Icon(Icons.save_as_rounded))
         ],
@@ -419,46 +351,59 @@ class _EditSickState extends State<EditSick> {
   }
 
   Future<Null> processEditData() async {
-    if (typeSexBol) {
-      map['typeSex'] = typeSexSick;
-    }
+    String sickImage = 'sick${Random().nextInt(1000000)}.jpg';
+    FirebaseStorage storage = FirebaseStorage.instance;
+    Reference reference = storage.ref().child('sick/$sickImage');
+    UploadTask task = reference.putFile(file!);
+    await task.whenComplete(() async {
+      await reference.getDownloadURL().then((value) async {
+        String urlImage = value.toString();
+        if (typeSexBol) {
+          map['typeSex'] = typeSexSick;
+        }
 
-    if (typeStatusBol) {
-      map['typeStatus'] = typeStatusSick;
-    }
+        if (typeStatusBol) {
+          map['typeStatus'] = typeStatusSick;
+        }
 
-    if (typeducationlevel) {
-      map['typeeducation_level'] = typeeducationlevelSick;
-    }
+        if (typeducationlevel) {
+          map['typeeducation_level'] = typeeducationlevelSick;
+        }
 
-    if (typeposition) {
-      map['typeposition'] = typepositionSick;
-    }
+        if (typeposition) {
+          map['typeposition'] = typepositionSick;
+        }
 
-    if (typereligions) {
-      map['religion'] = religionSick;
-    }
+        if (typereligions) {
+          map['religion'] = religionSick;
+        }
 
-    if (typelevel) {
-      map['level'] = levelSick;
-    }
+        if (typelevel) {
+          map['level'] = levelSick;
+        }
 
-    map['bond'] = pickedDate;
-    map['lat'] = lat;
-    map['lng'] = lng;
+        if (file != null) {
+          map['urlImage'] = urlImage;
+        }
 
-    print('### map ==>> $map');
-    if (map.isEmpty) {
-      normalDialog(context, 'ไม่มีการเปลี่ยนแปลง');
-    } else {
-      await Firebase.initializeApp().then((value) async {
-        await FirebaseFirestore.instance
-            .collection('sick')
-            .doc(widget.idcard)
-            .update(map)
-            .then((value) => Navigator.pop(context));
+        map['bond'] = pickedDate;
+        map['lat'] = lat;
+        map['lng'] = lng;
+
+        print('### map ==>> $map');
+        if (map.isEmpty) {
+          normalDialog(context, 'ไม่มีการเปลี่ยนแปลง');
+        } else {
+          await Firebase.initializeApp().then((value) async {
+            await FirebaseFirestore.instance
+                .collection('sick')
+                .doc(widget.idcard)
+                .update(map)
+                .then((value) => Navigator.pop(context));
+          });
+        }
       });
-    }
+    });
   }
 
   Set<Marker> setMarker() => <Marker>{

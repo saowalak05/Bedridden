@@ -93,12 +93,12 @@ class _HomeState extends State<Home> {
     final IconThemeData data;
     return Scaffold(
       appBar: AppBar(
-        title: Center(
-          child: Text(
-            'หน้าหลัก',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-            ),
+        leading: Container(),
+        centerTitle: true,
+        title: Text(
+          'หน้าหลัก',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
           ),
         ),
         backgroundColor: const Color(0xffdfad98),

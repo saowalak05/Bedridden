@@ -3,13 +3,11 @@ import 'package:bedridden/models/environment_model.dart';
 import 'package:bedridden/models/family_model.dart';
 import 'package:bedridden/models/health_model.dart';
 import 'package:bedridden/models/sick_model.dart';
-import 'package:bedridden/widgets/show_progess.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
-import 'dart:developer';
 
 class SearchBar extends StatefulWidget {
   const SearchBar({Key? key}) : super(key: key);
@@ -19,7 +17,7 @@ class SearchBar extends StatefulWidget {
 }
 
 class _SearchBarState extends State<SearchBar> {
-  String query = '';
+  String query ='';
   final primary = Color(0xffdfad98);
   final secondary = Color(0xfff29a94);
 
@@ -124,6 +122,14 @@ class _SearchBarState extends State<SearchBar> {
                   labelText: "ค้นหา",
                   hintText: "ค้นหา",
                   prefixIcon: Icon(Icons.search),
+                  // suffixIcon: IconButton(
+                  //   icon: Icon(Icons.close),
+                  //   onPressed: () {
+                  //     setState(() {
+                  //       query = "";
+                  //     });
+                  //   },
+                  // ),
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(20.0)))),
             ),
@@ -162,7 +168,7 @@ class _SearchBarState extends State<SearchBar> {
               child: Card(
                 color: Color(0xffFFD1BB),
                 child: Padding(
-                  padding: const EdgeInsets.all(4.0),
+                  padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
                   child: Column(
                     children: [
                       Container(
@@ -179,41 +185,39 @@ class _SearchBarState extends State<SearchBar> {
                           ),
                         ),
                       ),
-                      Row(
-                        children: [
-                          Container(
-                            margin: EdgeInsets.symmetric(
-                                vertical: 5, horizontal: 8),
-                            width: 140,
-                            child: Text(
-                              sickmodels[index].name,
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
+                      Expanded(
+                        child: Row(
+                          children: [
+                            Container(
+                              child: Text(
+                                sickmodels[index].name,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                      Row(
-                        children: [
-                          Container(
-                            margin: EdgeInsets.symmetric(
-                                vertical: 5, horizontal: 8),
-                            width: 140,
-                            child: Text(sickmodels[index].address),
-                          ),
-                        ],
+                      Expanded(
+                        child: Row(
+                          children: [
+                            Container(
+                              child: Text(sickmodels[index].address),
+                            ),
+                          ],
+                        ),
                       ),
-                      Row(
-                        children: [
-                          Container(
-                            margin: EdgeInsets.symmetric(
-                                vertical: 5, horizontal: 8),
-                            width: 140,
-                            child: Text('ระดับที่ ${sickmodels[index].level}'),
-                          ),
-                        ],
+                      Expanded(
+                        child: Row(
+                          children: [
+                            Container(
+                              child:
+                                  Text('ระดับที่ ${sickmodels[index].level}'),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
