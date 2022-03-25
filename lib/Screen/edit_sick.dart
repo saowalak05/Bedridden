@@ -12,7 +12,6 @@ import 'dart:io';
 import 'dart:math';
 import 'package:firebase_storage/firebase_storage.dart';
 
-
 class EditSick extends StatefulWidget {
   final String idcard;
   const EditSick({Key? key, required this.idcard}) : super(key: key);
@@ -206,7 +205,6 @@ class _EditSickState extends State<EditSick> {
       ),
     );
   }
-
 
   Future<Null> processGetImage(ImageSource source) async {
     try {

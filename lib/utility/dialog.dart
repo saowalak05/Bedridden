@@ -8,7 +8,11 @@ Future<Null> normalDialog(BuildContext context, String string) async {
     context: context,
     builder: (context) => SimpleDialog(
       title: ListTile(
-        leading: Image.asset('assets/images/exclamation_mark.png'),
+        title: Icon(
+          Icons.warning_rounded,
+          color: Color.fromARGB(255, 253, 17, 0),
+          size: 60,
+        ),
         subtitle: Text(string),
       ),
       children: [

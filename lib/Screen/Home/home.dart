@@ -144,7 +144,10 @@ class _HomeState extends State<Home> {
 
   Widget buildtListNameAllBedriddenLevel3() {
     return sickmodelsLevel3.length == 0
-        ? ShowProgress()
+        ? Container(
+            child: Text('ไม่พบรายชื่อ',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          )
         : Container(
             height: 270,
             child: ListView.builder(
@@ -271,7 +274,10 @@ class _HomeState extends State<Home> {
 
   Widget buildtListNameAllBedriddenLevel2() {
     return sickmodelsLevel2.length == 0
-        ? ShowProgress()
+        ? Container(
+            child: Text('ไม่พบรายชื่อ',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          )
         : Container(
             height: 270,
             child: ListView.builder(
@@ -399,7 +405,10 @@ class _HomeState extends State<Home> {
 //'รายชื่อผู้ป่วยติดเตียง ระดับที่ 1'
   Widget buildtListNameAllBedriddenLevel1() {
     return sickmodelsLevel1.length == 0
-        ? ShowProgress()
+        ? Container(
+            child: Text('ไม่พบรายชื่อ',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          )
         : Container(
             height: 270,
             child: ListView.builder(
@@ -531,7 +540,10 @@ class _HomeState extends State<Home> {
 
   Widget buildtListNameAllBedridden() {
     return sickmodels.length == 0
-        ? ShowProgress()
+        ? Container(
+            child: Text('ไม่พบรายชื่อ',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          )
         : Container(
             height: 270,
             child: ListView.builder(

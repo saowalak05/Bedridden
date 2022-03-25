@@ -93,58 +93,58 @@ class _SignupPageState extends State<SignupPage> {
                           SizedBox(
                             height: 30,
                           ),
-                          TextFormField(
-                              onChanged: (value) => Name = value.trim(),
-                              keyboardType: TextInputType.emailAddress,
-                              decoration: InputDecoration(
-                                labelText: "ชื่อ",
-                                hintText: "กรุณาใส่ชื่อของคุณ",
-                                floatingLabelBehavior:
-                                    FloatingLabelBehavior.always,
-                                contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 45,
-                                  vertical: 20,
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(28),
-                                  borderSide: BorderSide(color: Colors.black87),
-                                  gapPadding: 10,
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(28),
-                                  borderSide: BorderSide(color: Colors.black87),
-                                  gapPadding: 10,
-                                ),
-                              )),
-                          SizedBox(
-                            height: 30,
-                          ),
-                          TextFormField(
-                              onChanged: (value) => Surname = value.trim(),
-                              keyboardType: TextInputType.emailAddress,
-                              decoration: InputDecoration(
-                                labelText: "นามสกุล",
-                                hintText: "กรุณาใส่นามสกุลของคุณ",
-                                floatingLabelBehavior:
-                                    FloatingLabelBehavior.always,
-                                contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 45,
-                                  vertical: 20,
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(28),
-                                  borderSide: BorderSide(color: Colors.black87),
-                                  gapPadding: 10,
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(28),
-                                  borderSide: BorderSide(color: Colors.black87),
-                                  gapPadding: 10,
-                                ),
-                              )),
-                          SizedBox(
-                            height: 30,
-                          ),
+                          // TextFormField(
+                          //     onChanged: (value) => Name = value.trim(),
+                          //     keyboardType: TextInputType.emailAddress,
+                          //     decoration: InputDecoration(
+                          //       labelText: "ชื่อ",
+                          //       hintText: "กรุณาใส่ชื่อของคุณ",
+                          //       floatingLabelBehavior:
+                          //           FloatingLabelBehavior.always,
+                          //       contentPadding: EdgeInsets.symmetric(
+                          //         horizontal: 45,
+                          //         vertical: 20,
+                          //       ),
+                          //       enabledBorder: OutlineInputBorder(
+                          //         borderRadius: BorderRadius.circular(28),
+                          //         borderSide: BorderSide(color: Colors.black87),
+                          //         gapPadding: 10,
+                          //       ),
+                          //       focusedBorder: OutlineInputBorder(
+                          //         borderRadius: BorderRadius.circular(28),
+                          //         borderSide: BorderSide(color: Colors.black87),
+                          //         gapPadding: 10,
+                          //       ),
+                          //     )),
+                          // SizedBox(
+                          //   height: 30,
+                          // ),
+                          // TextFormField(
+                          //     onChanged: (value) => Surname = value.trim(),
+                          //     keyboardType: TextInputType.emailAddress,
+                          //     decoration: InputDecoration(
+                          //       labelText: "นามสกุล",
+                          //       hintText: "กรุณาใส่นามสกุลของคุณ",
+                          //       floatingLabelBehavior:
+                          //           FloatingLabelBehavior.always,
+                          //       contentPadding: EdgeInsets.symmetric(
+                          //         horizontal: 45,
+                          //         vertical: 20,
+                          //       ),
+                          //       enabledBorder: OutlineInputBorder(
+                          //         borderRadius: BorderRadius.circular(28),
+                          //         borderSide: BorderSide(color: Colors.black87),
+                          //         gapPadding: 10,
+                          //       ),
+                          //       focusedBorder: OutlineInputBorder(
+                          //         borderRadius: BorderRadius.circular(28),
+                          //         borderSide: BorderSide(color: Colors.black87),
+                          //         gapPadding: 10,
+                          //       ),
+                          //     )),
+                          // SizedBox(
+                          //   height: 30,
+                          // ),
                           TextFormField(
                               keyboardType: TextInputType.emailAddress,
                               onChanged: (value) => Email = value.trim(),

@@ -1,3 +1,15 @@
+import 'dart:io';
+import 'dart:math';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
+import 'package:simple_speed_dial/simple_speed_dial.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 import 'package:bedridden/Screen/edit_environment.dart';
 import 'package:bedridden/Screen/edit_family.dart';
 import 'package:bedridden/Screen/edit_health.dart';
@@ -6,18 +18,10 @@ import 'package:bedridden/models/environment_model.dart';
 import 'package:bedridden/models/family_model.dart';
 import 'package:bedridden/models/health_model.dart';
 import 'package:bedridden/models/sick_model.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'dart:io';
-import 'dart:math';
-import 'package:firebase_storage/firebase_storage.dart';
 
 class LitlEdit extends StatefulWidget {
   final String idcard;
+
   const LitlEdit({Key? key, required this.idcard}) : super(key: key);
 
   @override
@@ -81,8 +85,13 @@ double? lat;
 double? lng;
 
 File? file;
+String? colorName;
+Color? color;
 
 class _LitlEditState extends State<LitlEdit> {
+  String _text = '';
+  ValueNotifier<bool> isDialOpen = ValueNotifier(false);
+
   @override
   void initState() {
     super.initState();
@@ -258,19 +267,6 @@ class _LitlEditState extends State<LitlEdit> {
             ),
           ),
         ),
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-              confirmDelete();
-            },
-            icon: Icon(
-              Icons.delete,
-              size: 28,
-              color: Colors.white,
-            ),
-          )
-        ],
         backgroundColor: const Color(0xffdfad98),
         toolbarHeight: 90,
         shape: RoundedRectangleBorder(
@@ -347,28 +343,28 @@ class _LitlEditState extends State<LitlEdit> {
                   'ส่วนที่ 1 ข้อมูลของผู้ป่วย',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-                MaterialButton(
-                  minWidth: 50,
-                  height: 30,
-                  onPressed: () {
-                    var idcard = widget.idcard;
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => EditSick(idcard: idcard),
-                        ));
-                  },
-                  shape: RoundedRectangleBorder(
-                      side: BorderSide(
-                        color: const Color(0xffffede5),
-                      ),
-                      borderRadius: BorderRadius.circular(50)),
-                  child: Text(
-                    "แก้ไข",
-                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
-                  ),
-                  color: const Color(0xffdfad98),
-                ),
+                // MaterialButton(
+                //   minWidth: 50,
+                //   height: 30,
+                //   onPressed: () {
+                //     var idcard = widget.idcard;
+                //     Navigator.push(
+                //         context,
+                //         MaterialPageRoute(
+                //           builder: (context) => EditSick(idcard: idcard),
+                //         ));
+                //   },
+                //   shape: RoundedRectangleBorder(
+                //       side: BorderSide(
+                //         color: const Color(0xffffede5),
+                //       ),
+                //       borderRadius: BorderRadius.circular(50)),
+                //   child: Text(
+                //     "แก้ไข",
+                //     style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+                //   ),
+                //   color: const Color(0xffdfad98),
+                // ),
               ],
             ),
             SizedBox(height: 10),
@@ -462,28 +458,28 @@ class _LitlEditState extends State<LitlEdit> {
                 Text('ส่วนที่ 2 ข้อมูลด้านสุขภาพ',
                     style:
                         TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                MaterialButton(
-                  minWidth: 50,
-                  height: 30,
-                  onPressed: () {
-                    var idcard = widget.idcard;
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => EditHealth(idcard: idcard),
-                        ));
-                  },
-                  shape: RoundedRectangleBorder(
-                      side: BorderSide(
-                        color: const Color(0xffffede5),
-                      ),
-                      borderRadius: BorderRadius.circular(50)),
-                  child: Text(
-                    "แก้ไข",
-                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
-                  ),
-                  color: const Color(0xffdfad98),
-                ),
+                // MaterialButton(
+                //   minWidth: 50,
+                //   height: 30,
+                //   onPressed: () {
+                //     var idcard = widget.idcard;
+                //     Navigator.push(
+                //         context,
+                //         MaterialPageRoute(
+                //           builder: (context) => EditHealth(idcard: idcard),
+                //         ));
+                //   },
+                //   shape: RoundedRectangleBorder(
+                //       side: BorderSide(
+                //         color: const Color(0xffffede5),
+                //       ),
+                //       borderRadius: BorderRadius.circular(50)),
+                //   child: Text(
+                //     "แก้ไข",
+                //     style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+                //   ),
+                //   color: const Color(0xffdfad98),
+                // ),
               ],
             ),
             SizedBox(height: 10),
@@ -527,28 +523,28 @@ class _LitlEditState extends State<LitlEdit> {
                   'ส่วนที่ 3 ข้อมูลสภาพแวดล้อม',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-                MaterialButton(
-                  minWidth: 50,
-                  height: 30,
-                  onPressed: () {
-                    var idcard = widget.idcard;
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => EditEnvironment(idcard: idcard),
-                        ));
-                  },
-                  shape: RoundedRectangleBorder(
-                      side: BorderSide(
-                        color: const Color(0xffffede5),
-                      ),
-                      borderRadius: BorderRadius.circular(50)),
-                  child: Text(
-                    "แก้ไข",
-                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
-                  ),
-                  color: const Color(0xffdfad98),
-                ),
+                // MaterialButton(
+                //   minWidth: 50,
+                //   height: 30,
+                //   onPressed: () {
+                //     var idcard = widget.idcard;
+                //     Navigator.push(
+                //         context,
+                //         MaterialPageRoute(
+                //           builder: (context) => EditEnvironment(idcard: idcard),
+                //         ));
+                //   },
+                //   shape: RoundedRectangleBorder(
+                //       side: BorderSide(
+                //         color: const Color(0xffffede5),
+                //       ),
+                //       borderRadius: BorderRadius.circular(50)),
+                //   child: Text(
+                //     "แก้ไข",
+                //     style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+                //   ),
+                //   color: const Color(0xffdfad98),
+                // ),
               ],
             ),
             SizedBox(height: 10),
@@ -607,28 +603,28 @@ class _LitlEditState extends State<LitlEdit> {
                   'ส่วนที่ 4 ข้อมูลเครือญาติผู้ป่วย',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-                MaterialButton(
-                  minWidth: 50,
-                  height: 30,
-                  onPressed: () {
-                    var idcard = widget.idcard;
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => EditFamily(idcard: idcard),
-                        ));
-                  },
-                  shape: RoundedRectangleBorder(
-                      side: BorderSide(
-                        color: const Color(0xffffede5),
-                      ),
-                      borderRadius: BorderRadius.circular(50)),
-                  child: Text(
-                    "แก้ไข",
-                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
-                  ),
-                  color: const Color(0xffdfad98),
-                ),
+                // MaterialButton(
+                //   minWidth: 50,
+                //   height: 30,
+                //   onPressed: () {
+                //     var idcard = widget.idcard;
+                //     Navigator.push(
+                //         context,
+                //         MaterialPageRoute(
+                //           builder: (context) => EditFamily(idcard: idcard),
+                //         ));
+                //   },
+                //   shape: RoundedRectangleBorder(
+                //       side: BorderSide(
+                //         color: const Color(0xffffede5),
+                //       ),
+                //       borderRadius: BorderRadius.circular(50)),
+                //   child: Text(
+                //     "แก้ไข",
+                //     style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+                //   ),
+                //   color: const Color(0xffdfad98),
+                // ),
               ],
             ),
             SizedBox(height: 10),
@@ -698,12 +694,90 @@ class _LitlEditState extends State<LitlEdit> {
         ),
       )),
       //นำทาง
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _launchMap();
-        },
-        backgroundColor: Color(0xfff29a94),
-        child: const Icon(Icons.navigation),
+
+      floatingActionButton: SpeedDial(
+        child: const Icon(Icons.add),
+        speedDialChildren: <SpeedDialChild>[
+          SpeedDialChild(
+            child: const Icon(Icons.edit),
+            foregroundColor: Colors.white,
+            backgroundColor: Color.fromARGB(255, 231, 172, 11),
+            label: 'แก้ไข ส่วนที่ 1',
+            onPressed: () {
+              var idcard = widget.idcard;
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EditSick(idcard: idcard),
+                  ));
+            },
+          ),
+          SpeedDialChild(
+            child: const Icon(Icons.edit),
+            foregroundColor: Colors.white,
+            backgroundColor: Color.fromARGB(255, 231, 172, 11),
+            label: 'แก้ไข ส่วนที่ 2',
+            onPressed: () {
+              var idcard = widget.idcard;
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EditHealth(idcard: idcard),
+                  ));
+            },
+          ),
+          SpeedDialChild(
+            child: const Icon(Icons.edit),
+            foregroundColor: Colors.white,
+            backgroundColor: Color.fromARGB(255, 231, 172, 11),
+            label: 'แก้ไข ส่วนที่ 3',
+            onPressed: () {
+              var idcard = widget.idcard;
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EditEnvironment(idcard: idcard),
+                  ));
+            },
+          ),
+          SpeedDialChild(
+            child: const Icon(Icons.edit),
+            foregroundColor: Colors.white,
+            backgroundColor: Color.fromARGB(255, 231, 172, 11),
+            label: 'แก้ไข ส่วนที่ 4',
+            onPressed: () {
+              var idcard = widget.idcard;
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EditFamily(idcard: idcard),
+                  ));
+            },
+          ),
+          SpeedDialChild(
+            child: const Icon(Icons.delete),
+            foregroundColor: Colors.white,
+            backgroundColor: Colors.red,
+            label: 'ลบ',
+            onPressed: () {
+              Navigator.pop(context);
+              confirmDelete();
+            },
+          ),
+          SpeedDialChild(
+            child: const Icon(Icons.navigation),
+            foregroundColor: Colors.white,
+            backgroundColor: Colors.green,
+            label: 'นำทาง',
+            onPressed: () {
+              _launchMap();
+            },
+          ),
+        ],
+        // closedForegroundColor: const Color(0xffdfad98),
+        // openForegroundColor: const Color(0xffdfad98),
+        closedBackgroundColor: const Color(0xfff29a94),
+        openBackgroundColor: Color.fromARGB(255, 255, 143, 95),
       ),
     );
   }

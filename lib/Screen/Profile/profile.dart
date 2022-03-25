@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 import 'package:bedridden/utility/dialog.dart';
@@ -7,6 +8,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
@@ -17,6 +19,9 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   TextEditingController userNameController = TextEditingController();
+
+  final RoundedLoadingButtonController _btnController2 =
+      RoundedLoadingButtonController();
 
   bool load = true;
   String? email;
@@ -52,127 +57,139 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        elevation: 0.0,
-        backgroundColor: Color(0xffdfad98),
-        // leading: IconButton(
-        //   icon: Icon(Icons.arrow_back),
-        //   onPressed: () {},
-        // ),
+        leading: Container(),
+        centerTitle: true,
+        title: Text(
+          'ข้อมูลส่วนตัว',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: const Color(0xffdfad98),
+        toolbarHeight: 90,
+        shape: RoundedRectangleBorder(
+            borderRadius:
+                BorderRadius.vertical(bottom: Radius.elliptical(30.0, 30.0))),
       ),
       body: load ? ShowProgress() : buildContent(context),
     );
   }
 
   Widget buildContent(BuildContext context) {
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        CustomPaint(
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-          ),
-          painter: HeaderCurvedContainer(),
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Padding(
-              padding: EdgeInsets.all(10),
-              child: Text(
-                "ข้อมูลส่วนตัว",
-                style: TextStyle(
-                  fontSize: 20,
-                  letterSpacing: 1.5,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                ),
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: 30,
               ),
-            ),
-            Container(
-              // padding: EdgeInsets.all(50.0),
-              width: MediaQuery.of(context).size.width / 2,
-              height: MediaQuery.of(context).size.width / 2,
-              child: file != null
-                  ? circleFile()
-                  : urlImage != null
-                      ? circleNetwork()
-                      : circleAsset(),
-            ),
-          ],
-        ),
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            buildEditImage(),
-            buildUpdateImage(),
-          ],
-        ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Container(
-              height: 450,
-              width: double.infinity,
-              margin: EdgeInsets.symmetric(horizontal: 15),
-              child: Column(
-                // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  TextFormField(
-                      onChanged: (value) {
-                        changeDisplayName = false;
-                      },
-                      controller: userNameController,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        prefixIcon: Icon(Icons.account_circle_outlined),
-                        hintText: "username",
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                        contentPadding: EdgeInsets.symmetric(
-                          horizontal: 45,
-                          vertical: 20,
-                        ),
-                        suffixIcon: IconButton(
-                          onPressed: () {
-                            if (changeDisplayName) {
-                              normalDialog(context,
-                                  'Display ยังไม่มีการเปลี่ยนแปลง ?');
-                            } else {
-                              processChangeDisplayName();
-                            }
-                          },
-                          icon: const Icon(Icons.arrow_forward_ios),
-                        ),
-                      )),
-                  SizedBox(
-                    height: 30,
+              Container(
+                // padding: EdgeInsets.all(50.0),
+                width: MediaQuery.of(context).size.width / 2,
+                height: MediaQuery.of(context).size.width / 2,
+                child: file != null
+                    ? circleFile()
+                    : urlImage != null
+                        ? circleNetwork()
+                        : circleAsset(),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  FloatingActionButton.small(
+                    backgroundColor: Color(0xffdfad98),
+                    onPressed: () => confirmImageDialog(),
+                    child: Icon(
+                      Icons.edit,
+                      size: 30,
+                      color: Colors.white,
+                    ),
                   ),
-                  ListTile(
-                    leading: Icon(Icons.email_outlined),
-                    title: Text(email!),
-                  ),
-                  SizedBox(
-                    height: 100,
-                  ),
-                  ElevatedButton(
-                    child: const Text('ออกจากระบบ'),
-                    onPressed: () async {
-                      await Firebase.initializeApp().then((value) async {
-                        await FirebaseAuth.instance.signOut().then((value) =>
-                            Navigator.pushNamedAndRemoveUntil(
-                                context, '/LoginPage', (route) => false));
-                      });
+                  FloatingActionButton.small(
+                    backgroundColor: Color(0xffdfad98),
+                    onPressed: () {
+                      if (file == null) {
+                        normalDialog(context, 'กรุณาใส่ภาพ');
+                      } else {
+                        processChangeImageProfile();
+                      }
                     },
-                    style: ElevatedButton.styleFrom(
-                      primary: Color(0xffdfad98),
+                    child: Icon(
+                      Icons.save,
+                      size: 30,
+                      color: Colors.white,
                     ),
                   ),
                 ],
               ),
-            )
-          ],
-        ),
-      ],
+              SizedBox(
+                height: 30,
+              ),
+              Container(
+                child: Column(
+                  // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    TextFormField(
+                        onChanged: (value) {
+                          changeDisplayName = false;
+                        },
+                        controller: userNameController,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          prefixIcon: Icon(Icons.account_circle_outlined),
+                          hintText: "username",
+                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: 45,
+                            vertical: 20,
+                          ),
+                          suffixIcon: IconButton(
+                            onPressed: () {
+                              if (changeDisplayName) {
+                                normalDialog(
+                                    context, 'ยังไม่มีการเปลี่ยนแปลง ?');
+                              } else {
+                                processChangeDisplayName();
+                              }
+                            },
+                            icon: const Icon(Icons.save),
+                          ),
+                        )),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    ListTile(
+                      leading: Icon(Icons.email_outlined),
+                      title: Text(email!),
+                    ),
+                    SizedBox(
+                      height: 100,
+                    ),
+                    RoundedLoadingButton(
+                      color: Color(0xffdfad98),
+                      successColor: Color(0xffdfad98),
+                      controller: _btnController2,
+                      onPressed: () async {
+                        await Firebase.initializeApp().then((value) async {
+                          await FirebaseAuth.instance.signOut().then((value) =>
+                              Navigator.pushNamedAndRemoveUntil(
+                                  context, '/LoginPage', (route) => false));
+                        });
+                      },
+                      valueColor: Colors.white,
+                      borderRadius: 10,
+                      child: Text('''ออกจากระบบ''',
+                          style: TextStyle(color: Colors.white)),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
+        ],
+      ),
     );
   }
 
@@ -222,7 +239,7 @@ class _ProfileState extends State<Profile> {
       context: context,
       builder: (context) => AlertDialog(
         title: ListTile(
-          leading: Image.asset("assets/images/bedridden.png"),
+          // leading: Image.asset("assets/images/bedridden.png"),
           title: Text('กรุณาเลือกแหล่งภาพ'),
         ),
         actions: [
@@ -231,29 +248,29 @@ class _ProfileState extends State<Profile> {
               Navigator.pop(context);
               processGetImage(ImageSource.camera);
             },
-            child: Text('Camera'),
+            child: Text('กล้อง'),
           ),
           TextButton(
             onPressed: () {
               Navigator.pop(context);
               processGetImage(ImageSource.gallery);
             },
-            child: Text('Gallery'),
+            child: Text('อัลบั้ม'),
           ),
           TextButton(
             onPressed: () {
               Navigator.pop(context);
             },
-            child: Text('Cancel'),
+            child: Text('ยกเลิก'),
           ),
         ],
       ),
     );
   }
 
-  Padding buildEditImage() {
+  buildEditImage() {
     return Padding(
-      padding: EdgeInsets.only(bottom: 260, left: 170),
+      padding: EdgeInsets.only(bottom: 1, left: 170),
       child: CircleAvatar(
         backgroundColor: Colors.grey,
         child: IconButton(
@@ -314,7 +331,7 @@ class _ProfileState extends State<Profile> {
       FirebaseAuth.instance.authStateChanges().listen((event) async {
         await event!
             .updateDisplayName(userNameController.text)
-            .then((value) => normalDialog(context, 'change Dsiplay Success'));
+            .then((value) => normalDialog(context, 'เสร็จสิ้น'));
       });
     });
   } // end build

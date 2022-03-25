@@ -17,7 +17,7 @@ class SearchBar extends StatefulWidget {
 }
 
 class _SearchBarState extends State<SearchBar> {
-  String query ='';
+  String query = '';
   final primary = Color(0xffdfad98);
   final secondary = Color(0xfff29a94);
 
@@ -140,94 +140,102 @@ class _SearchBarState extends State<SearchBar> {
   }
 
   Widget buildBook() {
-    return Container(
-      height: 1000,
-      child: GridView.builder(
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        physics: ScrollPhysics(),
-        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-            maxCrossAxisExtent: 300,
-            childAspectRatio: 200 / 300,
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 10),
-        itemCount: sickmodels.length,
-        itemBuilder: (context, index) => Container(
-          width: 175,
-          child: GestureDetector(
-            onTap: () {
-              var idcard = sickmodels[index].idCard;
-              print('## idcard = $idcard');
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => LitlEdit(idcard: idcard)));
-            },
-            child: ClipRRect(
-              borderRadius: BorderRadius.all(Radius.circular(28)),
-              child: Card(
-                color: Color(0xffFFD1BB),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
-                  child: Column(
-                    children: [
-                      Container(
-                        margin: EdgeInsets.symmetric(vertical: 10),
-                        width: 150,
-                        height: 100,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                          child: Image.network(
-                            sickmodels[index].urlImage,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, exception, stackTrack) =>
-                                Icon(Icons.error),
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: Row(
+    return sickmodels.length == 0
+        ? Container(
+            child: Text('ไม่พบรายชื่อ',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          )
+        : Container(
+            height: 1000,
+            child: GridView.builder(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              physics: ScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                  maxCrossAxisExtent: 300,
+                  childAspectRatio: 200 / 300,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10),
+              itemCount: sickmodels.length,
+              itemBuilder: (context, index) => Container(
+                width: 175,
+                child: GestureDetector(
+                  onTap: () {
+                    var idcard = sickmodels[index].idCard;
+                    print('## idcard = $idcard');
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => LitlEdit(idcard: idcard)));
+                  },
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.all(Radius.circular(28)),
+                    child: Card(
+                      color: Color(0xffFFD1BB),
+                      child: Padding(
+                        padding:
+                            const EdgeInsets.only(left: 8, right: 8, bottom: 8),
+                        child: Column(
                           children: [
                             Container(
-                              child: Text(
-                                sickmodels[index].name,
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
+                              margin: EdgeInsets.symmetric(vertical: 10),
+                              width: 150,
+                              height: 100,
+                              child: ClipRRect(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                                child: Image.network(
+                                  sickmodels[index].urlImage,
+                                  fit: BoxFit.cover,
+                                  errorBuilder:
+                                      (context, exception, stackTrack) =>
+                                          Icon(Icons.error),
                                 ),
+                              ),
+                            ),
+                            Expanded(
+                              child: Row(
+                                children: [
+                                  Container(
+                                    child: Text(
+                                      sickmodels[index].name,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Expanded(
+                              child: Row(
+                                children: [
+                                  Container(
+                                    child: Text(sickmodels[index].address),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Expanded(
+                              child: Row(
+                                children: [
+                                  Container(
+                                    child: Text(
+                                        'ระดับที่ ${sickmodels[index].level}'),
+                                  ),
+                                ],
                               ),
                             ),
                           ],
                         ),
                       ),
-                      Expanded(
-                        child: Row(
-                          children: [
-                            Container(
-                              child: Text(sickmodels[index].address),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        child: Row(
-                          children: [
-                            Container(
-                              child:
-                                  Text('ระดับที่ ${sickmodels[index].level}'),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-        ),
-      ),
-    );
+          );
   }
 
   void searchName(String query) {
