@@ -146,7 +146,7 @@ class _LoginPageState extends State<LoginPage> {
                         borderRadius: BorderRadius.circular(50),
                       ),
                       child: Text(
-                        "Login",
+                        "เข้าสู่ระบบ",
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
                           fontSize: 18,
