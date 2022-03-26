@@ -40,18 +40,16 @@ class ListlState extends State<Listl> {
   }
 
   Future<Null> readAllSick() async {
-    
-      if (sickmodels.length != 0) {
-        sickmodels.clear();
-        sickmodelsLevel1.clear();
-        sickmodelsLevel2.clear();
-        sickmodelsLevel3.clear();
-        docIds.clear();
-        healthModel.clear();
-        environmentModel.clear();
-        familyModel.clear();
-      }
-
+    if (sickmodels.length != 0) {
+      sickmodels.clear();
+      sickmodelsLevel1.clear();
+      sickmodelsLevel2.clear();
+      sickmodelsLevel3.clear();
+      docIds.clear();
+      healthModel.clear();
+      environmentModel.clear();
+      familyModel.clear();
+    }
 
     await Firebase.initializeApp().then((value) async {
       FirebaseFirestore.instance.collection('sick').snapshots().listen((event) {
@@ -108,14 +106,12 @@ class ListlState extends State<Listl> {
       ),
     );
   }
-  
 
 //'รายชื่อผู้ป่วยติดเตียง ระดับที่ 1'
   Widget buildtListNameAllBedriddenLevel1() {
     return sickmodelsLevel1.length == 0
         ? ShowProgress()
         : Container(
-            
             height: 1000,
             child: GridView.builder(
               scrollDirection: Axis.vertical,
@@ -143,13 +139,13 @@ class ListlState extends State<Listl> {
                     child: Card(
                       color: Color(0xffFFD1BB),
                       child: Padding(
-                        padding: const EdgeInsets.all(4.0),
+                        padding: const EdgeInsets.all(8.0),
                         child: Column(
                           children: [
                             Container(
-                              margin: EdgeInsets.symmetric(vertical: 12),
-                              width: 130,
-                              height: 80,
+                              margin: EdgeInsets.symmetric(vertical: 10),
+                              width: 150,
+                              height: 100,
                               child: ClipRRect(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10)),
@@ -164,15 +160,14 @@ class ListlState extends State<Listl> {
                             ),
                             Row(
                               children: [
-                                Container(
-                                  margin: EdgeInsets.symmetric(
-                                      vertical: 5, horizontal: 8),
-                                  width: 140,
-                                  child: Text(
-                                    sickmodelsLevel1[index].name,
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
+                                Expanded(
+                                  child: Container(
+                                    child: Text(
+                                      sickmodelsLevel1[index].name,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -180,22 +175,21 @@ class ListlState extends State<Listl> {
                             ),
                             Row(
                               children: [
-                                Container(
-                                  margin: EdgeInsets.symmetric(
-                                      vertical: 5, horizontal: 8),
-                                  width: 140,
-                                  child: Text(sickmodelsLevel1[index].address),
+                                Expanded(
+                                  child: Container(
+                                    child:
+                                        Text(sickmodelsLevel1[index].address),
+                                  ),
                                 ),
                               ],
                             ),
                             Row(
                               children: [
-                                Container(
-                                  margin: EdgeInsets.symmetric(
-                                      vertical: 5, horizontal: 8),
-                                  width: 140,
-                                  child: Text(
-                                      'ระดับที่ ${sickmodelsLevel1[index].level}'),
+                                Expanded(
+                                  child: Container(
+                                    child: Text(
+                                        'ระดับที่ ${sickmodelsLevel1[index].level}'),
+                                  ),
                                 ),
                               ],
                             ),

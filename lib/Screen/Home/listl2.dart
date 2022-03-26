@@ -40,18 +40,16 @@ class _Listl2State extends State<Listl2> {
   }
 
   Future<Null> readAllSick() async {
-   
-      if (sickmodels.length != 0) {
-        sickmodels.clear();
-        sickmodelsLevel1.clear();
-        sickmodelsLevel2.clear();
-        sickmodelsLevel3.clear();
-        docIds.clear();
-        healthModel.clear();
-        environmentModel.clear();
-        familyModel.clear();
-      }
-  
+    if (sickmodels.length != 0) {
+      sickmodels.clear();
+      sickmodelsLevel1.clear();
+      sickmodelsLevel2.clear();
+      sickmodelsLevel3.clear();
+      docIds.clear();
+      healthModel.clear();
+      environmentModel.clear();
+      familyModel.clear();
+    }
 
     await Firebase.initializeApp().then((value) async {
       FirebaseFirestore.instance.collection('sick').snapshots().listen((event) {
@@ -97,14 +95,13 @@ class _Listl2State extends State<Listl2> {
                 BorderRadius.vertical(bottom: Radius.elliptical(30.0, 30.0))),
       ),
       body: SafeArea(
-        child: Stack(
-          children: [
-            SingleChildScrollView(
-              child: Column(
-                children: [buildtListNameAllBedriddenLevel2()],
-              ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [buildtListNameAllBedriddenLevel2()],
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -114,7 +111,7 @@ class _Listl2State extends State<Listl2> {
     return sickmodelsLevel2.length == 0
         ? ShowProgress()
         : Container(
-             height: 1000,
+            height: 1000,
             child: GridView.builder(
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
@@ -126,7 +123,7 @@ class _Listl2State extends State<Listl2> {
                   mainAxisSpacing: 10),
               itemCount: sickmodelsLevel2.length,
               itemBuilder: (context, index) => Container(
-                width: 100,
+                width: 175,
                 child: GestureDetector(
                   onTap: () {
                     var idcard = sickmodels[index].idCard;
@@ -141,13 +138,13 @@ class _Listl2State extends State<Listl2> {
                     child: Card(
                       color: Color(0xffFFD1BB),
                       child: Padding(
-                        padding: const EdgeInsets.all(4.0),
+                        padding: const EdgeInsets.all(8.0),
                         child: Column(
                           children: [
                             Container(
-                              margin: EdgeInsets.symmetric(vertical: 12),
-                              width: 130,
-                              height: 80,
+                              margin: EdgeInsets.symmetric(vertical: 10),
+                              width: 150,
+                              height: 100,
                               child: ClipRRect(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10)),
@@ -162,15 +159,14 @@ class _Listl2State extends State<Listl2> {
                             ),
                             Row(
                               children: [
-                                Container(
-                                  margin: EdgeInsets.symmetric(
-                                      vertical: 5, horizontal: 8),
-                                  width: 140,
-                                  child: Text(
-                                    sickmodelsLevel2[index].name,
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
+                                Expanded(
+                                  child: Container(
+                                    child: Text(
+                                      sickmodelsLevel2[index].name,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -178,22 +174,21 @@ class _Listl2State extends State<Listl2> {
                             ),
                             Row(
                               children: [
-                                Container(
-                                  margin: EdgeInsets.symmetric(
-                                      vertical: 5, horizontal: 8),
-                                  width: 140,
-                                  child: Text(sickmodelsLevel2[index].address),
+                                Expanded(
+                                  child: Container(
+                                    child:
+                                        Text(sickmodelsLevel2[index].address),
+                                  ),
                                 ),
                               ],
                             ),
                             Row(
                               children: [
-                                Container(
-                                  margin: EdgeInsets.symmetric(
-                                      vertical: 5, horizontal: 8),
-                                  width: 140,
-                                  child: Text(
-                                      'ระดับที่ ${sickmodelsLevel2[index].level}'),
+                                Expanded(
+                                  child: Container(
+                                    child: Text(
+                                        'ระดับที่ ${sickmodelsLevel2[index].level}'),
+                                  ),
                                 ),
                               ],
                             ),

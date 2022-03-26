@@ -418,7 +418,7 @@ class _EditSickState extends State<EditSick> {
           border: Border.all(color: Colors.grey),
         ),
         margin: EdgeInsets.symmetric(vertical: 16),
-        width: 200,
+        width: 300,
         height: 200,
         child: lat == null
             ? ShowProgress()

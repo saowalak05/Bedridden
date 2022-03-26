@@ -139,7 +139,7 @@ class _AllState extends State<All> {
                     child: Card(
                       color: Color(0xffFFD1BB),
                       child: Padding(
-                        padding: const EdgeInsets.all(4.0),
+                        padding: const EdgeInsets.all(8.0),
                         child: Column(
                           children: [
                             Container(
@@ -160,15 +160,14 @@ class _AllState extends State<All> {
                             ),
                             Row(
                               children: [
-                                Container(
-                                  margin: EdgeInsets.symmetric(
-                                      vertical: 5, horizontal: 8),
-                                  width: 140,
-                                  child: Text(
-                                    sickmodels[index].name,
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
+                                Expanded(
+                                  child: Container(
+                                    child: Text(
+                                      sickmodels[index].name,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -176,22 +175,20 @@ class _AllState extends State<All> {
                             ),
                             Row(
                               children: [
-                                Container(
-                                  margin: EdgeInsets.symmetric(
-                                      vertical: 5, horizontal: 8),
-                                  width: 140,
-                                  child: Text(sickmodels[index].address),
+                                Expanded(
+                                  child: Container(
+                                    child: Text(sickmodels[index].address),
+                                  ),
                                 ),
                               ],
                             ),
                             Row(
                               children: [
-                                Container(
-                                  margin: EdgeInsets.symmetric(
-                                      vertical: 5, horizontal: 8),
-                                  width: 140,
-                                  child: Text(
-                                      'ระดับที่ ${sickmodels[index].level}'),
+                                Expanded(
+                                  child: Container(
+                                    child: Text(
+                                        'ระดับที่ ${sickmodels[index].level}'),
+                                  ),
                                 ),
                               ],
                             ),

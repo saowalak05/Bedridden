@@ -138,13 +138,13 @@ class _Listl3State extends State<Listl3> {
                     child: Card(
                       color: Color(0xffFFD1BB),
                       child: Padding(
-                        padding: const EdgeInsets.all(4.0),
+                        padding: const EdgeInsets.all(8.0),
                         child: Column(
                           children: [
                             Container(
-                              margin: EdgeInsets.symmetric(vertical: 12),
-                              width: 130,
-                              height: 80,
+                              margin: EdgeInsets.symmetric(vertical: 10),
+                              width: 150,
+                              height: 100,
                               child: ClipRRect(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10)),
@@ -159,15 +159,14 @@ class _Listl3State extends State<Listl3> {
                             ),
                             Row(
                               children: [
-                                Container(
-                                  margin: EdgeInsets.symmetric(
-                                      vertical: 5, horizontal: 8),
-                                  width: 140,
-                                  child: Text(
-                                    sickmodelsLevel3[index].name,
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
+                                Expanded(
+                                  child: Container(
+                                    child: Text(
+                                      sickmodelsLevel3[index].name,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -175,22 +174,21 @@ class _Listl3State extends State<Listl3> {
                             ),
                             Row(
                               children: [
-                                Container(
-                                  margin: EdgeInsets.symmetric(
-                                      vertical: 5, horizontal: 8),
-                                  width: 140,
-                                  child: Text(sickmodelsLevel3[index].address),
+                                Expanded(
+                                  child: Container(
+                                    child:
+                                        Text(sickmodelsLevel3[index].address),
+                                  ),
                                 ),
                               ],
                             ),
                             Row(
                               children: [
-                                Container(
-                                  margin: EdgeInsets.symmetric(
-                                      vertical: 5, horizontal: 8),
-                                  width: 140,
-                                  child: Text(
-                                      'ระดับที่ ${sickmodelsLevel3[index].level}'),
+                                Expanded(
+                                  child: Container(
+                                    child: Text(
+                                        'ระดับที่ ${sickmodelsLevel3[index].level}'),
+                                  ),
                                 ),
                               ],
                             ),

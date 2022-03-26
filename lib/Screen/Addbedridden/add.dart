@@ -407,7 +407,7 @@ class _AddState extends State<Add> {
         Row(
           children: [
             Container(
-              width: 170,
+              width: 160,
               child: RadioListTile(
                 title: const Text(
                   'ไม่ได้รับการศึกษา',
@@ -425,7 +425,7 @@ class _AddState extends State<Add> {
               ),
             ),
             Container(
-              width: 170,
+              width: 160,
               child: RadioListTile(
                 title: const Text(
                   'ประถมศึกษาตอนต้น',
@@ -447,7 +447,7 @@ class _AddState extends State<Add> {
         Row(
           children: [
             Container(
-              width: 170,
+              width: 160,
               child: RadioListTile(
                 title: const Text(
                   'ประถมศึกษาตอนปลาย',
@@ -465,7 +465,7 @@ class _AddState extends State<Add> {
               ),
             ),
             Container(
-              width: 170,
+              width: 160,
               child: RadioListTile(
                 title: const Text(
                   'มัธยมศึกษาตอนต้น',
@@ -487,7 +487,7 @@ class _AddState extends State<Add> {
         Row(
           children: [
             Container(
-              width: 170,
+              width: 160,
               child: RadioListTile(
                 title: const Text(
                   'มัธยมศึกษาตอนปลาย',
@@ -505,7 +505,7 @@ class _AddState extends State<Add> {
               ),
             ),
             Container(
-              width: 170,
+              width: 160,
               child: RadioListTile(
                 title: const Text(
                   'ปวช',
@@ -527,7 +527,7 @@ class _AddState extends State<Add> {
         Row(
           children: [
             Container(
-              width: 170,
+              width: 160,
               child: RadioListTile(
                 title: const Text(
                   'ปวส',
@@ -545,7 +545,7 @@ class _AddState extends State<Add> {
               ),
             ),
             Container(
-              width: 170,
+              width: 160,
               child: RadioListTile(
                 title: const Text(
                   'ปริญญาตรี',
@@ -727,7 +727,7 @@ class _AddState extends State<Add> {
         Row(
           children: [
             Container(
-              width: 170,
+              width: 160,
               child: RadioListTile(
                 title: const Text('โสด'),
                 value: 'โสด',
@@ -742,7 +742,7 @@ class _AddState extends State<Add> {
               ),
             ),
             Container(
-              width: 170,
+              width: 160,
               child: RadioListTile(
                 title: const Text(
                   'สมรสอยู่ด้วยกัน',
@@ -764,7 +764,7 @@ class _AddState extends State<Add> {
         Row(
           children: [
             Container(
-              width: 170,
+              width: 160,
               child: RadioListTile(
                 title: const Text(
                   'อยู่ด้วยกันโดยไม่จดทะเบียน',
@@ -782,7 +782,7 @@ class _AddState extends State<Add> {
               ),
             ),
             Container(
-              width: 170,
+              width: 160,
               child: RadioListTile(
                 title: const Text(
                   'อย่าร้าง',
@@ -804,7 +804,7 @@ class _AddState extends State<Add> {
         Row(
           children: [
             Container(
-              width: 170,
+              width: 160,
               child: RadioListTile(
                 title: const Text(
                   'หม้ายคู่สมรสเสียชีวิต',
@@ -822,7 +822,7 @@ class _AddState extends State<Add> {
               ),
             ),
             Container(
-              width: 170,
+              width: 160,
               child: RadioListTile(
                 title: const Text(
                   'สมรสแยกกันอยู่',
@@ -1113,7 +1113,6 @@ class _AddState extends State<Add> {
 
   Future<Null> processUploadImageAndInsertValue() async {
     String nameImage = 'sick${Random().nextInt(1000000)}.jpg';
-
 
     await Firebase.initializeApp().then((value) async {
       FirebaseStorage storage = FirebaseStorage.instance;

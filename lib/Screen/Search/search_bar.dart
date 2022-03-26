@@ -193,10 +193,10 @@ class _SearchBarState extends State<SearchBar> {
                                 ),
                               ),
                             ),
-                            Expanded(
-                              child: Row(
-                                children: [
-                                  Container(
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Container(
                                     child: Text(
                                       sickmodels[index].name,
                                       style: TextStyle(
@@ -205,27 +205,27 @@ class _SearchBarState extends State<SearchBar> {
                                       ),
                                     ),
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
-                            Expanded(
-                              child: Row(
-                                children: [
-                                  Container(
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Container(
                                     child: Text(sickmodels[index].address),
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
-                            Expanded(
-                              child: Row(
-                                children: [
-                                  Container(
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Container(
                                     child: Text(
                                         'ระดับที่ ${sickmodels[index].level}'),
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
