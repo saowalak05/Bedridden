@@ -264,9 +264,7 @@ class _SignupPageState extends State<SignupPage> {
             'Username = $Username,Name = $Name,Surname = $Surname, Email = $Email, Password =$Password');
         if ((Username?.isEmpty ?? true) ||
             (Email?.isEmpty ?? true) ||
-            (Password?.isEmpty ?? true) ||
-            (Name?.isEmpty ?? true) ||
-            (Surname?.isEmpty ?? true)) {
+            (Password?.isEmpty ?? true)) {
           print('ใส่ข้อมูลไม่ครบ');
           normalDialog(context, 'กรุณากรอกข้อมูล');
         } else {
