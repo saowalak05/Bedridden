@@ -336,37 +336,26 @@ class _LitlEditState extends State<LitlEdit> {
               ],
             ),
             SizedBox(width: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'ส่วนที่ 1 ข้อมูลของผู้ป่วย',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                // MaterialButton(
-                //   minWidth: 50,
-                //   height: 30,
-                //   onPressed: () {
-                //     var idcard = widget.idcard;
-                //     Navigator.push(
-                //         context,
-                //         MaterialPageRoute(
-                //           builder: (context) => EditSick(idcard: idcard),
-                //         ));
-                //   },
-                //   shape: RoundedRectangleBorder(
-                //       side: BorderSide(
-                //         color: const Color(0xffffede5),
-                //       ),
-                //       borderRadius: BorderRadius.circular(50)),
-                //   child: Text(
-                //     "แก้ไข",
-                //     style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
-                //   ),
-                //   color: const Color(0xffdfad98),
-                // ),
-              ],
-            ),
+            Row(children: <Widget>[
+              Expanded(
+                child: new Container(
+                    margin: const EdgeInsets.only(left: 10.0, right: 15.0),
+                    child: Divider(
+                      color: Colors.black,
+                      height: 50,
+                    )),
+              ),
+              Text("ส่วนที่ 1 ข้อมูลของผู้ป่วย",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              Expanded(
+                child: new Container(
+                    margin: const EdgeInsets.only(left: 15.0, right: 10.0),
+                    child: Divider(
+                      color: Colors.black,
+                      height: 70,
+                    )),
+              ),
+            ]),
             SizedBox(height: 10),
             Text('เลขบัตรประจำตัวประชาชน',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
@@ -449,39 +438,26 @@ class _LitlEditState extends State<LitlEdit> {
             SizedBox(height: 10),
             Text('$typepositionSick', style: TextStyle(fontSize: 16)),
             SizedBox(height: 10),
-            Divider(
-              color: Colors.black,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('ส่วนที่ 2 ข้อมูลด้านสุขภาพ',
-                    style:
-                        TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                // MaterialButton(
-                //   minWidth: 50,
-                //   height: 30,
-                //   onPressed: () {
-                //     var idcard = widget.idcard;
-                //     Navigator.push(
-                //         context,
-                //         MaterialPageRoute(
-                //           builder: (context) => EditHealth(idcard: idcard),
-                //         ));
-                //   },
-                //   shape: RoundedRectangleBorder(
-                //       side: BorderSide(
-                //         color: const Color(0xffffede5),
-                //       ),
-                //       borderRadius: BorderRadius.circular(50)),
-                //   child: Text(
-                //     "แก้ไข",
-                //     style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
-                //   ),
-                //   color: const Color(0xffdfad98),
-                // ),
-              ],
-            ),
+            Row(children: <Widget>[
+              Expanded(
+                child: new Container(
+                    margin: const EdgeInsets.only(left: 10.0, right: 15.0),
+                    child: Divider(
+                      color: Colors.black,
+                      height: 50,
+                    )),
+              ),
+              Text("ส่วนที่ 2 ข้อมูลด้านสุขภาพ",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              Expanded(
+                child: new Container(
+                    margin: const EdgeInsets.only(left: 15.0, right: 10.0),
+                    child: Divider(
+                      color: Colors.black,
+                      height: 70,
+                    )),
+              ),
+            ]),
             SizedBox(height: 10),
             Text('โรคประจำตัวหรือปัญหาสุขภาพ',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
@@ -513,40 +489,26 @@ class _LitlEditState extends State<LitlEdit> {
             SizedBox(height: 10),
             Text('$foodsupplementHealth', style: TextStyle(fontSize: 16)),
             SizedBox(height: 10),
-            Divider(
-              color: Colors.black,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'ส่วนที่ 3 ข้อมูลสภาพแวดล้อม',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                // MaterialButton(
-                //   minWidth: 50,
-                //   height: 30,
-                //   onPressed: () {
-                //     var idcard = widget.idcard;
-                //     Navigator.push(
-                //         context,
-                //         MaterialPageRoute(
-                //           builder: (context) => EditEnvironment(idcard: idcard),
-                //         ));
-                //   },
-                //   shape: RoundedRectangleBorder(
-                //       side: BorderSide(
-                //         color: const Color(0xffffede5),
-                //       ),
-                //       borderRadius: BorderRadius.circular(50)),
-                //   child: Text(
-                //     "แก้ไข",
-                //     style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
-                //   ),
-                //   color: const Color(0xffdfad98),
-                // ),
-              ],
-            ),
+            Row(children: <Widget>[
+              Expanded(
+                child: new Container(
+                    margin: const EdgeInsets.only(left: 10.0, right: 15.0),
+                    child: Divider(
+                      color: Colors.black,
+                      height: 50,
+                    )),
+              ),
+              Text("ส่วนที่ 3 ข้อมูลสภาพแวดล้อม",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              Expanded(
+                child: new Container(
+                    margin: const EdgeInsets.only(left: 15.0, right: 10.0),
+                    child: Divider(
+                      color: Colors.black,
+                      height: 70,
+                    )),
+              ),
+            ]),
             SizedBox(height: 10),
             Text('สถานะของที่พักอาศัย',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
@@ -593,103 +555,223 @@ class _LitlEditState extends State<LitlEdit> {
               ),
             ),
             SizedBox(height: 10),
-            Divider(
-              color: Colors.black,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'ส่วนที่ 4 ข้อมูลเครือญาติผู้ป่วย',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                // MaterialButton(
-                //   minWidth: 50,
-                //   height: 30,
-                //   onPressed: () {
-                //     var idcard = widget.idcard;
-                //     Navigator.push(
-                //         context,
-                //         MaterialPageRoute(
-                //           builder: (context) => EditFamily(idcard: idcard),
-                //         ));
-                //   },
-                //   shape: RoundedRectangleBorder(
-                //       side: BorderSide(
-                //         color: const Color(0xffffede5),
-                //       ),
-                //       borderRadius: BorderRadius.circular(50)),
-                //   child: Text(
-                //     "แก้ไข",
-                //     style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
-                //   ),
-                //   color: const Color(0xffdfad98),
-                // ),
-              ],
-            ),
+            Row(children: <Widget>[
+              Expanded(
+                child: new Container(
+                    margin: const EdgeInsets.only(left: 10.0, right: 15.0),
+                    child: Divider(
+                      color: Colors.black,
+                      height: 50,
+                    )),
+              ),
+              Text("ส่วนที่ 4 ข้อมูลเครือญาติผู้ป่วย",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              Expanded(
+                child: new Container(
+                    margin: const EdgeInsets.only(left: 15.0, right: 10.0),
+                    child: Divider(
+                      color: Colors.black,
+                      height: 70,
+                    )),
+              ),
+            ]),
             SizedBox(height: 10),
             Text('ข้อมูลความสัมพันธ์กับสมาชิกในครอบครัว',
                 style: TextStyle(fontSize: 16)),
-            SizedBox(height: 10),
-            Text('ชื่อ-สกุล สมาชิกในครอบครัว', style: TextStyle(fontSize: 16)),
-            SizedBox(height: 20),
-            Text('คนที่ 1 :',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-            SizedBox(height: 10),
-            Text('ชื่อ-สกุล',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-            SizedBox(height: 10),
-            Text('$familynameoneFamily', style: TextStyle(fontSize: 16)),
-            SizedBox(height: 10),
-            Text('ความสัมพันธ์กับผู้ป่วย',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-            SizedBox(height: 10),
-            Text('$familyrelationshiponeFamily',
-                style: TextStyle(fontSize: 16)),
-            SizedBox(height: 10),
-            Text('อาชีพ',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-            SizedBox(height: 10),
-            Text('$occupationoneFamily', style: TextStyle(fontSize: 16)),
-            SizedBox(height: 10),
-            Text('คนที่ 2 :',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-            SizedBox(height: 10),
-            Text('ชื่อ-สกุล',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-            SizedBox(height: 10),
-            Text('$familynametwoFamily', style: TextStyle(fontSize: 16)),
-            SizedBox(height: 10),
-            Text('ความสัมพันธ์กับผู้ป่วย',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-            SizedBox(height: 10),
-            Text('$familyrelationshiptwoFamily',
-                style: TextStyle(fontSize: 16)),
-            SizedBox(height: 10),
-            Text('อาชีพ',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-            SizedBox(height: 10),
-            Text('$occupationtwoFamily', style: TextStyle(fontSize: 16)),
-            SizedBox(height: 10),
-            Text('คนที่ 3 :',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-            SizedBox(height: 10),
-            Text('ชื่อ-สกุล',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-            SizedBox(height: 10),
-            Text('$familynamethreeFamily', style: TextStyle(fontSize: 16)),
-            SizedBox(height: 10),
-            Text('ความสัมพันธ์กับผู้ป่วย',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-            SizedBox(height: 10),
-            Text('$familyrelationshipthreeFamily',
-                style: TextStyle(fontSize: 16)),
-            SizedBox(height: 10),
-            Text('อาชีพ',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-            SizedBox(height: 10),
-            Text('$occupationthreeFamily', style: TextStyle(fontSize: 16)),
-            SizedBox(height: 20),
+            SizedBox(height: 30),
+            Column(
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                        child: Container(
+                            child: CircleAvatar(
+                      radius: 60,
+                      backgroundColor: const Color(0xfff29a94),
+                      child: Text('$familyrelationshiponeFamily',
+                          style: TextStyle(
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
+                          textAlign: TextAlign.center),
+                    ))),
+                    Expanded(
+                        child: Container(
+                            child: CircleAvatar(
+                      radius: 60,
+                      backgroundColor: const Color(0xfff29a94),
+                      child: Text('$familyrelationshiptwoFamily',
+                          style: TextStyle(
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
+                          textAlign: TextAlign.center),
+                    ))),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text('ชื่อ-สกุล :$familynameoneFamily',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center),
+                    ),
+                    Expanded(
+                      child: Text('ชื่อ-สกุล :$familynametwoFamily',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text('อาชีพ : $occupationoneFamily',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center),
+                    ),
+                    Expanded(
+                      child: Text('อาชีพ : $occupationtwoFamily',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.topCenter,
+                    child: Container(
+                      height: 30,
+                      width: 3,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.topCenter,
+                    child: Container(
+                      height: 30,
+                      width: 3,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Divider(
+              color: Colors.black, //color of divider
+              height: 0, //height spacing of divider
+              thickness: 3, //thickness of divier line
+              indent: 90, //spacing at the start of divider
+              endIndent: 90, //spacing at the end of divider
+            ),
+            Align(
+              alignment: Alignment.topCenter,
+              child: Container(
+                height: 30,
+                width: 3,
+                color: Colors.black,
+              ),
+            ),
+            Align(
+              alignment: Alignment.topCenter,
+              child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    // padding: EdgeInsets.all(50.0),
+                    width: MediaQuery.of(context).size.width / 3.5,
+                    height: MediaQuery.of(context).size.width / 3.5,
+                    child: file != null
+                        ? circleFile()
+                        : urlImageSick != null
+                            ? circleNetwork()
+                            : circleAsset(),
+                  )),
+            ),
+            Center(
+              child: Text(
+                '$nameSick',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            Align(
+              alignment: Alignment.topCenter,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  height: 50,
+                  width: 3,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+            Column(
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                        child: Container(
+                            child: CircleAvatar(
+                      radius: 60,
+                      backgroundColor: const Color(0xfff29a94),
+                      child: Text('$familyrelationshipthreeFamily',
+                          style: TextStyle(
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
+                          textAlign: TextAlign.center),
+                    ))),
+
+                    // Expanded(
+                    //     child: Container(
+                    //   child: CircleAvatar(
+                    //       foregroundColor: Colors.blue,
+                    //       backgroundColor: Colors.white,
+                    //       radius: 70.0,
+                    //       child: ClipOval(
+                    //         child: Image.network(
+                    //           '$urlenvironmentImageenvironment',
+                    //           fit: BoxFit.cover,
+                    //           width: 120.0,
+                    //           height: 120.0,
+                    //         ),
+                    //       )),
+                    // )),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text('ชื่อ-สกุล : $familynamethreeFamily',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text('อาชีพ : $familyrelationshipthreeFamily',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ],
         ),
       )),
