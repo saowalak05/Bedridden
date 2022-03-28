@@ -72,14 +72,17 @@ String? typefacilitiesenvironment;
 String? urlenvironmentImageenvironment;
 //Family
 String? familynameoneFamily;
-String? familynamethreeFamily;
 String? familynametwoFamily;
+String? familynamethreeFamily;
+String? familynamefourFamily;
 String? familyrelationshiponeFamily;
 String? familyrelationshipthreeFamily;
 String? familyrelationshiptwoFamily;
+String? familyrelationshipfourFamily;
 String? occupationoneFamily;
 String? occupationthreeFamily;
 String? occupationtwoFamily;
+String? occupationfourFamily;
 
 double? lat;
 double? lng;
@@ -243,12 +246,15 @@ class _LitlEditState extends State<LitlEdit> {
             familynameoneFamily = event['familynameone'];
             familynamethreeFamily = event['familynamethree'];
             familynametwoFamily = event['familynametwo'];
+            familynamefourFamily = event['familynamefour'];
             familyrelationshiponeFamily = event['familyrelationshipone'];
             familyrelationshipthreeFamily = event['familyrelationshipthree'];
             familyrelationshiptwoFamily = event['familyrelationshiptwo'];
+            familyrelationshipfourFamily = event['familyrelationshipfour'];
             occupationoneFamily = event['occupationone'];
             occupationtwoFamily = event['occupationtwo'];
             occupationthreeFamily = event['occupationthree'];
+            occupationfourFamily = event['occupationfour'];
           });
         });
       });
@@ -586,11 +592,11 @@ class _LitlEditState extends State<LitlEdit> {
                     Expanded(
                         child: Container(
                             child: CircleAvatar(
-                      radius: 60,
+                      radius: 50,
                       backgroundColor: const Color(0xfff29a94),
-                      child: Text('$familyrelationshiponeFamily',
+                      child: Text('บิดา',
                           style: TextStyle(
-                              fontSize: 30,
+                              fontSize: 20,
                               fontWeight: FontWeight.bold,
                               color: Colors.white),
                           textAlign: TextAlign.center),
@@ -598,11 +604,11 @@ class _LitlEditState extends State<LitlEdit> {
                     Expanded(
                         child: Container(
                             child: CircleAvatar(
-                      radius: 60,
+                      radius: 50,
                       backgroundColor: const Color(0xfff29a94),
-                      child: Text('$familyrelationshiptwoFamily',
+                      child: Text('มารดา',
                           style: TextStyle(
-                              fontSize: 30,
+                              fontSize: 20,
                               fontWeight: FontWeight.bold,
                               color: Colors.white),
                           textAlign: TextAlign.center),
@@ -707,14 +713,42 @@ class _LitlEditState extends State<LitlEdit> {
             ),
             Align(
               alignment: Alignment.topCenter,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  height: 50,
-                  width: 3,
-                  color: Colors.black,
-                ),
+              child: Container(
+                height: 30,
+                width: 3,
+                color: Colors.black,
               ),
+            ),
+            Divider(
+              color: Colors.black, //color of divider
+              height: 0, //height spacing of divider
+              thickness: 3, //thickness of divier line
+              indent: 90, //spacing at the start of divider
+              endIndent: 90, //spacing at the end of divider
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.topCenter,
+                    child: Container(
+                      height: 30,
+                      width: 3,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.topCenter,
+                    child: Container(
+                      height: 30,
+                      width: 3,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+              ],
             ),
             Column(
               children: [
@@ -723,11 +757,23 @@ class _LitlEditState extends State<LitlEdit> {
                     Expanded(
                         child: Container(
                             child: CircleAvatar(
-                      radius: 60,
+                      radius: 50,
                       backgroundColor: const Color(0xfff29a94),
-                      child: Text('$familyrelationshipthreeFamily',
+                      child: Text('ลูกคนที่ 1',
                           style: TextStyle(
-                              fontSize: 30,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
+                          textAlign: TextAlign.center),
+                    ))),
+                    Expanded(
+                        child: Container(
+                            child: CircleAvatar(
+                      radius: 50,
+                      backgroundColor: const Color(0xfff29a94),
+                      child: Text('ลูกคนที่ 2',
+                          style: TextStyle(
+                              fontSize: 20,
                               fontWeight: FontWeight.bold,
                               color: Colors.white),
                           textAlign: TextAlign.center),
@@ -758,12 +804,24 @@ class _LitlEditState extends State<LitlEdit> {
                               fontSize: 16, fontWeight: FontWeight.bold),
                           textAlign: TextAlign.center),
                     ),
+                    Expanded(
+                      child: Text('ชื่อ-สกุล : $familynamefourFamily',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center),
+                    ),
                   ],
                 ),
                 Row(
                   children: [
                     Expanded(
-                      child: Text('อาชีพ : $familyrelationshipthreeFamily',
+                      child: Text('อาชีพ : $occupationthreeFamily',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center),
+                    ),
+                    Expanded(
+                      child: Text('อาชีพ : $occupationfourFamily',
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold),
                           textAlign: TextAlign.center),
@@ -784,7 +842,7 @@ class _LitlEditState extends State<LitlEdit> {
             child: const Icon(Icons.edit),
             foregroundColor: Colors.white,
             backgroundColor: Color.fromARGB(255, 231, 172, 11),
-            label: 'แก้ไข ส่วนที่ 1',
+            label: 'แก้ไข ข้อมูลของผู้ป่วย',
             onPressed: () {
               var idcard = widget.idcard;
               Navigator.push(
@@ -798,7 +856,7 @@ class _LitlEditState extends State<LitlEdit> {
             child: const Icon(Icons.edit),
             foregroundColor: Colors.white,
             backgroundColor: Color.fromARGB(255, 231, 172, 11),
-            label: 'แก้ไข ส่วนที่ 2',
+            label: 'แก้ไข ข้อมูลด้านสุขภาพ',
             onPressed: () {
               var idcard = widget.idcard;
               Navigator.push(
@@ -812,7 +870,7 @@ class _LitlEditState extends State<LitlEdit> {
             child: const Icon(Icons.edit),
             foregroundColor: Colors.white,
             backgroundColor: Color.fromARGB(255, 231, 172, 11),
-            label: 'แก้ไข ส่วนที่ 3',
+            label: 'แก้ไข ข้อมูลสภาพแวดล้อม',
             onPressed: () {
               var idcard = widget.idcard;
               Navigator.push(
@@ -826,7 +884,7 @@ class _LitlEditState extends State<LitlEdit> {
             child: const Icon(Icons.edit),
             foregroundColor: Colors.white,
             backgroundColor: Color.fromARGB(255, 231, 172, 11),
-            label: 'แก้ไข ส่วนที่ 4',
+            label: 'แก้ไข ข้อมูลเครือญาติ',
             onPressed: () {
               var idcard = widget.idcard;
               Navigator.push(

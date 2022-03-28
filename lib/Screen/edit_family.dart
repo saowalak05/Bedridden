@@ -33,17 +33,28 @@ class _EditFamilyState extends State<EditFamily> {
       TextEditingController(); //'ความสัมพันธ์'
   TextEditingController occupationContorllerthree =
       TextEditingController(); //'อาชีพ'
+  TextEditingController familynameControllerfour =
+      TextEditingController(); //'ชื่อ'
+  TextEditingController familyrelationshipControllerfour =
+      TextEditingController(); //'ความสัมพันธ์'
+  TextEditingController occupationContorllerfour =
+      TextEditingController(); //'อาชีพ'
 
   //Family
   String? familynameoneFamily;
   String? familynamethreeFamily;
   String? familynametwoFamily;
+  String? familynamefourFamily;
+
   String? familyrelationshiponeFamily;
   String? familyrelationshipthreeFamily;
   String? familyrelationshiptwoFamily;
+  String? familyrelationshipfourFamily;
+
   String? occupationoneFamily;
   String? occupationthreeFamily;
   String? occupationtwoFamily;
+  String? occupationfourFamily;
 
   Future<Null> processEditData() async {
     if (map.isEmpty) {
@@ -71,12 +82,17 @@ class _EditFamilyState extends State<EditFamily> {
             familynameoneFamily = event['familynameone'];
             familynamethreeFamily = event['familynamethree'];
             familynametwoFamily = event['familynametwo'];
+            familynamefourFamily = event['familynamefour'];
+
             familyrelationshiponeFamily = event['familyrelationshipone'];
             familyrelationshipthreeFamily = event['familyrelationshipthree'];
             familyrelationshiptwoFamily = event['familyrelationshiptwo'];
+            familyrelationshipfourFamily = event['familyrelationshipfour'];
+
             occupationoneFamily = event['occupationone'];
             occupationtwoFamily = event['occupationtwo'];
             occupationthreeFamily = event['occupationthree'];
+            occupationfourFamily = event['occupationfour'];
           });
         });
       });
@@ -121,6 +137,7 @@ class _EditFamilyState extends State<EditFamily> {
               filedOne(),
               filedTwo(),
               filedThree(),
+              filedFour(),
               buildSizeBox(),
             ]),
           ),
@@ -208,29 +225,8 @@ class _EditFamilyState extends State<EditFamily> {
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
             filled: true,
-            hintText: '1.ชื่อ-สกุล',
-            labelText: '1.ชื่อ-สกุล *',
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          onChanged: (value) {
-            map['familyrelationshipone'] = value;
-          },
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก ความสัมพันธ์กับผู้ป่วย';
-            } else {
-              return null;
-            }
-          },
-          controller: familyrelationshipControllerone,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: 'ความสัมพันธ์กับผู้ป่วย',
-            labelText: 'ความสัมพันธ์กับผู้ป่วย ระบุ *',
+            hintText: 'ชื่อ-สกุล',
+            labelText: 'ชื่อ-สกุล',
           ),
         ),
         const SizedBox(height: 16.0),
@@ -251,7 +247,7 @@ class _EditFamilyState extends State<EditFamily> {
             border: OutlineInputBorder(),
             filled: true,
             hintText: 'อาชีพ',
-            labelText: 'อาชีพ *',
+            labelText: 'อาชีพ',
           ),
         ),
       ],
@@ -267,7 +263,7 @@ class _EditFamilyState extends State<EditFamily> {
           child: Row(
             children: <Widget>[
               Text(
-                'คนที่ 2 :',
+                'มารดา',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
@@ -293,29 +289,8 @@ class _EditFamilyState extends State<EditFamily> {
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
             filled: true,
-            hintText: '2.ชื่อ-สกุล',
-            labelText: '2.ชื่อ-สกุล *',
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          onChanged: (value) {
-            map['familyrelationshiptwo'] = value;
-          },
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก ความสัมพันธ์กับผู้ป่วย';
-            } else {
-              return null;
-            }
-          },
-          controller: familyrelationshipControllertwo,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: 'ความสัมพันธ์กับผู้ป่วย',
-            labelText: 'ความสัมพันธ์กับผู้ป่วย ระบุ *',
+            hintText: 'ชื่อ-สกุล',
+            labelText: 'ชื่อ-สกุล',
           ),
         ),
         const SizedBox(height: 16.0),
@@ -336,7 +311,7 @@ class _EditFamilyState extends State<EditFamily> {
             border: OutlineInputBorder(),
             filled: true,
             hintText: 'อาชีพ',
-            labelText: 'อาชีพ *',
+            labelText: 'อาชีพ',
           ),
         ),
       ],
@@ -352,7 +327,7 @@ class _EditFamilyState extends State<EditFamily> {
           child: Row(
             children: <Widget>[
               Text(
-                'คนที่ 3 :',
+                'ลูกคนที่ 1',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
@@ -378,29 +353,8 @@ class _EditFamilyState extends State<EditFamily> {
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
             filled: true,
-            hintText: '3.ชื่อ-สกุล',
-            labelText: '3.ชื่อ-สกุล *',
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          onChanged: (value) {
-            map['familyrelationshipthree'] = value;
-          },
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก ความสัมพันธ์กับผู้ป่วย';
-            } else {
-              return null;
-            }
-          },
-          controller: familyrelationshipControllerthree,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: 'ความสัมพันธ์กับผู้ป่วย',
-            labelText: 'ความสัมพันธ์กับผู้ป่วย ระบุ *',
+            hintText: 'ชื่อ-สกุล',
+            labelText: 'ชื่อ-สกุล',
           ),
         ),
         const SizedBox(height: 16.0),
@@ -421,7 +375,71 @@ class _EditFamilyState extends State<EditFamily> {
             border: OutlineInputBorder(),
             filled: true,
             hintText: 'อาชีพ',
-            labelText: 'อาชีพ *',
+            labelText: 'อาชีพ',
+          ),
+        ),
+      ],
+    );
+  }
+
+  Column filedFour() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        const SizedBox(height: 16.0),
+        Container(
+          child: Row(
+            children: <Widget>[
+              Text(
+                'ลูกคนที่ 2',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 16.0),
+        TextFormField(
+          onChanged: (value) {
+            map['familynamefour'] = value;
+          },
+          validator: (value) {
+            if (value!.isEmpty) {
+              return 'กรุณากรอก ชื่อ-สกุล';
+            } else {
+              return null;
+            }
+          },
+          controller: familynameControllerfour,
+          textCapitalization: TextCapitalization.words,
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            filled: true,
+            hintText: 'ชื่อ-สกุล',
+            labelText: 'ชื่อ-สกุล ',
+          ),
+        ),
+        const SizedBox(height: 16.0),
+        TextFormField(
+          onChanged: (value) {
+            map['occupationfour'] = value;
+          },
+          validator: (value) {
+            if (value!.isEmpty) {
+              return 'กรุณากรอก อาชีพ';
+            } else {
+              return null;
+            }
+          },
+          controller: occupationContorllerfour,
+          textCapitalization: TextCapitalization.words,
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            filled: true,
+            hintText: 'อาชีพ',
+            labelText: 'อาชีพ',
           ),
         ),
       ],

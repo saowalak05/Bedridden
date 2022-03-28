@@ -20,6 +20,8 @@ class Home extends StatefulWidget {
 
   @override
   _HomeState createState() => _HomeState();
+
+  clear() {}
 }
 
 class _HomeState extends State<Home> {
@@ -33,6 +35,31 @@ class _HomeState extends State<Home> {
   List<SickModel> sickmodelsLevel2 = [];
   List<SickModel> sickmodelsLevel3 = [];
   List<String> docIds = [];
+
+  Future refresh() async {
+    SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+        child: SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(),
+            child: Column(
+              children: [
+                buildtTtleListNameAllBedridden(), //'รายชื่อผู้ป่วยติดเตียง,โชว์ทั้งหมด'
+                buildtListNameAllBedridden(), //'รายชื่อผู้ป่วยติดเตียง'
+                buildtTtleListNameAllBedriddenLevel1(), //'รายชื่อผู้ป่วยติดเตียง ระดับที่ 1,โชว์ทั้งหมด'
+                buildtListNameAllBedriddenLevel1(), //'รายชื่อผู้ป่วยติดเตียง ระดับที่ 1'
+                buildtTtleListNameAllBedriddenLevel2(), //'รายชื่อผู้ป่วยติดเตียง ระดับที่ 2,โชว์ทั้งหมด'
+                buildtListNameAllBedriddenLevel2(), //'รายชื่อผู้ป่วยติดเตียง ระดับที่ 2'
+                buildtTtleListNameAllBedriddenLevel3(), //'รายชื่อผู้ป่วยติดเตียง ระดับที่ 3,โชว์ทั้งหมด'
+                buildtListNameAllBedriddenLevel3(), //'รายชื่อผู้ป่วยติดเตียง ระดับที่ 3'
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
   @override
   void initState() {
@@ -107,23 +134,26 @@ class _HomeState extends State<Home> {
             borderRadius:
                 BorderRadius.vertical(bottom: Radius.elliptical(30.0, 30.0))),
       ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
-          child: SingleChildScrollView(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(),
-              child: Column(
-                children: [
-                  buildtTtleListNameAllBedridden(), //'รายชื่อผู้ป่วยติดเตียง,โชว์ทั้งหมด'
-                  buildtListNameAllBedridden(), //'รายชื่อผู้ป่วยติดเตียง'
-                  buildtTtleListNameAllBedriddenLevel1(), //'รายชื่อผู้ป่วยติดเตียง ระดับที่ 1,โชว์ทั้งหมด'
-                  buildtListNameAllBedriddenLevel1(), //'รายชื่อผู้ป่วยติดเตียง ระดับที่ 1'
-                  buildtTtleListNameAllBedriddenLevel2(), //'รายชื่อผู้ป่วยติดเตียง ระดับที่ 2,โชว์ทั้งหมด'
-                  buildtListNameAllBedriddenLevel2(), //'รายชื่อผู้ป่วยติดเตียง ระดับที่ 2'
-                  buildtTtleListNameAllBedriddenLevel3(), //'รายชื่อผู้ป่วยติดเตียง ระดับที่ 3,โชว์ทั้งหมด'
-                  buildtListNameAllBedriddenLevel3(), //'รายชื่อผู้ป่วยติดเตียง ระดับที่ 3'
-                ],
+      body: RefreshIndicator(
+        onRefresh: refresh,
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+            child: SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(),
+                child: Column(
+                  children: [
+                    buildtTtleListNameAllBedridden(), //'รายชื่อผู้ป่วยติดเตียง,โชว์ทั้งหมด'
+                    buildtListNameAllBedridden(), //'รายชื่อผู้ป่วยติดเตียง'
+                    buildtTtleListNameAllBedriddenLevel1(), //'รายชื่อผู้ป่วยติดเตียง ระดับที่ 1,โชว์ทั้งหมด'
+                    buildtListNameAllBedriddenLevel1(), //'รายชื่อผู้ป่วยติดเตียง ระดับที่ 1'
+                    buildtTtleListNameAllBedriddenLevel2(), //'รายชื่อผู้ป่วยติดเตียง ระดับที่ 2,โชว์ทั้งหมด'
+                    buildtListNameAllBedriddenLevel2(), //'รายชื่อผู้ป่วยติดเตียง ระดับที่ 2'
+                    buildtTtleListNameAllBedriddenLevel3(), //'รายชื่อผู้ป่วยติดเตียง ระดับที่ 3,โชว์ทั้งหมด'
+                    buildtListNameAllBedriddenLevel3(), //'รายชื่อผู้ป่วยติดเตียง ระดับที่ 3'
+                  ],
+                ),
               ),
             ),
           ),

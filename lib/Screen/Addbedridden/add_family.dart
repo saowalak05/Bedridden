@@ -32,6 +32,12 @@ class _AddfamilyState extends State<Addfamily> {
       TextEditingController(); //'ความสัมพันธ์'
   TextEditingController occupationContorllerthree =
       TextEditingController(); //'อาชีพ'
+  TextEditingController familynameControllerfour =
+      TextEditingController(); //'ชื่อ'
+  TextEditingController familyrelationshipControllerfour =
+      TextEditingController(); //'ความสัมพันธ์'
+  TextEditingController occupationContorllerfour =
+      TextEditingController(); //'อาชีพ'
 
   @override
   void initState() {
@@ -71,6 +77,7 @@ class _AddfamilyState extends State<Addfamily> {
                 filedOne(),
                 filedTwo(),
                 filedThree(),
+                filedFour(),
                 buildSavefamily(),
               ],
             ),
@@ -84,12 +91,15 @@ class _AddfamilyState extends State<Addfamily> {
           familynameone: familynameControllerone.text,
           familynametwo: familynameControllertwo.text,
           familynamethree: familynameControllerthree.text,
+          familynamefour: familynameControllerfour.text,
           familyrelationshipone: familyrelationshipControllerone.text,
           familyrelationshiptwo: familyrelationshipControllertwo.text,
           familyrelationshipthree: familyrelationshipControllerthree.text,
+          familyrelationshipfour: familyrelationshipControllerfour.text,
           occupationone: occupationContorllerone.text,
           occupationtwo: occupationContorllertwo.text,
-          occupationthree: occupationContorllerthree.text);
+          occupationthree: occupationContorllerthree.text,
+          occupationfour: occupationContorllerthree.text);
 
       await FirebaseFirestore.instance
           .collection('Family')
@@ -178,7 +188,7 @@ class _AddfamilyState extends State<Addfamily> {
           child: Row(
             children: <Widget>[
               Text(
-                'คนที่ 1 :',
+                'บิดา',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
@@ -201,31 +211,31 @@ class _AddfamilyState extends State<Addfamily> {
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
             filled: true,
-            hintText: '1.ชื่อ-สกุล',
-            labelText: '1.ชื่อ-สกุล *',
+            hintText: 'ชื่อ-สกุล',
+            labelText: 'ชื่อ-สกุล',
             fillColor: const Color(0xfff7e4db),
           ),
         ),
         const SizedBox(height: 16.0),
-        TextFormField(
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก ความสัมพันธ์กับผู้ป่วย';
-            } else {
-              return null;
-            }
-          },
-          controller: familyrelationshipControllerone,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: 'ความสัมพันธ์กับผู้ป่วย',
-            labelText: 'ความสัมพันธ์กับผู้ป่วย ระบุ *',
-            fillColor: const Color(0xfff7e4db),
-          ),
-        ),
-        const SizedBox(height: 16.0),
+        // TextFormField(
+        //   validator: (value) {
+        //     if (value!.isEmpty) {
+        //       return 'กรุณากรอก ความสัมพันธ์กับผู้ป่วย';
+        //     } else {
+        //       return null;
+        //     }
+        //   },
+        //   controller: familyrelationshipControllerone,
+        //   textCapitalization: TextCapitalization.words,
+        //   decoration: const InputDecoration(
+        //     border: OutlineInputBorder(),
+        //     filled: true,
+        //     hintText: 'ความสัมพันธ์กับผู้ป่วย',
+        //     labelText: 'ความสัมพันธ์กับผู้ป่วย ระบุ *',
+        //     fillColor: const Color(0xfff7e4db),
+        //   ),
+        // ),
+
         TextFormField(
           validator: (value) {
             if (value!.isEmpty) {
@@ -240,7 +250,7 @@ class _AddfamilyState extends State<Addfamily> {
             border: OutlineInputBorder(),
             filled: true,
             hintText: 'อาชีพ',
-            labelText: 'อาชีพ *',
+            labelText: 'อาชีพ ',
             fillColor: const Color(0xfff7e4db),
           ),
         ),
@@ -257,7 +267,7 @@ class _AddfamilyState extends State<Addfamily> {
           child: Row(
             children: <Widget>[
               Text(
-                'คนที่ 2 :',
+                'มารดา',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
@@ -280,27 +290,8 @@ class _AddfamilyState extends State<Addfamily> {
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
             filled: true,
-            hintText: '2.ชื่อ-สกุล',
-            labelText: '2.ชื่อ-สกุล *',
-            fillColor: const Color(0xfff7e4db),
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก ความสัมพันธ์กับผู้ป่วย';
-            } else {
-              return null;
-            }
-          },
-          controller: familyrelationshipControllertwo,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: 'ความสัมพันธ์กับผู้ป่วย',
-            labelText: 'ความสัมพันธ์กับผู้ป่วย ระบุ *',
+            hintText: 'ชื่อ-สกุล',
+            labelText: 'ชื่อ-สกุล ',
             fillColor: const Color(0xfff7e4db),
           ),
         ),
@@ -319,7 +310,7 @@ class _AddfamilyState extends State<Addfamily> {
             border: OutlineInputBorder(),
             filled: true,
             hintText: 'อาชีพ',
-            labelText: 'อาชีพ *',
+            labelText: 'อาชีพ',
             fillColor: const Color(0xfff7e4db),
           ),
         ),
@@ -336,7 +327,7 @@ class _AddfamilyState extends State<Addfamily> {
           child: Row(
             children: <Widget>[
               Text(
-                'คนที่ 3 :',
+                'ลูกคนที่ 1',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
@@ -359,27 +350,8 @@ class _AddfamilyState extends State<Addfamily> {
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
             filled: true,
-            hintText: '3.ชื่อ-สกุล',
-            labelText: '3.ชื่อ-สกุล *',
-            fillColor: const Color(0xfff7e4db),
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          validator: (value) {
-            if (value!.isEmpty) {
-              return 'กรุณากรอก ความสัมพันธ์กับผู้ป่วย';
-            } else {
-              return null;
-            }
-          },
-          controller: familyrelationshipControllerthree,
-          textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            filled: true,
-            hintText: 'ความสัมพันธ์กับผู้ป่วย',
-            labelText: 'ความสัมพันธ์กับผู้ป่วย ระบุ *',
+            hintText: 'ชื่อ-สกุล',
+            labelText: 'ชื่อ-สกุล',
             fillColor: const Color(0xfff7e4db),
           ),
         ),
@@ -398,7 +370,67 @@ class _AddfamilyState extends State<Addfamily> {
             border: OutlineInputBorder(),
             filled: true,
             hintText: 'อาชีพ',
-            labelText: 'อาชีพ *',
+            labelText: 'อาชีพ',
+            fillColor: const Color(0xfff7e4db),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Column filedFour() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        const SizedBox(height: 16.0),
+        Container(
+          child: Row(
+            children: <Widget>[
+              Text(
+                'ลูกคนที่ 2',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 16.0),
+        TextFormField(
+          validator: (value) {
+            if (value!.isEmpty) {
+              return 'กรุณากรอก ชื่อ-สกุล';
+            } else {
+              return null;
+            }
+          },
+          controller: familynameControllerfour,
+          textCapitalization: TextCapitalization.words,
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            filled: true,
+            hintText: 'ชื่อ-สกุล',
+            labelText: 'ชื่อ-สกุล',
+            fillColor: const Color(0xfff7e4db),
+          ),
+        ),
+        const SizedBox(height: 16.0),
+        TextFormField(
+          validator: (value) {
+            if (value!.isEmpty) {
+              return 'กรุณากรอก อาชีพ';
+            } else {
+              return null;
+            }
+          },
+          controller: occupationContorllerfour,
+          textCapitalization: TextCapitalization.words,
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            filled: true,
+            hintText: 'อาชีพ',
+            labelText: 'อาชีพ',
             fillColor: const Color(0xfff7e4db),
           ),
         ),
