@@ -173,14 +173,17 @@ class MapState extends State<Map> {
           value: choice,
           child: Row(
             children: [
-              Text(choice.title!),
               SizedBox(
                 width: 10,
               ),
               Icon(
                 choice.icon!,
                 color: choice.color!,
-              )
+              ),
+              SizedBox(
+                width: 20,
+              ),
+              Text(choice.title!),
             ],
           ),
         );

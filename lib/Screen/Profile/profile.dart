@@ -165,7 +165,7 @@ class _ProfileState extends State<Profile> {
                       title: Text(email!),
                     ),
                     SizedBox(
-                      height: 100,
+                      height: 30,
                     ),
                     RoundedLoadingButton(
                       color: Color(0xffdfad98),
