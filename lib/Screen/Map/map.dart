@@ -8,6 +8,26 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+class Choice {
+  final String? title;
+  final IconData? icon;
+  final Color? color;
+  const Choice({this.title, this.icon, this.color});
+}
+
+const List<Choice> choices = const <Choice>[
+  const Choice(title: 'โรงเรียน', icon: Icons.circle, color: Colors.green),
+  const Choice(
+      title: 'ร้านค้าใกล้บ้าน', icon: Icons.circle, color: Colors.amber),
+  const Choice(title: 'สถานณีอนามัย', icon: Icons.circle, color: Colors.blue),
+  const Choice(
+      title: 'องค์การบริหารส่วนตำบล',
+      icon: Icons.circle,
+      color: Colors.pinkAccent),
+  const Choice(title: 'โรงพยาบาล', icon: Icons.circle, color: Colors.purple),
+  const Choice(title: 'วัด', icon: Icons.circle, color: Colors.cyanAccent),
+];
+
 class Map extends StatefulWidget {
   @override
   MapState createState() => MapState();
@@ -110,6 +130,9 @@ class MapState extends State<Map> {
     // _createMarkerImageFromAsset(context);
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          _buildPopupMenu(),
+        ],
         title: Center(
           child: Text(
             'แผนที่',
@@ -139,8 +162,30 @@ class MapState extends State<Map> {
               context, MaterialPageRoute(builder: (context) => AppLocation()));
         },
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniStartFloat,
     );
+  }
+
+  Widget _buildPopupMenu() {
+    return PopupMenuButton<Choice>(itemBuilder: (context) {
+      return choices.map((Choice choice) {
+        return PopupMenuItem<Choice>(
+          value: choice,
+          child: Row(
+            children: [
+              Text(choice.title!),
+              SizedBox(
+                width: 10,
+              ),
+              Icon(
+                choice.icon!,
+                color: choice.color!,
+              )
+            ],
+          ),
+        );
+      }).toList();
+    });
   }
 
   Widget _buildGoogleMap(
