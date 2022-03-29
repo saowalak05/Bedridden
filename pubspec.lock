@@ -8,13 +8,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.0.6"
-  arrow_path:
-    dependency: transitive
-    description:
-      name: arrow_path
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "2.0.0"
   async:
     dependency: transitive
     description:
@@ -317,20 +310,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.1.5"
-  graphite:
-    dependency: "direct main"
-    description:
-      name: graphite
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "0.3.0"
-  graphview:
-    dependency: "direct main"
-    description:
-      name: graphview
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.1.1"
   hawk_fab_menu:
     dependency: "direct main"
     description:
@@ -464,13 +443,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.1.2"
-  pluto_menu_bar:
-    dependency: "direct main"
-    description:
-      name: pluto_menu_bar
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "0.1.4"
   provider:
     dependency: "direct main"
     description:
@@ -574,13 +546,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.4.8"
-  touchable:
-    dependency: transitive
-    description:
-      name: touchable
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.0.0"
   typed_data:
     dependency: transitive
     description:
