@@ -33,13 +33,14 @@ class _Listl2State extends State<Listl2> {
   List<EnvironmentModel> environmentModel = [];
   List<FamilyModel> familyModel = [];
 
-  @override
+ @override
   void initState() {
     super.initState();
     readAllSick();
   }
 
   Future<Null> readAllSick() async {
+    Future.delayed(Duration(seconds: 1));
     if (sickmodels.length != 0) {
       sickmodels.clear();
       sickmodelsLevel1.clear();
@@ -94,12 +95,15 @@ class _Listl2State extends State<Listl2> {
             borderRadius:
                 BorderRadius.vertical(bottom: Radius.elliptical(30.0, 30.0))),
       ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [buildtListNameAllBedriddenLevel2()],
+      body: RefreshIndicator(
+        onRefresh: readAllSick,
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [buildtListNameAllBedriddenLevel2()],
+              ),
             ),
           ),
         ),

@@ -4,7 +4,6 @@ import 'package:bedridden/Screen/Home/listl1.dart';
 import 'package:bedridden/Screen/Home/listl2.dart';
 import 'package:bedridden/Screen/Home/listl3.dart';
 import 'package:bedridden/models/sick_model.dart';
-import 'package:bedridden/widgets/show_progess.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -20,46 +19,18 @@ class Home extends StatefulWidget {
 
   @override
   _HomeState createState() => _HomeState();
-
-  clear() {}
 }
 
 class _HomeState extends State<Home> {
   final primary = Color(0xffdfad98);
   final secondary = Color(0xfff29a94);
 
-  get padding => null;
 
   List<SickModel> sickmodels = [];
   List<SickModel> sickmodelsLevel1 = [];
   List<SickModel> sickmodelsLevel2 = [];
   List<SickModel> sickmodelsLevel3 = [];
   List<String> docIds = [];
-
-  Future refresh() async {
-    SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
-        child: SingleChildScrollView(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(),
-            child: Column(
-              children: [
-                buildtTtleListNameAllBedridden(), //'รายชื่อผู้ป่วยติดเตียง,โชว์ทั้งหมด'
-                buildtListNameAllBedridden(), //'รายชื่อผู้ป่วยติดเตียง'
-                buildtTtleListNameAllBedriddenLevel1(), //'รายชื่อผู้ป่วยติดเตียง ระดับที่ 1,โชว์ทั้งหมด'
-                buildtListNameAllBedriddenLevel1(), //'รายชื่อผู้ป่วยติดเตียง ระดับที่ 1'
-                buildtTtleListNameAllBedriddenLevel2(), //'รายชื่อผู้ป่วยติดเตียง ระดับที่ 2,โชว์ทั้งหมด'
-                buildtListNameAllBedriddenLevel2(), //'รายชื่อผู้ป่วยติดเตียง ระดับที่ 2'
-                buildtTtleListNameAllBedriddenLevel3(), //'รายชื่อผู้ป่วยติดเตียง ระดับที่ 3,โชว์ทั้งหมด'
-                buildtListNameAllBedriddenLevel3(), //'รายชื่อผู้ป่วยติดเตียง ระดับที่ 3'
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 
   @override
   void initState() {
@@ -76,6 +47,7 @@ class _HomeState extends State<Home> {
   }
 
   Future<Null> readAllSick() async {
+    Future.delayed(Duration(seconds: 1));
     if (sickmodels.length != 0) {
       sickmodels.clear();
       sickmodelsLevel1.clear();
@@ -135,7 +107,7 @@ class _HomeState extends State<Home> {
                 BorderRadius.vertical(bottom: Radius.elliptical(30.0, 30.0))),
       ),
       body: RefreshIndicator(
-        onRefresh: refresh,
+        onRefresh: readAllSick,
         child: SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),

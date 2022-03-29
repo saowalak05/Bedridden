@@ -40,6 +40,7 @@ class ListlState extends State<Listl> {
   }
 
   Future<Null> readAllSick() async {
+    Future.delayed(Duration(seconds: 1));
     if (sickmodels.length != 0) {
       sickmodels.clear();
       sickmodelsLevel1.clear();
@@ -94,12 +95,15 @@ class ListlState extends State<Listl> {
             borderRadius:
                 BorderRadius.vertical(bottom: Radius.elliptical(30.0, 30.0))),
       ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [buildtListNameAllBedriddenLevel1()],
+      body: RefreshIndicator(
+        onRefresh: readAllSick,
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [buildtListNameAllBedriddenLevel1()],
+              ),
             ),
           ),
         ),
