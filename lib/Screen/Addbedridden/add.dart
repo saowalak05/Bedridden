@@ -164,12 +164,47 @@ class _AddState extends State<Add> {
               buildMap(),
               buildOccupationTalent(), //'อาชีพ,ความสามารถพิเศษ'
               groupPosition(), //'ฐานะ'
-              buildlevel(), //'ระดับกการเจ็บป่วย'
-              buildSaveBedridden(), //'บันทึก'
+
+              buildlevel(),
+              const SizedBox(
+                height: 100,
+              ), //'ระดับกการเจ็บป่วย'
             ],
           ),
         ),
       ),
+      floatingActionButton: FloatingActionButton.extended(
+        elevation: 4.0,
+        icon: const Icon(Icons.save_alt_rounded),
+        label: const Text('บันทึก'),
+        backgroundColor: Color(0xfff29a94),
+        onPressed: () {
+          if (file == null) {
+            normalDialog(context, 'กรุณาใส่รูปภาพ');
+          } else if (_typesex == null) {
+            normalDialog(context, 'กรุณาเลือก เพศ');
+          } else if (bondStatus) {
+            normalDialog(context, 'กรุณาเลือก วันเกิด');
+          } else if (race == null) {
+            normalDialog(context, 'กรุณาเลือกเชื้อชาติ');
+          } else if (nationality == null) {
+            normalDialog(context, 'กรุณาเลือก สัญชาติ');
+          } else if (religion == null) {
+            normalDialog(context, 'กรุณาเลือก ศาสนา');
+          } else if (_typestatus == null) {
+            normalDialog(context, 'กรุณาเลือก สถานะภาพสมรส');
+          } else if (typeeducationLevel == null) {
+            normalDialog(context, 'กรุณาเลือก ระดับการศึกษา');
+          } else if (typeposition == null) {
+            normalDialog(context, 'กรุณาเลือก ฐานะของผู้ป่วย');
+          } else if (level == null) {
+            normalDialog(context, 'กรุณาเลือก ระดับการป่วย');
+          } else if (formkey.currentState!.validate()) {
+            processUploadImageAndInsertValue();
+          }
+        },
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
     );
   }
 
@@ -206,53 +241,6 @@ class _AddState extends State<Add> {
                 markers: setMarker(),
               ),
       );
-
-  Container buildSaveBedridden() {
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          MaterialButton(
-            onPressed: () {
-              if (file == null) {
-                normalDialog(context, 'กรุณาใส่รูปภาพ');
-              } else if (_typesex == null) {
-                normalDialog(context, 'กรุณาเลือก เพศ');
-              } else if (bondStatus) {
-                normalDialog(context, 'กรุณาเลือก วันเกิด');
-              } else if (race == null) {
-                normalDialog(context, 'กรุณาเลือกเชื้อชาติ');
-              } else if (nationality == null) {
-                normalDialog(context, 'กรุณาเลือก สัญชาติ');
-              } else if (religion == null) {
-                normalDialog(context, 'กรุณาเลือก ศาสนา');
-              } else if (_typestatus == null) {
-                normalDialog(context, 'กรุณาเลือก สถานะภาพสมรส');
-              } else if (typeeducationLevel == null) {
-                normalDialog(context, 'กรุณาเลือก ระดับการศึกษา');
-              } else if (typeposition == null) {
-                normalDialog(context, 'กรุณาเลือก ฐานะของผู้ป่วย');
-              } else if (level == null) {
-                normalDialog(context, 'กรุณาเลือก ระดับการป่วย');
-              } else if (formkey.currentState!.validate()) {
-                processUploadImageAndInsertValue();
-              }
-            },
-            shape: RoundedRectangleBorder(
-                side: BorderSide(
-                  color: const Color(0xffffede5),
-                ),
-                borderRadius: BorderRadius.circular(50)),
-            child: Text(
-              "บันทึก",
-              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
-            ),
-            color: const Color(0xffdfad98),
-          ),
-        ],
-      ),
-    );
-  }
 
   Column groupPosition() {
     return Column(

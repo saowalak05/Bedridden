@@ -42,40 +42,59 @@ class _AddhealthState extends State<Addhealth> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: const Color(0xffdfad98),
-          toolbarHeight: 90,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(
-              bottom: Radius.elliptical(30.0, 30.0),
-            ),
-          ),
-          title: Text(
-            'ส่วนที่ 2 ข้อมูลด้านสุขภาพ',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-            ),
+      appBar: AppBar(
+        backgroundColor: const Color(0xffdfad98),
+        toolbarHeight: 90,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.elliptical(30.0, 30.0),
           ),
         ),
-        body: GestureDetector(
-          onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
-          behavior: HitTestBehavior.opaque,
-          child: Form(
-            key: formkey,
-            child: ListView(
-              padding: EdgeInsets.only(top: 16, left: 8, right: 8),
-              children: [
-                buildTitle3(), //'ส่วนที่ 2 ข้อมูลด้านสุขภาพ '
-                buildDisease(), //'โรคประจำตัวหรือปัญหาสุขภาพ '
-                buildmedicine(), //'ยาที่แพทย์สั่ง '
-                buildtypeexaminationresults(), //'ผลการตรวจสอบ '
-                builddruguse(), //'การใช้ยา '
-                buildOHF(), //' สมุนไพร อาหารเสริม '
-                buildsavehealth(), //'บันทึก'
-              ],
-            ),
+        title: Text(
+          'ส่วนที่ 2 ข้อมูลด้านสุขภาพ',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
           ),
-        ));
+        ),
+      ),
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+        behavior: HitTestBehavior.opaque,
+        child: Form(
+          key: formkey,
+          child: ListView(
+            padding: EdgeInsets.only(top: 16, left: 8, right: 8),
+            children: [
+              buildTitle3(), //'ส่วนที่ 2 ข้อมูลด้านสุขภาพ '
+              buildDisease(), //'โรคประจำตัวหรือปัญหาสุขภาพ '
+              buildmedicine(), //'ยาที่แพทย์สั่ง '
+              buildtypeexaminationresults(), //'ผลการตรวจสอบ '
+              builddruguse(), //'การใช้ยา '
+              buildOHF(),
+              const SizedBox(
+                height: 16,
+              ), //' สมุนไพร อาหารเสริม '
+            ],
+          ),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        elevation: 4.0,
+        icon: const Icon(Icons.save_alt_rounded),
+        label: const Text('บันทึก'),
+        backgroundColor: Color(0xfff29a94),
+        onPressed: () {
+          if (groupA == null) {
+            normalDialog(context, 'กรุณาเลือก ผลการตรวจสอบ');
+          } else if (groupB == null) {
+            normalDialog(context, 'กรุณาเลือก การใช้ยา');
+          } else if (formkey.currentState!.validate()) {
+            proccessUplodhealth();
+          }
+        },
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
+    );
   }
 
   Future<Null> proccessUplodhealth() async {
@@ -100,39 +119,7 @@ class _AddhealthState extends State<Addhealth> {
                   builder: (context) => Addenvironment(
                         idCard: '${widget.idCard}',
                       ))));
-     
     });
-  }
-
-  Container buildsavehealth() {
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          MaterialButton(
-            onPressed: () {
-              if (groupA == null) {
-                normalDialog(context, 'กรุณาเลือก ผลการตรวจสอบ');
-              } else if (groupB == null) {
-                normalDialog(context, 'กรุณาเลือก การใช้ยา');
-              } else if (formkey.currentState!.validate()) {
-                proccessUplodhealth();
-              }
-            },
-            shape: RoundedRectangleBorder(
-                side: BorderSide(
-                  color: const Color(0xffffede5),
-                ),
-                borderRadius: BorderRadius.circular(50)),
-            child: Text(
-              "บันทึก",
-              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
-            ),
-            color: const Color(0xffdfad98),
-          ),
-        ],
-      ),
-    );
   }
 
   Column buildOHF() {

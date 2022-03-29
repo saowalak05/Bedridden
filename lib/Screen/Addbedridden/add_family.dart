@@ -50,39 +50,54 @@ class _AddfamilyState extends State<Addfamily> {
     // Size size = MediaQuery.of(context).size;
     // final IconThemeData data;
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: const Color(0xffdfad98),
-          toolbarHeight: 90,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(
-              bottom: Radius.elliptical(30.0, 30.0),
-            ),
-          ),
-          title: Text(
-            'ส่วนที่ 4 ข้อมูลเครือญาติผู้ป่วย',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-            ),
+      appBar: AppBar(
+        backgroundColor: const Color(0xffdfad98),
+        toolbarHeight: 90,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.elliptical(30.0, 30.0),
           ),
         ),
-        body: GestureDetector(
-          onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
-          behavior: HitTestBehavior.opaque,
-          child: Form(
-            key: formkey,
-            child: ListView(
-              padding: EdgeInsets.only(top: 16, left: 16, right: 16),
-              children: [
-                buildtitle(), //'ชื่อ-สกุล สมาชิกในครอบครัว '
-                filedOne(),
-                filedTwo(),
-                filedThree(),
-                filedFour(),
-                buildSavefamily(),
-              ],
-            ),
+        title: Text(
+          'ส่วนที่ 4 ข้อมูลเครือญาติผู้ป่วย',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
           ),
-        ));
+        ),
+      ),
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+        behavior: HitTestBehavior.opaque,
+        child: Form(
+          key: formkey,
+          child: ListView(
+            padding: EdgeInsets.only(top: 16, left: 16, right: 16),
+            children: [
+              buildtitle(), //'ชื่อ-สกุล สมาชิกในครอบครัว '
+              filedOne(),
+              filedTwo(),
+              filedThree(),
+              filedFour(),
+              const SizedBox(
+                height: 16,
+              ),
+            ],
+          ),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        elevation: 4.0,
+        icon: const Icon(Icons.save_alt_rounded),
+        label: const Text('บันทึก'),
+        backgroundColor: Color(0xfff29a94),
+        onPressed: () {
+          if (formkey.currentState!.validate()) {
+            proccessUplodFamily();
+          }
+        },
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
+    );
   }
 
   Future<Null> proccessUplodFamily() async {
@@ -110,33 +125,6 @@ class _AddfamilyState extends State<Addfamily> {
           .then((value) => Navigator.push(
               context, MaterialPageRoute(builder: (context) => Home())));
     });
-  }
-
-  Container buildSavefamily() {
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          MaterialButton(
-            onPressed: () {
-              if (formkey.currentState!.validate()) {
-                proccessUplodFamily();
-              }
-            },
-            shape: RoundedRectangleBorder(
-                side: BorderSide(
-                  color: const Color(0xffffede5),
-                ),
-                borderRadius: BorderRadius.circular(50)),
-            child: Text(
-              "บันทึก",
-              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
-            ),
-            color: const Color(0xffdfad98),
-          ),
-        ],
-      ),
-    );
   }
 
   Column buildtitle() {

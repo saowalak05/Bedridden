@@ -33,39 +33,67 @@ class _AddenvironmentState extends State<Addenvironment> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: const Color(0xffdfad98),
-          toolbarHeight: 90,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(
-              bottom: Radius.elliptical(30.0, 30.0),
-            ),
-          ),
-          title: Text(
-            'ส่วนที่ 3 ข้อมูลสภาพแวดล้อม',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-            ),
+      appBar: AppBar(
+        backgroundColor: const Color(0xffdfad98),
+        toolbarHeight: 90,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.elliptical(30.0, 30.0),
           ),
         ),
-        body: GestureDetector(
-          onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
-          behavior: HitTestBehavior.opaque,
-          child: Form(
-            child: ListView(
-              padding: EdgeInsets.only(top: 16, left: 8, right: 8),
-              children: [
-                buildaccommodation(),
-                buildtypeHouse(),
-                buildHomeEnvironment(),
-                buildHousingSafety(),
-                buildFacilities(),
-                buildImage(context),
-                buildsaveenvironment(),
-              ],
-            ),
+        title: Text(
+          'ส่วนที่ 3 ข้อมูลสภาพแวดล้อม',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
           ),
-        ));
+        ),
+      ),
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+        behavior: HitTestBehavior.opaque,
+        child: Form(
+          child: ListView(
+            padding: EdgeInsets.only(top: 16, left: 8, right: 8),
+            children: [
+              buildaccommodation(),
+              buildtypeHouse(),
+              buildHomeEnvironment(),
+              buildHousingSafety(),
+              buildFacilities(),
+              buildImage(context),
+              const SizedBox(
+                height: 16,
+              ),
+            ],
+          ),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        elevation: 4.0,
+        icon: const Icon(Icons.save_alt_rounded),
+        label: const Text('บันทึก'),
+        backgroundColor: Color(0xfff29a94),
+        onPressed: () {
+          if (accommodation == null) {
+            normalDialog(context, 'กรุณาเลือกสถานะของที่พักอาศัย');
+          } else if (typeHouse == null) {
+            normalDialog(context, 'กรุณาเลือกประเภทบ้าน');
+          } else if (typeHomeEnvironment == null) {
+            normalDialog(context, 'กรุณาเลือกสภาพสิ่งแวดล้อมในบ้าน');
+          } else if (typeHousingSafety == null) {
+            normalDialog(context, 'กรุณาเลือกความปลอดภัย');
+          } else if (typefacilities == null) {
+            normalDialog(context,
+                'กรุณาเลือกมีสิ่งอำนวยความสะดวกให้ผู้ป่วยสามารถดำรงชีวิตในบ้านได้');
+          } else if (files == null) {
+            normalDialog(context, 'กรุณาใส่รูปภาพ');
+          } else {
+            proccessUploadImageenvironmentValue();
+          }
+        },
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
+    );
   }
 
   Future<Null> proccessUploadImageenvironmentValue() async {
@@ -101,46 +129,6 @@ class _AddenvironmentState extends State<Addenvironment> {
                         ))));
       });
     });
-  }
-
-  Container buildsaveenvironment() {
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          MaterialButton(
-            onPressed: () {
-              if (accommodation == null) {
-                normalDialog(context, 'กรุณาเลือกสถานะของที่พักอาศัย');
-              } else if (typeHouse == null) {
-                normalDialog(context, 'กรุณาเลือกประเภทบ้าน');
-              } else if (typeHomeEnvironment == null) {
-                normalDialog(context, 'กรุณาเลือกสภาพสิ่งแวดล้อมในบ้าน');
-              } else if (typeHousingSafety == null) {
-                normalDialog(context, 'กรุณาเลือกความปลอดภัย');
-              } else if (typefacilities == null) {
-                normalDialog(context,
-                    'กรุณาเลือกมีสิ่งอำนวยความสะดวกให้ผู้ป่วยสามารถดำรงชีวิตในบ้านได้');
-              } else if (files == null) {
-                normalDialog(context, 'กรุณาใส่รูปภาพ');
-              } else {
-                proccessUploadImageenvironmentValue();
-              }
-            },
-            shape: RoundedRectangleBorder(
-                side: BorderSide(
-                  color: const Color(0xffffede5),
-                ),
-                borderRadius: BorderRadius.circular(50)),
-            child: Text(
-              "บันทึก",
-              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
-            ),
-            color: const Color(0xffdfad98),
-          ),
-        ],
-      ),
-    );
   }
 
   Column buildFacilities() {

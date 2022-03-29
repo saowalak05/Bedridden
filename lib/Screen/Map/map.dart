@@ -129,14 +129,17 @@ class MapState extends State<Map> {
           _buildGoogleMap(context),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
+        elevation: 4.0,
+        icon: const Icon(Icons.home),
+        label: const Text('บันทึกสถานที่สำคัญ'),
+        backgroundColor: Color(0xfff29a94),
         onPressed: () {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => AppLocation()));
         },
-        backgroundColor: Color(0xfff29a94),
-        child: const Icon(Icons.add),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
