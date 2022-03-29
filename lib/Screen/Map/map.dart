@@ -162,7 +162,7 @@ class MapState extends State<Map> {
               context, MaterialPageRoute(builder: (context) => AppLocation()));
         },
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniStartFloat,
     );
   }
 
