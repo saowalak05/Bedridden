@@ -6,7 +6,9 @@ import 'package:bedridden/widgets/show_progess.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'dart:typed_data';
 
 class Choice {
   final String? title;
@@ -39,7 +41,6 @@ class MapState extends State<Map> {
 
   List<SickModel> sickmodels = [];
   List<LocationModel> locationModel = [];
-  String? urlImageSick;
 
   Future<Null> readAlldata() async {
     setState(() {
@@ -47,10 +48,10 @@ class MapState extends State<Map> {
         sickmodels.clear();
       }
     });
-    BitmapDescriptor markerbitmap = await BitmapDescriptor.fromAssetImage(
-      ImageConfiguration(),
-      '$urlImageSick',
-    );
+    String imgurl = "https://www.fluttercampus.com/img/car.png";
+    Uint8List bytes = (await NetworkAssetBundle(Uri.parse(imgurl)).load(imgurl))
+        .buffer
+        .asUint8List();
 
     await Firebase.initializeApp().then((value) async {
       FirebaseFirestore.instance.collection('sick').snapshots().listen((event) {
@@ -65,22 +66,24 @@ class MapState extends State<Map> {
             for (var i = 0; i < sickmodels.length; i++) {
               setState(() {
                 markers.add(Marker(
-                  //add start location marker
                   markerId: MarkerId(sickmodels[i].name),
                   position: LatLng(sickmodels[i].lat, sickmodels[i].lng),
+                  icon: BitmapDescriptor.defaultMarkerWithHue(
+                      sickmodels[i].level == '1'
+                          ? BitmapDescriptor.hueYellow
+                          : sickmodels[i].level == '2'
+                              ? BitmapDescriptor.hueOrange
+                              : BitmapDescriptor.hueRed),
                   infoWindow: InfoWindow(
-                    //popup info
-                    title: 'ชือ ${sickmodels[i].name}',
-                    snippet: 'ระดับ ${sickmodels[i].level}',
-                  ),
-
-                  icon: markerbitmap, //Icon for Marker
+                      title: 'ชือ ${sickmodels[i].name}',
+                      snippet: 'ระดับ ${sickmodels[i].level}'),
                 ));
               });
             }
           }
         }
       });
+
       FirebaseFirestore.instance
           .collection('location')
           .snapshots()
@@ -95,25 +98,35 @@ class MapState extends State<Map> {
           if (event.docs.isNotEmpty) {
             for (var i = 0; i < locationModel.length; i++) {
               setState(() {
+                // markers.add(Marker(
+                //   markerId: MarkerId(locationModel[i].location),
+                //   position: LatLng(locationModel[i].lat, locationModel[i].lng),
+                //   icon: BitmapDescriptor.defaultMarkerWithHue(
+                //       locationModel[i].location == 'โรงเรียน'
+                //           ? BitmapDescriptor.hueGreen
+                //           : locationModel[i].location == 'ร้านค้าใกล้บ้าน'
+                //               ? BitmapDescriptor.hueAzure
+                //               : locationModel[i].location == 'สถานณีอนามัย'
+                //                   ? BitmapDescriptor.hueBlue
+                //                   : locationModel[i].location ==
+                //                           'องค์การบริหารส่วนตำบล'
+                //                       ? BitmapDescriptor.hueViolet
+                //                       : locationModel[i].location == 'โรงพยาบาล'
+                //                           ? BitmapDescriptor.hueRose
+                //                           : BitmapDescriptor.hueCyan),
+                //   infoWindow: InfoWindow(
+                //     title: 'สถานที่ ${locationModel[i].location}',
+                //   ),
+                // ));
                 markers.add(Marker(
+                  //add start location marker
                   markerId: MarkerId(locationModel[i].location),
                   position: LatLng(locationModel[i].lat, locationModel[i].lng),
-                  icon: BitmapDescriptor.defaultMarkerWithHue(
-                      locationModel[i].location == 'โรงเรียน'
-                          ? BitmapDescriptor.hueGreen
-                          : locationModel[i].location == 'ร้านค้าใกล้บ้าน'
-                              ? BitmapDescriptor.hueAzure
-                              : locationModel[i].location == 'สถานณีอนามัย'
-                                  ? BitmapDescriptor.hueBlue
-                                  : locationModel[i].location ==
-                                          'องค์การบริหารส่วนตำบล'
-                                      ? BitmapDescriptor.hueViolet
-                                      : locationModel[i].location == 'โรงพยาบาล'
-                                          ? BitmapDescriptor.hueRose
-                                          : BitmapDescriptor.hueCyan),
-                  infoWindow: InfoWindow(
-                    title: 'สถานที่ ${locationModel[i].location}',
-                  ),
+                  infoWindow: InfoWindow(//popup info
+                      // title: 'Car Point ',
+                      // snippet: 'Car Marker',
+                      ),
+                  icon: BitmapDescriptor.fromBytes(bytes), //Icon for Marker
                 ));
               });
             }
