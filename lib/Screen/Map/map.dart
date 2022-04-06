@@ -49,17 +49,11 @@ class MapState extends State<Map> {
       }
     });
 
-    String imgurlhospital =
-        "https://cdn-icons-png.flaticon.com/512/3448/3448513.png";
+    String imgurlhospital = "https://i.ibb.co/xSDYMnr/hospital-1.png";
     Uint8List hospital = (await NetworkAssetBundle(Uri.parse(imgurlhospital))
             .load(imgurlhospital))
         .buffer
         .asUint8List();
-
-    BitmapDescriptor markerbitmap = await BitmapDescriptor.fromAssetImage(
-      ImageConfiguration(),
-      "/assets/images/hospital (1).png",
-    );
 
     await Firebase.initializeApp().then((value) async {
       FirebaseFirestore.instance.collection('sick').snapshots().listen((event) {
@@ -134,7 +128,7 @@ class MapState extends State<Map> {
                       // title: 'Car Point ',
                       // snippet: 'Car Marker',
                       ),
-                  icon: markerbitmap,
+                  icon: BitmapDescriptor.fromBytes(hospital),
                   //Icon for Marker
                 ));
               });
