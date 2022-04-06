@@ -48,8 +48,11 @@ class MapState extends State<Map> {
         sickmodels.clear();
       }
     });
-    String imgurl = "https://www.fluttercampus.com/img/car.png";
-    Uint8List bytes = (await NetworkAssetBundle(Uri.parse(imgurl)).load(imgurl))
+
+    String imgurlhospital =
+        "https://cdn-icons-png.flaticon.com/512/3448/3448513.png";
+    Uint8List hospital = (await NetworkAssetBundle(Uri.parse(imgurlhospital))
+            .load(imgurlhospital))
         .buffer
         .asUint8List();
 
@@ -126,7 +129,7 @@ class MapState extends State<Map> {
                       // title: 'Car Point ',
                       // snippet: 'Car Marker',
                       ),
-                  icon: BitmapDescriptor.fromBytes(bytes), //Icon for Marker
+                  icon: BitmapDescriptor.fromBytes(hospital), //Icon for Marker
                 ));
               });
             }
