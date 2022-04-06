@@ -39,6 +39,7 @@ class MapState extends State<Map> {
 
   List<SickModel> sickmodels = [];
   List<LocationModel> locationModel = [];
+  String? urlImageSick;
 
   Future<Null> readAlldata() async {
     setState(() {
@@ -46,6 +47,11 @@ class MapState extends State<Map> {
         sickmodels.clear();
       }
     });
+    BitmapDescriptor markerbitmap = await BitmapDescriptor.fromAssetImage(
+      ImageConfiguration(),
+      '$urlImageSick',
+    );
+
     await Firebase.initializeApp().then((value) async {
       FirebaseFirestore.instance.collection('sick').snapshots().listen((event) {
         for (var item in event.docs) {
@@ -59,17 +65,16 @@ class MapState extends State<Map> {
             for (var i = 0; i < sickmodels.length; i++) {
               setState(() {
                 markers.add(Marker(
+                  //add start location marker
                   markerId: MarkerId(sickmodels[i].name),
                   position: LatLng(sickmodels[i].lat, sickmodels[i].lng),
-                  icon: BitmapDescriptor.defaultMarkerWithHue(
-                      sickmodels[i].level == '1'
-                          ? BitmapDescriptor.hueYellow
-                          : sickmodels[i].level == '2'
-                              ? BitmapDescriptor.hueOrange
-                              : BitmapDescriptor.hueRed),
                   infoWindow: InfoWindow(
-                      title: 'ชือ ${sickmodels[i].name}',
-                      snippet: 'ระดับ ${sickmodels[i].level}'),
+                    //popup info
+                    title: 'ชือ ${sickmodels[i].name}',
+                    snippet: 'ระดับ ${sickmodels[i].level}',
+                  ),
+
+                  icon: markerbitmap, //Icon for Marker
                 ));
               });
             }
