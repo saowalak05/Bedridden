@@ -49,8 +49,7 @@ class MapState extends State<Map> {
       }
     });
 
-    String imgurlhospital =
-        "https://cdn-icons-png.flaticon.com/512/3448/3448513.png";
+    String imgurlhospital = "/assets/images/hospital (1).png";
     Uint8List hospital = (await NetworkAssetBundle(Uri.parse(imgurlhospital))
             .load(imgurlhospital))
         .buffer
@@ -129,7 +128,8 @@ class MapState extends State<Map> {
                       // title: 'Car Point ',
                       // snippet: 'Car Marker',
                       ),
-                  icon: BitmapDescriptor.fromBytes(hospital), //Icon for Marker
+                  icon: BitmapDescriptor.fromBytes(hospital),
+                  //Icon for Marker
                 ));
               });
             }
