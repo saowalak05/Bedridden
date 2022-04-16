@@ -1,5 +1,6 @@
 import 'package:bedridden/Screen/my_service.dart';
-import 'package:bedridden/models/location_model.dart';
+import 'package:bedridden/models/location_model_SCH.dart';
+import 'package:bedridden/models/location_model_ST.dart';
 import 'package:bedridden/utility/dialog.dart';
 import 'package:bedridden/widgets/show_progess.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,15 +9,15 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class AppLocation extends StatefulWidget {
-  const AppLocation({Key? key}) : super(key: key);
+class AddSCH extends StatefulWidget {
+  const AddSCH({Key? key}) : super(key: key);
 
   @override
-  State<AppLocation> createState() => _AppLocationState();
+  State<AddSCH> createState() => _AddSCHState();
 }
 
-class _AppLocationState extends State<AppLocation> {
-  String? typelocationTEM;
+class _AddSCHState extends State<AddSCH> {
+  String? typelocationSCH;
 
   double? lat;
   double? lng;
@@ -77,14 +78,14 @@ class _AppLocationState extends State<AppLocation> {
 
   Future<Null> proccessUplodlocation() async {
     await Firebase.initializeApp().then((value) async {
-      LocationModel model = LocationModel(
-        locationTEM: typelocationTEM!,
+      LocationSCHModel model = LocationSCHModel(
+        locationSCH: typelocationSCH!,
         lat: lat!,
         lng: lng!,
       );
 
       await FirebaseFirestore.instance
-          .collection('locationTEM')
+          .collection('locationSCH')
           .doc()
           .set(model.toMap())
           .then((value) => Navigator.push(
@@ -176,7 +177,7 @@ class _AppLocationState extends State<AppLocation> {
         children: [
           MaterialButton(
             onPressed: () {
-              if (typelocationTEM == null) {
+              if (typelocationSCH == null) {
                 normalDialog(context, 'กรุณาเลือก สถานที่');
               } else {
                 proccessUplodlocation();
@@ -199,42 +200,45 @@ class _AppLocationState extends State<AppLocation> {
   }
 
   Column groupTypeeducation() {
-    return Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-      Container(
-        child: Row(
-          children: <Widget>[
-            Text(
-              'สถานที่สำคัญ :',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Container(
+          child: Row(
+            children: <Widget>[
+              Text(
+                'สถานที่สำคัญ :',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
+              )
+            ],
+          ),
+        ),
+        Row(
+          children: [
+            Container(
+              width: 160,
+              child: RadioListTile(
+                title: const Text(
+                  'โรงเรียน',
+                  style: TextStyle(fontSize: 12),
+                ),
+                value: 'โรงเรียน',
+                groupValue: typelocationSCH,
+                onChanged: (value) {
+                  setState(
+                    () {
+                      typelocationSCH = value as String?;
+                    },
+                  );
+                },
               ),
-            )
+            ),
           ],
         ),
-      ),
-      Row(
-        children: [
-          Container(
-            width: 160,
-            child: RadioListTile(
-              title: const Text(
-                'วัด',
-                style: TextStyle(fontSize: 12),
-              ),
-              value: 'วัด',
-              groupValue: typelocationTEM,
-              onChanged: (value) {
-                setState(
-                  () {
-                    typelocationTEM = value as String?;
-                  },
-                );
-              },
-            ),
-          ),
-        ],
-      )
-    ]);
+      ],
+    );
   }
 }

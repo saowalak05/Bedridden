@@ -1,23 +1,23 @@
 import 'dart:convert';
 
 class LocationModel {
-  final String location;
+  final String locationTEM; //วัด
   final double lat;
   final double lng;
 
   LocationModel({
-    required this.location,
+    required this.locationTEM,
     required this.lat,
     required this.lng,
   });
 
   LocationModel copyWith({
-    String? location,
+    String? locationTEM,
     double? lat,
     double? lng,
   }) {
     return LocationModel(
-      location: location ?? this.location,
+      locationTEM: locationTEM ?? this.locationTEM,
       lat: lat ?? this.lat,
       lng: lng ?? this.lng,
     );
@@ -25,7 +25,7 @@ class LocationModel {
 
   Map<String, dynamic> toMap() {
     return {
-      'location': location,
+      'locationTEM': locationTEM,
       'lat': lat,
       'lng': lng,
     };
@@ -33,7 +33,7 @@ class LocationModel {
 
   factory LocationModel.fromMap(Map<String, dynamic> map) {
     return LocationModel(
-      location: map['location'],
+      locationTEM: map['locationTEM'],
       lat: map['lat'] ?? 0.0,
       lng: map['lng'] ?? 0.0,
     );
@@ -46,7 +46,7 @@ class LocationModel {
 
   @override
   String toString() {
-    return 'LocationModel(location: $location, lat: $lng, lng: $lng)';
+    return 'LocationModel(locationTEM: $locationTEM, lat: $lng, lng: $lng)';
   }
 
   @override
@@ -54,13 +54,13 @@ class LocationModel {
     if (identical(this, other)) return true;
 
     return other is LocationModel &&
-        other.location == location &&
+        other.locationTEM == locationTEM &&
         other.lat == lat &&
         other.lng == lng;
   }
 
   @override
   int get hashCode {
-    return location.hashCode ^ lat.hashCode ^ lng.hashCode;
+    return locationTEM.hashCode ^ lat.hashCode ^ lng.hashCode;
   }
 }

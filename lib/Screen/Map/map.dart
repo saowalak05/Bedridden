@@ -1,6 +1,16 @@
 import 'dart:async';
+import 'package:bedridden/Screen/Map/addHEL.dart';
+import 'package:bedridden/Screen/Map/addHOT.dart';
+import 'package:bedridden/Screen/Map/addSAO.dart';
+import 'package:bedridden/Screen/Map/addSCH.dart';
+import 'package:bedridden/Screen/Map/addST.dart';
 import 'package:bedridden/Screen/Map/addlocation.dart';
 import 'package:bedridden/models/location_model.dart';
+import 'package:bedridden/models/location_model_HEL.dart';
+import 'package:bedridden/models/location_model_HOT.dart';
+import 'package:bedridden/models/location_model_SAO.dart';
+import 'package:bedridden/models/location_model_SCH.dart';
+import 'package:bedridden/models/location_model_ST.dart';
 import 'package:bedridden/models/sick_model.dart';
 import 'package:bedridden/widgets/show_progess.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -9,6 +19,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:typed_data';
+import 'dart:ui' as ui;
+
+import 'package:simple_speed_dial/simple_speed_dial.dart';
+
+Future<Uint8List> getBytesFromAsset(String path, int width) async {
+  ByteData data = await rootBundle.load(path);
+  ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
+      targetWidth: width);
+  ui.FrameInfo fi = await codec.getNextFrame();
+  return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
+      .buffer
+      .asUint8List();
+}
 
 class Choice {
   final String? title;
@@ -30,17 +53,22 @@ const List<Choice> choices = const <Choice>[
   const Choice(title: 'วัด', icon: Icons.circle, color: Colors.cyanAccent),
 ];
 
-class Map extends StatefulWidget {
+class Mappage extends StatefulWidget {
   @override
-  MapState createState() => MapState();
+  MappageState createState() => MappageState();
 }
 
-class MapState extends State<Map> {
+class MappageState extends State<Mappage> {
   Completer<GoogleMapController> _controller = Completer();
   final Set<Marker> markers = new Set(); //markers for google map
 
   List<SickModel> sickmodels = [];
   List<LocationModel> locationModel = [];
+  List<LocationHELModel> locationHELModel = [];
+  List<LocationSCHModel> locationSCHModel = [];
+  List<LocationSAOModel> locationSAOModel = [];
+  List<LocationHOTModel> locationHOTModel = [];
+  List<LocationSTModel> locationSTModel = [];
 
   Future<Null> readAlldata() async {
     setState(() {
@@ -49,11 +77,18 @@ class MapState extends State<Map> {
       }
     });
 
-    String imgurlhospital = "https://i.ibb.co/xSDYMnr/hospital-1.png";
-    Uint8List hospital = (await NetworkAssetBundle(Uri.parse(imgurlhospital))
-            .load(imgurlhospital))
-        .buffer
-        .asUint8List();
+    final Uint8List imgurltemple =
+        await getBytesFromAsset('assets/images/temple.png', 80);
+    final Uint8List imgurlsupermarket =
+        await getBytesFromAsset('assets/images/supermarket.png', 80);
+    final Uint8List imgurlschool =
+        await getBytesFromAsset('assets/images/school.png', 80);
+    final Uint8List imgurlhospital =
+        await getBytesFromAsset('assets/images/hospital.png', 80);
+    final Uint8List imgurlOrganization =
+        await getBytesFromAsset('assets/images/Organization.png', 80);
+    final Uint8List imgurlsanitation =
+        await getBytesFromAsset('assets/images/sanitation.png', 80);
 
     await Firebase.initializeApp().then((value) async {
       FirebaseFirestore.instance.collection('sick').snapshots().listen((event) {
@@ -100,35 +135,181 @@ class MapState extends State<Map> {
           if (event.docs.isNotEmpty) {
             for (var i = 0; i < locationModel.length; i++) {
               setState(() {
-                // markers.add(Marker(
-                //   markerId: MarkerId(locationModel[i].location),
-                //   position: LatLng(locationModel[i].lat, locationModel[i].lng),
-                //   icon: BitmapDescriptor.defaultMarkerWithHue(
-                //       locationModel[i].location == 'โรงเรียน'
-                //           ? BitmapDescriptor.hueGreen
-                //           : locationModel[i].location == 'ร้านค้าใกล้บ้าน'
-                //               ? BitmapDescriptor.hueAzure
-                //               : locationModel[i].location == 'สถานณีอนามัย'
-                //                   ? BitmapDescriptor.hueBlue
-                //                   : locationModel[i].location ==
-                //                           'องค์การบริหารส่วนตำบล'
-                //                       ? BitmapDescriptor.hueViolet
-                //                       : locationModel[i].location == 'โรงพยาบาล'
-                //                           ? BitmapDescriptor.hueRose
-                //                           : BitmapDescriptor.hueCyan),
-                //   infoWindow: InfoWindow(
-                //     title: 'สถานที่ ${locationModel[i].location}',
-                //   ),
-                // ));
                 markers.add(Marker(
                   //add start location marker
-                  markerId: MarkerId(locationModel[i].location),
+                  markerId: MarkerId(locationModel[i].locationTEM),
                   position: LatLng(locationModel[i].lat, locationModel[i].lng),
-                  infoWindow: InfoWindow(//popup info
-                      // title: 'Car Point ',
-                      // snippet: 'Car Marker',
-                      ),
-                  icon: BitmapDescriptor.fromBytes(hospital),
+                  infoWindow: InfoWindow(
+                    //popup info
+                    title: locationModel[i].locationTEM,
+                    // snippet: 'Car Marker',
+                  ),
+                  icon: BitmapDescriptor.fromBytes(imgurltemple),
+                  //Icon for Marker
+                ));
+              });
+            }
+          }
+        }
+      });
+
+      FirebaseFirestore.instance
+          .collection('locationST')
+          .snapshots()
+          .listen((event) {
+        for (var item in event.docs) {
+          LocationSTModel model = LocationSTModel.fromMap(item.data());
+          print('locationSTModel ====>>>${locationSTModel.length}');
+          setState(() {
+            locationSTModel.add(model);
+            print('locationSTModel ==${locationSTModel.length}');
+          });
+          if (event.docs.isNotEmpty) {
+            for (var i = 0; i < locationSTModel.length; i++) {
+              setState(() {
+                markers.add(Marker(
+                  //add start location marker
+                  markerId: MarkerId(locationSTModel[i].locationST),
+                  position:
+                      LatLng(locationSTModel[i].lat, locationSTModel[i].lng),
+                  infoWindow: InfoWindow(
+                    //popup info
+                    title: locationSTModel[i].locationST,
+                    // snippet: 'Car Marker',
+                  ),
+                  icon: BitmapDescriptor.fromBytes(imgurlsupermarket),
+                  //Icon for Marker
+                ));
+              });
+            }
+          }
+        }
+      });
+
+      FirebaseFirestore.instance
+          .collection('locationSCH')
+          .snapshots()
+          .listen((event) {
+        for (var item in event.docs) {
+          LocationSCHModel model = LocationSCHModel.fromMap(item.data());
+          print('locationSCHModel ====>>>${locationSCHModel.length}');
+          setState(() {
+            locationSCHModel.add(model);
+            print('locationSCHModel ==${locationSCHModel.length}');
+          });
+          if (event.docs.isNotEmpty) {
+            for (var i = 0; i < locationSCHModel.length; i++) {
+              setState(() {
+                markers.add(Marker(
+                  //add start location marker
+                  markerId: MarkerId(locationSCHModel[i].locationSCH),
+                  position:
+                      LatLng(locationSCHModel[i].lat, locationSCHModel[i].lng),
+                  infoWindow: InfoWindow(
+                    //popup info
+                    title: locationSCHModel[i].locationSCH,
+                    // snippet: 'Car Marker',
+                  ),
+                  icon: BitmapDescriptor.fromBytes(imgurlschool),
+                  //Icon for Marker
+                ));
+              });
+            }
+          }
+        }
+      });
+
+      FirebaseFirestore.instance
+          .collection('locationSAO')
+          .snapshots()
+          .listen((event) {
+        for (var item in event.docs) {
+          LocationSAOModel model = LocationSAOModel.fromMap(item.data());
+          print('locationSAOModel ====>>>${locationSAOModel.length}');
+          setState(() {
+            locationSAOModel.add(model);
+            print('locationSAOModel ==${locationSAOModel.length}');
+          });
+          if (event.docs.isNotEmpty) {
+            for (var i = 0; i < locationSAOModel.length; i++) {
+              setState(() {
+                markers.add(Marker(
+                  //add start location marker
+                  markerId: MarkerId(locationSAOModel[i].locationSAO),
+                  position:
+                      LatLng(locationSAOModel[i].lat, locationSAOModel[i].lng),
+                  infoWindow: InfoWindow(
+                    //popup info
+                    title: locationSAOModel[i].locationSAO,
+                    // snippet: 'Car Marker',
+                  ),
+                  icon: BitmapDescriptor.fromBytes(imgurlOrganization),
+                  //Icon for Marker
+                ));
+              });
+            }
+          }
+        }
+      });
+
+      FirebaseFirestore.instance
+          .collection('locationHEL')
+          .snapshots()
+          .listen((event) {
+        for (var item in event.docs) {
+          LocationHELModel model = LocationHELModel.fromMap(item.data());
+          print('locationHELModel ====>>>${locationHELModel.length}');
+          setState(() {
+            locationHELModel.add(model);
+            print('locationHELModel ==${locationHELModel.length}');
+          });
+          if (event.docs.isNotEmpty) {
+            for (var i = 0; i < locationHELModel.length; i++) {
+              setState(() {
+                markers.add(Marker(
+                  //add start location marker
+                  markerId: MarkerId(locationHELModel[i].locationHEL),
+                  position:
+                      LatLng(locationHELModel[i].lat, locationHELModel[i].lng),
+                  infoWindow: InfoWindow(
+                    //popup info
+                    title: locationHELModel[i].locationHEL,
+                    // snippet: 'Car Marker',
+                  ),
+                  icon: BitmapDescriptor.fromBytes(imgurlsanitation),
+                  //Icon for Marker
+                ));
+              });
+            }
+          }
+        }
+      });
+
+      FirebaseFirestore.instance
+          .collection('locationHOT')
+          .snapshots()
+          .listen((event) {
+        for (var item in event.docs) {
+          LocationHOTModel model = LocationHOTModel.fromMap(item.data());
+          print('locationHOTModel ====>>>${locationHOTModel.length}');
+          setState(() {
+            locationHOTModel.add(model);
+            print('locationHELModel ==${locationHOTModel.length}');
+          });
+          if (event.docs.isNotEmpty) {
+            for (var i = 0; i < locationHOTModel.length; i++) {
+              setState(() {
+                markers.add(Marker(
+                  //add start location marker
+                  markerId: MarkerId(locationHOTModel[i].locationHOT),
+                  position:
+                      LatLng(locationHOTModel[i].lat, locationHOTModel[i].lng),
+                  infoWindow: InfoWindow(
+                    //popup info
+                    title: locationHOTModel[i].locationHOT,
+                    // snippet: 'Car Marker',
+                  ),
+                  icon: BitmapDescriptor.fromBytes(imgurlhospital),
                   //Icon for Marker
                 ));
               });
@@ -171,19 +352,113 @@ class MapState extends State<Map> {
       body: Stack(
         children: <Widget>[
           _buildGoogleMap(context),
+          Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Align(
+              alignment: Alignment.topRight,
+              child: SpeedDial(
+                child: const Icon(Icons.add),
+                speedDialChildren: <SpeedDialChild>[
+                  SpeedDialChild(
+                    child: const Icon(Icons.edit),
+                    foregroundColor: Colors.white,
+                    backgroundColor: Color.fromARGB(255, 231, 172, 11),
+                    label: 'โรงเรียน',
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AddSCH(),
+                          ));
+                    },
+                  ),
+                  SpeedDialChild(
+                    child: const Icon(Icons.edit),
+                    foregroundColor: Colors.white,
+                    backgroundColor: Color.fromARGB(255, 231, 172, 11),
+                    label: 'ร้านค้าใกล้บ้าน',
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AddST(),
+                          ));
+                    },
+                  ),
+                  SpeedDialChild(
+                    child: const Icon(Icons.edit),
+                    foregroundColor: Colors.white,
+                    backgroundColor: Color.fromARGB(255, 231, 172, 11),
+                    label: 'สถานีอนามัย',
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AddHEL(),
+                          ));
+                    },
+                  ),
+                  SpeedDialChild(
+                    child: const Icon(Icons.edit),
+                    foregroundColor: Colors.white,
+                    backgroundColor: Color.fromARGB(255, 231, 172, 11),
+                    label: 'องค์การบริหารส่วนตำบล',
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AddSAO(),
+                          ));
+                    },
+                  ),
+                  SpeedDialChild(
+                    child: const Icon(Icons.edit),
+                    foregroundColor: Colors.white,
+                    backgroundColor: Color.fromARGB(255, 231, 172, 11),
+                    label: 'โรงพยาบาล',
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AddHOT(),
+                          ));
+                    },
+                  ),
+                  SpeedDialChild(
+                    child: const Icon(Icons.edit),
+                    foregroundColor: Colors.white,
+                    backgroundColor: Color.fromARGB(255, 231, 172, 11),
+                    label: 'วัด',
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AppLocation(),
+                          ));
+                    },
+                  ),
+                ],
+                // closedForegroundColor: const Color(0xffdfad98),
+                // openForegroundColor: const Color(0xffdfad98),
+                closedBackgroundColor: const Color(0xfff29a94),
+                openBackgroundColor: Color.fromARGB(255, 255, 143, 95),
+              ),
+            ),
+          )
         ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        elevation: 4.0,
-        icon: const Icon(Icons.home),
-        label: const Text('บันทึกสถานที่สำคัญ'),
-        backgroundColor: Color(0xfff29a94),
-        onPressed: () {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => AppLocation()));
-        },
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.miniStartFloat,
+
+      // floatingActionButton: FloatingActionButton.extended(
+      //   elevation: 4.0,
+      //   icon: const Icon(Icons.home),
+      //   label: const Text('บันทึกสถานที่สำคัญ'),
+      //   backgroundColor: Color(0xfff29a94),
+      //   onPressed: () {
+      //     Navigator.push(
+      //         context, MaterialPageRoute(builder: (context) => AppLocation()));
+      //   },
+      // ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.miniEndDocked,
     );
   }
 
