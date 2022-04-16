@@ -42,10 +42,8 @@ class Choice {
 
 const List<Choice> choices = const <Choice>[
   const Choice(title: 'ระดับที่1', icon: Icons.circle, color: Colors.yellow),
-  const Choice(
-      title: 'ระดับที่2', icon: Icons.circle, color: Colors.orange),
+  const Choice(title: 'ระดับที่2', icon: Icons.circle, color: Colors.orange),
   const Choice(title: 'ระดับที่3', icon: Icons.circle, color: Colors.red),
-  
 ];
 
 class Mappage extends StatefulWidget {
