@@ -21,6 +21,7 @@ class SickModel {
   final String religion;
   final double lat;
   final double lng;
+  final String phase;
 
   SickModel({
     required this.address,
@@ -41,6 +42,7 @@ class SickModel {
     required this.religion,
     required this.lat,
     required this.lng,
+    required this.phase,
   });
 
   SickModel copyWith({
@@ -62,6 +64,7 @@ class SickModel {
     String? religion,
     double? lat,
     double? lng,
+    String? phase,
   }) {
     return SickModel(
       address: address ?? this.address,
@@ -82,6 +85,7 @@ class SickModel {
       religion: religion ?? this.religion,
       lat: lat ?? this.lat,
       lng: lng ?? this.lng,
+      phase: phase ?? this.phase,
     );
   }
 
@@ -105,6 +109,7 @@ class SickModel {
       'religion': religion,
       'lat': lat,
       'lng': lng,
+      'phase': phase,
     };
   }
 
@@ -128,6 +133,7 @@ class SickModel {
       religion: map['religion'] ?? '',
       lat: map['lat'] ?? 0.0,
       lng: map['lng'] ?? 0.0,
+      phase: map['lng'] ?? 0.0,
     );
   }
 
@@ -138,7 +144,7 @@ class SickModel {
 
   @override
   String toString() {
-    return 'SickModel(address: $address, bond: $bond, idCard: $idCard, name: $name, phone: $phone, typeSex: $typeSex, typeStatus: $typeStatus, urlImage: $urlImage, level: $level, typeeducation_level: $typeeducationlevel, typeposition: $typeposition, patientoccupation: $patientoccupation, talent: $talent, race: $race, nationality: $nationality, religion: $religion, lat: $lng, lng: $lng)';
+    return 'SickModel(address: $address, bond: $bond, idCard: $idCard, name: $name, phone: $phone, typeSex: $typeSex, typeStatus: $typeStatus, urlImage: $urlImage, level: $level, typeeducation_level: $typeeducationlevel, typeposition: $typeposition, patientoccupation: $patientoccupation, talent: $talent, race: $race, nationality: $nationality, religion: $religion, lat: $lng, lng: $lng, phase: $phase)';
   }
 
   @override
@@ -163,7 +169,8 @@ class SickModel {
         other.nationality == nationality &&
         other.religion == religion &&
         other.lat == lat &&
-        other.lng == lng;
+        other.lng == lng &&
+        other.phase == phase;
   }
 
   @override
@@ -185,6 +192,7 @@ class SickModel {
         nationality.hashCode ^
         religion.hashCode ^
         lat.hashCode ^
-        lng.hashCode;
+        lng.hashCode ^
+        phase.hashCode;
   }
 }

@@ -23,6 +23,9 @@ import 'dart:ui' as ui;
 
 import 'package:simple_speed_dial/simple_speed_dial.dart';
 
+import '../Addbedridden/add.dart';
+import 'calculate.dart';
+
 Future<Uint8List> getBytesFromAsset(String path, int width) async {
   ByteData data = await rootBundle.load(path);
   ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
@@ -347,95 +350,113 @@ class MappageState extends State<Mappage> {
           _buildGoogleMap(context),
           Padding(
             padding: EdgeInsets.all(16.0),
-            child: Align(
-              alignment: Alignment.topRight,
-              child: SpeedDial(
-                child: const Icon(Icons.add),
-                speedDialChildren: <SpeedDialChild>[
-                  SpeedDialChild(
-                    child: const Icon(Icons.edit),
-                    foregroundColor: Colors.white,
-                    backgroundColor: Color.fromARGB(255, 231, 172, 11),
-                    label: 'โรงเรียน',
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => AddSCH(),
-                          ));
-                    },
+            child: Column(
+              children: [
+                Align(
+                  alignment: Alignment.topRight,
+                  child: SpeedDial(
+                    child: const Icon(Icons.add_location),
+                    speedDialChildren: <SpeedDialChild>[
+                      SpeedDialChild(
+                        child: const Icon(Icons.add_location),
+                        foregroundColor: Colors.white,
+                        backgroundColor: Color.fromARGB(255, 231, 172, 11),
+                        label: 'โรงเรียน',
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => AddSCH(),
+                              ));
+                        },
+                      ),
+                      SpeedDialChild(
+                        child: const Icon(Icons.add_location),
+                        foregroundColor: Colors.white,
+                        backgroundColor: Color.fromARGB(255, 231, 172, 11),
+                        label: 'ร้านค้าใกล้บ้าน',
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => AddST(),
+                              ));
+                        },
+                      ),
+                      SpeedDialChild(
+                        child: const Icon(Icons.add_location),
+                        foregroundColor: Colors.white,
+                        backgroundColor: Color.fromARGB(255, 231, 172, 11),
+                        label: 'สถานีอนามัย',
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => AddHEL(),
+                              ));
+                        },
+                      ),
+                      SpeedDialChild(
+                        child: const Icon(Icons.add_location),
+                        foregroundColor: Colors.white,
+                        backgroundColor: Color.fromARGB(255, 231, 172, 11),
+                        label: 'องค์การบริหารส่วนตำบล',
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => AddSAO(),
+                              ));
+                        },
+                      ),
+                      SpeedDialChild(
+                        child: const Icon(Icons.add_location),
+                        foregroundColor: Colors.white,
+                        backgroundColor: Color.fromARGB(255, 231, 172, 11),
+                        label: 'โรงพยาบาล',
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => AddHOT(),
+                              ));
+                        },
+                      ),
+                      SpeedDialChild(
+                        child: const Icon(Icons.add_location),
+                        foregroundColor: Colors.white,
+                        backgroundColor: Color.fromARGB(255, 231, 172, 11),
+                        label: 'วัด',
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => AppLocation(),
+                              ));
+                        },
+                      ),
+                    ],
+                    // closedForegroundColor: const Color(0xffdfad98),
+                    // openForegroundColor: const Color(0xffdfad98),
+                    closedBackgroundColor: const Color(0xfff29a94),
+                    openBackgroundColor: Color.fromARGB(255, 255, 143, 95),
                   ),
-                  SpeedDialChild(
-                    child: const Icon(Icons.edit),
-                    foregroundColor: Colors.white,
-                    backgroundColor: Color.fromARGB(255, 231, 172, 11),
-                    label: 'ร้านค้าใกล้บ้าน',
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  alignment: Alignment.topRight,
+                  child: FloatingActionButton(
                     onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => AddST(),
-                          ));
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => CalculatePage()));
                     },
+                    backgroundColor: Color(0xfff29a94),
+                    child: const Icon(Icons.calculate),
                   ),
-                  SpeedDialChild(
-                    child: const Icon(Icons.edit),
-                    foregroundColor: Colors.white,
-                    backgroundColor: Color.fromARGB(255, 231, 172, 11),
-                    label: 'สถานีอนามัย',
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => AddHEL(),
-                          ));
-                    },
-                  ),
-                  SpeedDialChild(
-                    child: const Icon(Icons.edit),
-                    foregroundColor: Colors.white,
-                    backgroundColor: Color.fromARGB(255, 231, 172, 11),
-                    label: 'องค์การบริหารส่วนตำบล',
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => AddSAO(),
-                          ));
-                    },
-                  ),
-                  SpeedDialChild(
-                    child: const Icon(Icons.edit),
-                    foregroundColor: Colors.white,
-                    backgroundColor: Color.fromARGB(255, 231, 172, 11),
-                    label: 'โรงพยาบาล',
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => AddHOT(),
-                          ));
-                    },
-                  ),
-                  SpeedDialChild(
-                    child: const Icon(Icons.edit),
-                    foregroundColor: Colors.white,
-                    backgroundColor: Color.fromARGB(255, 231, 172, 11),
-                    label: 'วัด',
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => AppLocation(),
-                          ));
-                    },
-                  ),
-                ],
-                // closedForegroundColor: const Color(0xffdfad98),
-                // openForegroundColor: const Color(0xffdfad98),
-                closedBackgroundColor: const Color(0xfff29a94),
-                openBackgroundColor: Color.fromARGB(255, 255, 143, 95),
-              ),
+                ),
+              ],
             ),
           )
         ],
