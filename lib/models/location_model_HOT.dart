@@ -33,9 +33,9 @@ class LocationHOTModel {
 
   factory LocationHOTModel.fromMap(Map<String, dynamic> map) {
     return LocationHOTModel(
-      locationHOT: map['locationHOT'],
-      lat: map['lat'] ?? 0.0,
-      lng: map['lng'] ?? 0.0,
+      locationHOT: map['locationHOT'] ?? '',
+      lat: map['lat'].toDouble() ?? 0.0,
+      lng: map['lng'].toDouble() ?? 0.0,
     );
   }
 

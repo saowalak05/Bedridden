@@ -33,9 +33,9 @@ class LocationSTModel {
 
   factory LocationSTModel.fromMap(Map<String, dynamic> map) {
     return LocationSTModel(
-      locationST: map['locationST'],
-      lat: map['lat'] ?? 0.0,
-      lng: map['lng'] ?? 0.0,
+      locationST: map['locationST'] ?? '' ,
+      lat: map['lat'].toDouble() ?? 0.0,
+      lng: map['lng'].toDouble() ?? 0.0,
     );
   }
 

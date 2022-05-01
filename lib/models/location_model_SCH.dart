@@ -33,9 +33,9 @@ class LocationSCHModel {
 
   factory LocationSCHModel.fromMap(Map<String, dynamic> map) {
     return LocationSCHModel(
-      locationSCH: map['locationSCH'],
-      lat: map['lat'] ?? 0.0,
-      lng: map['lng'] ?? 0.0,
+      locationSCH: map['locationSCH'] ?? '' ,
+      lat: map['lat'].toDouble() ?? 0.0,
+      lng: map['lng'].toDouble() ?? 0.0,
     );
   }
 

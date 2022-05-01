@@ -14,6 +14,8 @@ class CalculatePage extends StatefulWidget {
 }
 
 class _CalculatePageState extends State<CalculatePage> {
+  double currentLat = 0.0;
+  double currentLng = 0.0;
   double? lat1, lng1, lat2, lng2, distance;
   String? distanceString;
 
@@ -21,27 +23,26 @@ class _CalculatePageState extends State<CalculatePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    readAllSick();
     findLat1Lng1();
-
-    print(sickmodels.length);
   }
 
   Future<Null> readAllSick() async {
     Future.delayed(Duration(microseconds: 30));
     await Firebase.initializeApp().then((value) async {
       FirebaseFirestore.instance.collection('sick').snapshots().listen((event) {
-        for (var item = 0; item < sickmodels.length; i++ in event.docs) {
+        for (var item in event.docs) {
           SickModel model = SickModel.fromMap(item.data());
           print('## name ==> ${model.name}');
           print('## idCard ==> ${model.idCard}');
-           lat2 = double.parse(sickmodels[item].lat.toString());
-          lng2 = double.parse(sickmodels[item].lng.toString());
-          distance = calculateDistance(lat1!, lng1!, lat2!, lng2!);
-          var myFormat = NumberFormat('#0.0#', 'en_US');
-          distanceString = myFormat.format(distance);
+          var latdistance = model.lat;
+          var lngdistance = model.lng;
+          model.ditance = calculateDistance(
+            currentLat,
+            currentLng,
+            latdistance,
+            lngdistance,
+          );
           print('lat1 =$lat1, lng1 = $lng1, lat2 =$lat2, lng2 = $lng2');
           print('distance = $distance');
           setState(() {
@@ -49,24 +50,27 @@ class _CalculatePageState extends State<CalculatePage> {
               sickmodels.add(model);
             }
           });
-          SickModel model = SickModel(
-           phase: distanceString!,
-          );
-           FirebaseFirestore.instance
-              .collection('sick')
-              .doc()
-              .set(model.toMap()).then((value) => null);
         }
+        sortDataSickModel();
       });
     });
-   
+  }
+
+  sortDataSickModel() {
+    sickmodels.sort((a, b) {
+      var distanceA = a.ditance ?? 0.0;
+      var distanceB = b.ditance ?? 0.0;
+      return distanceA.compareTo(distanceB);
+    });
   }
 
   Future<Null> findLat1Lng1() async {
-    LocationData? locationData = await findLocationData();
-    setState(() {
-      lat1 = locationData!.latitude;
-      lng1 = locationData.longitude;
+    findLocationData().then((value) {
+      setState(() {
+        currentLat = value?.latitude ?? 0.0;
+        currentLng = value?.longitude ?? 0.0;
+        readAllSick();
+      });
     });
   }
 
@@ -111,109 +115,104 @@ class _CalculatePageState extends State<CalculatePage> {
             borderRadius:
                 BorderRadius.vertical(bottom: Radius.elliptical(30.0, 30.0))),
       ),
-      body: sickmodels.length == 0
-          ? Container(
-              child: Text('ไม่พบข้อมูล',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-            )
-          : ListView.builder(
-              shrinkWrap: true,
-              physics: ScrollPhysics(),
-              itemCount: sickmodels.length,
-              itemBuilder: (context, index) {
-                // sickmodels.sort((a, b) => a.distance.compareTo(b.distance));
-                return Expanded(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(25),
-                      color: Colors.white,
-                    ),
-                    width: double.infinity,
-                    margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Container(
-                          width: 50,
-                          height: 50,
-                          margin: EdgeInsets.only(right: 15),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(50),
-                            border: Border.all(width: 3, color: Colors.grey),
-                            image: DecorationImage(
-                                image: NetworkImage(sickmodels[index].urlImage),
-                                fit: BoxFit.fill),
-                          ),
-                        ),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                sickmodels[index].name,
-                                style: TextStyle(
-                                    color: const Color(0xffdfad98),
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18),
-                              ),
-                              SizedBox(
-                                height: 6,
-                              ),
-                              Row(
-                                children: <Widget>[
-                                  Icon(
-                                    Icons.location_on,
-                                    color: const Color(0xffdfad98),
-                                    size: 20,
-                                  ),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  Text(sickmodels[index].address,
-                                      style: TextStyle(
-                                          color: const Color(0xffdfad98),
-                                          fontSize: 13,
-                                          letterSpacing: .3)),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 6,
-                              ),
-                              Row(
-                                children: <Widget>[
-                                  Icon(
-                                    Icons.navigation,
-                                    color: const Color(0xffdfad98),
-                                    size: 20,
-                                  ),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  Text(
-                                      distance == null
-                                          ? ''
-                                          : '$distanceString กิโลเมตร',
-                                      style: TextStyle(
-                                          color: const Color(0xffdfad98),
-                                          fontSize: 13,
-                                          letterSpacing: .3)),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                            child: Text('ลำดับ $index',
-                                style: TextStyle(
-                                    color: const Color(0xffdfad98),
-                                    fontSize: 13,
-                                    letterSpacing: .3))),
-                      ],
-                    ),
+      body: ListView.builder(
+          shrinkWrap: true,
+          physics: ScrollPhysics(),
+          itemCount: sickmodels.length,
+          itemBuilder: (context, index) {
+            return buildListview(index);
+          }),
+    );
+  }
+
+  Expanded buildListview(int index) {
+    return Expanded(
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(25),
+          color: Colors.white,
+        ),
+        width: double.infinity,
+        margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Container(
+              width: 50,
+              height: 50,
+              margin: EdgeInsets.only(right: 15),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(50),
+                border: Border.all(width: 3, color: Colors.grey),
+                image: DecorationImage(
+                    image: NetworkImage(sickmodels[index].urlImage),
+                    fit: BoxFit.fill),
+              ),
+            ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    sickmodels[index].name,
+                    style: TextStyle(
+                        color: const Color(0xffdfad98),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18),
                   ),
-                );
-              }),
+                  SizedBox(
+                    height: 6,
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Icon(
+                        Icons.location_on,
+                        color: const Color(0xffdfad98),
+                        size: 20,
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Text(sickmodels[index].address,
+                          style: TextStyle(
+                              color: const Color(0xffdfad98),
+                              fontSize: 13,
+                              letterSpacing: .3)),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 6,
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Icon(
+                        Icons.navigation,
+                        color: const Color(0xffdfad98),
+                        size: 20,
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Text(sickmodels[index].ditance.toString(),
+                          style: TextStyle(
+                              color: const Color(0xffdfad98),
+                              fontSize: 13,
+                              letterSpacing: .3)),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            Container(
+                child: Text('ลำดับ $index',
+                    style: TextStyle(
+                        color: const Color(0xffdfad98),
+                        fontSize: 13,
+                        letterSpacing: .3))),
+          ],
+        ),
+      ),
     );
   }
 }

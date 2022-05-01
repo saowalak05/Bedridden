@@ -99,7 +99,7 @@ class MappageState extends State<Mappage> {
             for (var i = 0; i < sickmodels.length; i++) {
               setState(() {
                 markers.add(Marker(
-                  markerId: MarkerId(sickmodels[i].name),
+                  markerId: MarkerId(DateTime.now().toString()),
                   position: LatLng(sickmodels[i].lat, sickmodels[i].lng),
                   icon: BitmapDescriptor.defaultMarkerWithHue(
                       sickmodels[i].level == '1'
@@ -133,7 +133,7 @@ class MappageState extends State<Mappage> {
               setState(() {
                 markers.add(Marker(
                   //add start location marker
-                  markerId: MarkerId(locationModel[i].locationTEM),
+                  markerId: MarkerId(DateTime.now().toString()),
                   position: LatLng(locationModel[i].lat, locationModel[i].lng),
                   infoWindow: InfoWindow(
                     //popup info
@@ -165,7 +165,7 @@ class MappageState extends State<Mappage> {
               setState(() {
                 markers.add(Marker(
                   //add start location marker
-                  markerId: MarkerId(locationSTModel[i].locationST),
+                  markerId: MarkerId(DateTime.now().toString()),
                   position:
                       LatLng(locationSTModel[i].lat, locationSTModel[i].lng),
                   infoWindow: InfoWindow(
@@ -194,11 +194,12 @@ class MappageState extends State<Mappage> {
             print('locationSCHModel ==${locationSCHModel.length}');
           });
           if (event.docs.isNotEmpty) {
+            print("askdjalksjdalksjdalksjdlaksjdlkasd");
             for (var i = 0; i < locationSCHModel.length; i++) {
               setState(() {
                 markers.add(Marker(
                   //add start location marker
-                  markerId: MarkerId(locationSCHModel[i].locationSCH),
+                  markerId: MarkerId(DateTime.now().toString()),
                   position:
                       LatLng(locationSCHModel[i].lat, locationSCHModel[i].lng),
                   infoWindow: InfoWindow(
@@ -231,7 +232,7 @@ class MappageState extends State<Mappage> {
               setState(() {
                 markers.add(Marker(
                   //add start location marker
-                  markerId: MarkerId(locationSAOModel[i].locationSAO),
+                  markerId: MarkerId(DateTime.now().toString()),
                   position:
                       LatLng(locationSAOModel[i].lat, locationSAOModel[i].lng),
                   infoWindow: InfoWindow(
@@ -264,7 +265,7 @@ class MappageState extends State<Mappage> {
               setState(() {
                 markers.add(Marker(
                   //add start location marker
-                  markerId: MarkerId(locationHELModel[i].locationHEL),
+                  markerId: MarkerId(DateTime.now().toString()),
                   position:
                       LatLng(locationHELModel[i].lat, locationHELModel[i].lng),
                   infoWindow: InfoWindow(
@@ -297,7 +298,7 @@ class MappageState extends State<Mappage> {
               setState(() {
                 markers.add(Marker(
                   //add start location marker
-                  markerId: MarkerId(locationHOTModel[i].locationHOT),
+                  markerId: MarkerId(DateTime.now().toString()),
                   position:
                       LatLng(locationHOTModel[i].lat, locationHOTModel[i].lng),
                   infoWindow: InfoWindow(
@@ -449,8 +450,10 @@ class MappageState extends State<Mappage> {
                   alignment: Alignment.topRight,
                   child: FloatingActionButton(
                     onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => CalculatePage()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => CalculatePage()));
                     },
                     backgroundColor: Color(0xfff29a94),
                     child: const Icon(Icons.calculate),

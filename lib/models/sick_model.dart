@@ -21,7 +21,7 @@ class SickModel {
   final String religion;
   final double lat;
   final double lng;
-  final String phase;
+  double? ditance;
 
   SickModel({
     required this.address,
@@ -42,30 +42,30 @@ class SickModel {
     required this.religion,
     required this.lat,
     required this.lng,
-    required this.phase,
+    this.ditance,
   });
 
-  SickModel copyWith({
-    String? address,
-    Timestamp? bond,
-    String? idCard,
-    String? name,
-    String? phone,
-    String? typeSex,
-    String? typeStatus,
-    String? urlImage,
-    String? level,
-    String? typeeducationlevel,
-    String? typeposition,
-    String? patientoccupation,
-    String? talent,
-    String? race,
-    String? nationality,
-    String? religion,
-    double? lat,
-    double? lng,
-    String? phase,
-  }) {
+  SickModel copyWith(
+      {String? address,
+      Timestamp? bond,
+      String? idCard,
+      String? name,
+      String? phone,
+      String? typeSex,
+      String? typeStatus,
+      String? urlImage,
+      String? level,
+      String? typeeducationlevel,
+      String? typeposition,
+      String? patientoccupation,
+      String? talent,
+      String? race,
+      String? nationality,
+      String? religion,
+      double? lat,
+      double? lng,
+      String? phase,
+      double? ditance}) {
     return SickModel(
       address: address ?? this.address,
       bond: bond ?? this.bond,
@@ -85,7 +85,7 @@ class SickModel {
       religion: religion ?? this.religion,
       lat: lat ?? this.lat,
       lng: lng ?? this.lng,
-      phase: phase ?? this.phase,
+      ditance: ditance ?? this.ditance,
     );
   }
 
@@ -109,7 +109,7 @@ class SickModel {
       'religion': religion,
       'lat': lat,
       'lng': lng,
-      'phase': phase,
+      'ditance': ditance,
     };
   }
 
@@ -133,7 +133,7 @@ class SickModel {
       religion: map['religion'] ?? '',
       lat: map['lat'] ?? 0.0,
       lng: map['lng'] ?? 0.0,
-      phase: map['lng'] ?? 0.0,
+      ditance: map['ditance'] ?? 0.0,
     );
   }
 
@@ -144,7 +144,7 @@ class SickModel {
 
   @override
   String toString() {
-    return 'SickModel(address: $address, bond: $bond, idCard: $idCard, name: $name, phone: $phone, typeSex: $typeSex, typeStatus: $typeStatus, urlImage: $urlImage, level: $level, typeeducation_level: $typeeducationlevel, typeposition: $typeposition, patientoccupation: $patientoccupation, talent: $talent, race: $race, nationality: $nationality, religion: $religion, lat: $lng, lng: $lng, phase: $phase)';
+    return 'SickModel(address: $address, bond: $bond, idCard: $idCard, name: $name, phone: $phone, typeSex: $typeSex, typeStatus: $typeStatus, urlImage: $urlImage, level: $level, typeeducation_level: $typeeducationlevel, typeposition: $typeposition, patientoccupation: $patientoccupation, talent: $talent, race: $race, nationality: $nationality, religion: $religion, lat: $lng, lng: $lng, ditance: $ditance';
   }
 
   @override
@@ -170,7 +170,7 @@ class SickModel {
         other.religion == religion &&
         other.lat == lat &&
         other.lng == lng &&
-        other.phase == phase;
+        other.ditance == ditance;
   }
 
   @override
@@ -193,6 +193,6 @@ class SickModel {
         religion.hashCode ^
         lat.hashCode ^
         lng.hashCode ^
-        phase.hashCode;
+        ditance.hashCode;
   }
 }

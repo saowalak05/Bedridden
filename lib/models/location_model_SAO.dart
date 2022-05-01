@@ -33,9 +33,9 @@ class LocationSAOModel {
 
   factory LocationSAOModel.fromMap(Map<String, dynamic> map) {
     return LocationSAOModel(
-      locationSAO: map['locationSAO'],
-      lat: map['lat'] ?? 0.0,
-      lng: map['lng'] ?? 0.0,
+      locationSAO: map['locationSAO'] ?? '',
+      lat: map['lat'].toDouble() ?? 0.0,
+      lng: map['lng'].toDouble() ?? 0.0,
     );
   }
 

@@ -33,7 +33,7 @@ class LocationModel {
 
   factory LocationModel.fromMap(Map<String, dynamic> map) {
     return LocationModel(
-      locationTEM: map['locationTEM'],
+      locationTEM: map['locationTEM'] ?? '' ,
       lat: map['lat'] ?? 0.0,
       lng: map['lng'] ?? 0.0,
     );
