@@ -120,6 +120,8 @@ class _CalculatePageState extends State<CalculatePage> {
           physics: ScrollPhysics(),
           itemCount: sickmodels.length,
           itemBuilder: (context, index) {
+            var myFormat = NumberFormat('#0.0#', 'en_US');
+            distanceString = myFormat.format(sickmodels[index].ditance);
             return buildListview(index);
           }),
     );
@@ -194,7 +196,7 @@ class _CalculatePageState extends State<CalculatePage> {
                       SizedBox(
                         width: 5,
                       ),
-                      Text(sickmodels[index].ditance.toString(),
+                      Text(distanceString!,
                           style: TextStyle(
                               color: const Color(0xffdfad98),
                               fontSize: 13,
