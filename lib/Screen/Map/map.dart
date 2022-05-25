@@ -510,6 +510,7 @@ class MappageState extends State<Mappage> {
     return sickmodels.length == 0
         ? ShowProgress()
         : GoogleMap(
+            // myLocationEnabled: true,
             mapType: MapType.normal,
             initialCameraPosition: CameraPosition(
                 target: LatLng(13.730583745661047, 100.4742379568907),
