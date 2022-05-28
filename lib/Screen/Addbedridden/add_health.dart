@@ -72,7 +72,7 @@ class _AddhealthState extends State<Addhealth> {
               builddruguse(), //'การใช้ยา '
               buildOHF(),
               const SizedBox(
-                height: 16,
+                height: 70,
               ), //' สมุนไพร อาหารเสริม '
             ],
           ),

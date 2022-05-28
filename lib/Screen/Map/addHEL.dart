@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bedridden/Screen/my_service.dart';
 import 'package:bedridden/models/location_model_HEL.dart';
 import 'package:bedridden/utility/dialog.dart';
@@ -16,6 +18,8 @@ class AddHEL extends StatefulWidget {
 }
 
 class _AddHELState extends State<AddHEL> {
+  Completer<GoogleMapController> _controller = Completer();
+
   String? typelocationHEL;
 
   double? lat;
@@ -161,10 +165,12 @@ class _AddHELState extends State<AddHEL> {
                   });
                 },
                 initialCameraPosition: CameraPosition(
-                  target: LatLng(lat!, lng!),
+                  target: LatLng(19.030864682775583, 99.92628236822989),
                   zoom: 16,
                 ),
-                onMapCreated: (controller) {},
+                onMapCreated: (GoogleMapController controller) {
+                  _controller.complete(controller);
+                },
                 markers: setMarker(),
               ),
       );

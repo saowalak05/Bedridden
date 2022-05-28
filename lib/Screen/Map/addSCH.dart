@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bedridden/Screen/my_service.dart';
 import 'package:bedridden/models/location_model_SCH.dart';
 import 'package:bedridden/models/location_model_ST.dart';
@@ -17,6 +19,8 @@ class AddSCH extends StatefulWidget {
 }
 
 class _AddSCHState extends State<AddSCH> {
+  Completer<GoogleMapController> _controller = Completer();
+
   String? typelocationSCH;
 
   double? lat;
@@ -162,10 +166,12 @@ class _AddSCHState extends State<AddSCH> {
                   });
                 },
                 initialCameraPosition: CameraPosition(
-                  target: LatLng(lat!, lng!),
+                target: LatLng(19.030864682775583, 99.92628236822989),
                   zoom: 16,
                 ),
-                onMapCreated: (controller) {},
+                onMapCreated: (GoogleMapController controller) {
+              _controller.complete(controller);
+            },
                 markers: setMarker(),
               ),
       );

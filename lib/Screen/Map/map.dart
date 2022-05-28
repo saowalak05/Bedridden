@@ -76,15 +76,15 @@ class MappageState extends State<Mappage> {
     final Uint8List imgurltemple =
         await getBytesFromAsset('assets/images/temple.png', 80);
     final Uint8List imgurlsupermarket =
-        await getBytesFromAsset('assets/images/supermarket.png', 80);
+        await getBytesFromAsset('assets/images/shoppingone.png', 80);
     final Uint8List imgurlschool =
-        await getBytesFromAsset('assets/images/school.png', 80);
+        await getBytesFromAsset('assets/images/schoolone.png', 80);
     final Uint8List imgurlhospital =
-        await getBytesFromAsset('assets/images/hospital.png', 80);
+        await getBytesFromAsset('assets/images/hospitalone.png', 80);
     final Uint8List imgurlOrganization =
-        await getBytesFromAsset('assets/images/Organization.png', 80);
+        await getBytesFromAsset('assets/images/Organizationone.png', 80);
     final Uint8List imgurlsanitation =
-        await getBytesFromAsset('assets/images/sanitation.png', 80);
+        await getBytesFromAsset('assets/images/sanitationone.png', 80);
 
     await Firebase.initializeApp().then((value) async {
       FirebaseFirestore.instance.collection('sick').snapshots().listen((event) {
@@ -131,13 +131,14 @@ class MappageState extends State<Mappage> {
           if (event.docs.isNotEmpty) {
             for (var i = 0; i < locationModel.length; i++) {
               setState(() {
+                print(locationModel.length);
                 markers.add(Marker(
                   //add start location marker
-                  markerId: MarkerId(DateTime.now().toString()),
+                  markerId: MarkerId(locationModel[i].locationTEM),
                   position: LatLng(locationModel[i].lat, locationModel[i].lng),
                   infoWindow: InfoWindow(
                     //popup info
-                    title: locationModel[i].locationTEM,
+                    title: 'วัด',
                     // snippet: 'Car Marker',
                   ),
                   icon: BitmapDescriptor.fromBytes(imgurltemple),
@@ -170,7 +171,7 @@ class MappageState extends State<Mappage> {
                       LatLng(locationSTModel[i].lat, locationSTModel[i].lng),
                   infoWindow: InfoWindow(
                     //popup info
-                    title: locationSTModel[i].locationST,
+                    title: 'ร้านค้า',
                     // snippet: 'Car Marker',
                   ),
                   icon: BitmapDescriptor.fromBytes(imgurlsupermarket),
@@ -204,7 +205,7 @@ class MappageState extends State<Mappage> {
                       LatLng(locationSCHModel[i].lat, locationSCHModel[i].lng),
                   infoWindow: InfoWindow(
                     //popup info
-                    title: locationSCHModel[i].locationSCH,
+                    title: 'โรงเรียน',
                     // snippet: 'Car Marker',
                   ),
                   icon: BitmapDescriptor.fromBytes(imgurlschool),
@@ -237,7 +238,7 @@ class MappageState extends State<Mappage> {
                       LatLng(locationSAOModel[i].lat, locationSAOModel[i].lng),
                   infoWindow: InfoWindow(
                     //popup info
-                    title: locationSAOModel[i].locationSAO,
+                    title: 'องค์การบริหารส่วนตำบล',
                     // snippet: 'Car Marker',
                   ),
                   icon: BitmapDescriptor.fromBytes(imgurlOrganization),
@@ -270,7 +271,7 @@ class MappageState extends State<Mappage> {
                       LatLng(locationHELModel[i].lat, locationHELModel[i].lng),
                   infoWindow: InfoWindow(
                     //popup info
-                    title: locationHELModel[i].locationHEL,
+                    title: 'สถานีอนามัย',
                     // snippet: 'Car Marker',
                   ),
                   icon: BitmapDescriptor.fromBytes(imgurlsanitation),
@@ -303,7 +304,7 @@ class MappageState extends State<Mappage> {
                       LatLng(locationHOTModel[i].lat, locationHOTModel[i].lng),
                   infoWindow: InfoWindow(
                     //popup info
-                    title: locationHOTModel[i].locationHOT,
+                    title: 'โรงพยาบาล',
                     // snippet: 'Car Marker',
                   ),
                   icon: BitmapDescriptor.fromBytes(imgurlhospital),
@@ -507,17 +508,14 @@ class MappageState extends State<Mappage> {
   Widget _buildGoogleMap(
     BuildContext context,
   ) {
-    return sickmodels.length == 0
-        ? ShowProgress()
-        : GoogleMap(
-            mapType: MapType.normal,
-            initialCameraPosition: CameraPosition(
-                target: LatLng(13.730583745661047, 100.4742379568907),
-                zoom: 12),
-            onMapCreated: (GoogleMapController controller) {
-              _controller.complete(controller);
-            },
-            markers: markers,
-          );
+    return GoogleMap(
+      mapType: MapType.normal,
+      initialCameraPosition: CameraPosition(
+          target: LatLng(19.030864682775583, 99.92628236822989), zoom: 16),
+      onMapCreated: (GoogleMapController controller) {
+        _controller.complete(controller);
+      },
+      markers: markers,
+    );
   }
 }

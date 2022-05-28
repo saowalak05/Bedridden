@@ -167,7 +167,7 @@ class _AddState extends State<Add> {
 
               buildlevel(),
               const SizedBox(
-                height: 100,
+                height: 70,
               ), //'ระดับกการเจ็บป่วย'
             ],
           ),
@@ -234,7 +234,7 @@ class _AddState extends State<Add> {
                   });
                 },
                 initialCameraPosition: CameraPosition(
-                  target: LatLng(lat!, lng!),
+                target: LatLng(19.030864682775583, 99.92628236822989),
                   zoom: 16,
                 ),
                 onMapCreated: (controller) {},

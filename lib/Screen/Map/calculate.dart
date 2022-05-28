@@ -196,7 +196,7 @@ class _CalculatePageState extends State<CalculatePage> {
                       SizedBox(
                         width: 5,
                       ),
-                      Text(distanceString!,
+                      Text('$distanceString กม.',
                           style: TextStyle(
                               color: const Color(0xffdfad98),
                               fontSize: 13,

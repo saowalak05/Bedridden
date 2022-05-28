@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bedridden/Screen/my_service.dart';
 import 'package:bedridden/models/location_model_HOT.dart';
 import 'package:bedridden/models/location_model_SAO.dart';
@@ -17,6 +19,8 @@ class AddHOT extends StatefulWidget {
 }
 
 class _AddHOTState extends State<AddHOT> {
+  Completer<GoogleMapController> _controller = Completer();
+
   String? typelocationHOT;
 
   double? lat;
@@ -162,10 +166,12 @@ class _AddHOTState extends State<AddHOT> {
                   });
                 },
                 initialCameraPosition: CameraPosition(
-                  target: LatLng(lat!, lng!),
+                  target: LatLng(19.030864682775583, 99.92628236822989),
                   zoom: 16,
                 ),
-                onMapCreated: (controller) {},
+                onMapCreated: (GoogleMapController controller) {
+                  _controller.complete(controller);
+                },
                 markers: setMarker(),
               ),
       );

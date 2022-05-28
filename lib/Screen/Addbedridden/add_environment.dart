@@ -62,7 +62,7 @@ class _AddenvironmentState extends State<Addenvironment> {
               buildFacilities(),
               buildImage(context),
               const SizedBox(
-                height: 16,
+                height: 70,
               ),
             ],
           ),
