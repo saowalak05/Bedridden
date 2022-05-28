@@ -118,7 +118,7 @@ class MappageState extends State<Mappage> {
       });
 
       FirebaseFirestore.instance
-          .collection('location')
+          .collection('locationTEM')
           .snapshots()
           .listen((event) {
         for (var item in event.docs) {
@@ -134,7 +134,7 @@ class MappageState extends State<Mappage> {
                 print(locationModel.length);
                 markers.add(Marker(
                   //add start location marker
-                  markerId: MarkerId(locationModel[i].locationTEM),
+                  markerId: MarkerId(DateTime.now().toString()),
                   position: LatLng(locationModel[i].lat, locationModel[i].lng),
                   infoWindow: InfoWindow(
                     //popup info
