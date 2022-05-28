@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:location/location.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../models/sick_model.dart';
 
 class CalculatePage extends StatefulWidget {
@@ -26,6 +27,19 @@ class _CalculatePageState extends State<CalculatePage> {
     super.initState();
     findLat1Lng1();
   }
+
+  _launchMap(double lat,double lng) async {
+    print('mapppp $lat $lng');
+    final String googleMapsUrl =
+        "https://www.google.com/maps/search/?api=1&query=$lat,$lng";
+
+    if (await canLaunch(googleMapsUrl)) {
+      await launch(googleMapsUrl);
+    } else {
+      throw 'could not open the map';
+    }
+  }
+
 
   Future<Null> readAllSick() async {
     Future.delayed(Duration(microseconds: 30));
@@ -129,90 +143,95 @@ class _CalculatePageState extends State<CalculatePage> {
 
   Expanded buildListview(int index) {
     return Expanded(
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(25),
-          color: Colors.white,
-        ),
-        width: double.infinity,
-        margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              width: 50,
-              height: 50,
-              margin: EdgeInsets.only(right: 15),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(50),
-                border: Border.all(width: 3, color: Colors.grey),
-                image: DecorationImage(
-                    image: NetworkImage(sickmodels[index].urlImage),
-                    fit: BoxFit.fill),
+      child: GestureDetector(
+        onTap: () {
+          _launchMap(sickmodels[index].lat,sickmodels[index].lng);
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(25),
+            color: Colors.white,
+          ),
+          width: double.infinity,
+          margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                width: 50,
+                height: 50,
+                margin: EdgeInsets.only(right: 15),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(50),
+                  border: Border.all(width: 3, color: Colors.grey),
+                  image: DecorationImage(
+                      image: NetworkImage(sickmodels[index].urlImage),
+                      fit: BoxFit.fill),
+                ),
               ),
-            ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    sickmodels[index].name,
-                    style: TextStyle(
-                        color: const Color(0xffdfad98),
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18),
-                  ),
-                  SizedBox(
-                    height: 6,
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Icon(
-                        Icons.location_on,
-                        color: const Color(0xffdfad98),
-                        size: 20,
-                      ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Text(sickmodels[index].address,
-                          style: TextStyle(
-                              color: const Color(0xffdfad98),
-                              fontSize: 13,
-                              letterSpacing: .3)),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 6,
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Icon(
-                        Icons.navigation,
-                        color: const Color(0xffdfad98),
-                        size: 20,
-                      ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Text('$distanceString กม.',
-                          style: TextStyle(
-                              color: const Color(0xffdfad98),
-                              fontSize: 13,
-                              letterSpacing: .3)),
-                    ],
-                  ),
-                ],
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      sickmodels[index].name,
+                      style: TextStyle(
+                          color: const Color(0xffdfad98),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18),
+                    ),
+                    SizedBox(
+                      height: 6,
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Icon(
+                          Icons.location_on,
+                          color: const Color(0xffdfad98),
+                          size: 20,
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Text(sickmodels[index].address,
+                            style: TextStyle(
+                                color: const Color(0xffdfad98),
+                                fontSize: 13,
+                                letterSpacing: .3)),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 6,
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Icon(
+                          Icons.navigation,
+                          color: const Color(0xffdfad98),
+                          size: 20,
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Text('$distanceString กม.',
+                            style: TextStyle(
+                                color: const Color(0xffdfad98),
+                                fontSize: 13,
+                                letterSpacing: .3)),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Container(
-                child: Text('ลำดับ $index',
-                    style: TextStyle(
-                        color: const Color(0xffdfad98),
-                        fontSize: 13,
-                        letterSpacing: .3))),
-          ],
+              Container(
+                  child: Text('ลำดับ $index',
+                      style: TextStyle(
+                          color: const Color(0xffdfad98),
+                          fontSize: 13,
+                          letterSpacing: .3))),
+            ],
+          ),
         ),
       ),
     );
