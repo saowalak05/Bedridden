@@ -90,9 +90,8 @@ class _AddSAOState extends State<AddSAO> {
       await FirebaseFirestore.instance
           .collection('locationSAO')
           .doc()
-          .set(model.toMap())
-          .then((value) => Navigator.push(
-              context, MaterialPageRoute(builder: (context) => MyService())));
+          .set(model.toMap());
+      Navigator.pop(context);
     });
   }
 
@@ -165,12 +164,12 @@ class _AddSAOState extends State<AddSAO> {
                   });
                 },
                 initialCameraPosition: CameraPosition(
-                target: LatLng(19.030864682775583, 99.92628236822989),
+                  target: LatLng(19.030864682775583, 99.92628236822989),
                   zoom: 16,
                 ),
                 onMapCreated: (GoogleMapController controller) {
-              _controller.complete(controller);
-            },
+                  _controller.complete(controller);
+                },
                 markers: setMarker(),
               ),
       );

@@ -91,9 +91,8 @@ class _AddHOTState extends State<AddHOT> {
       await FirebaseFirestore.instance
           .collection('locationHOT')
           .doc()
-          .set(model.toMap())
-          .then((value) => Navigator.push(
-              context, MaterialPageRoute(builder: (context) => MyService())));
+          .set(model.toMap());
+      Navigator.pop(context);
     });
   }
 

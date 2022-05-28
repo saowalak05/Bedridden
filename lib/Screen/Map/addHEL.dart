@@ -90,9 +90,8 @@ class _AddHELState extends State<AddHEL> {
       await FirebaseFirestore.instance
           .collection('locationHEL')
           .doc()
-          .set(model.toMap())
-          .then((value) => Navigator.push(
-              context, MaterialPageRoute(builder: (context) => MyService())));
+          .set(model.toMap());
+      Navigator.pop(context);
     });
   }
 

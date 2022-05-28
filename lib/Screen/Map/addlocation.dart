@@ -90,9 +90,8 @@ class _AppLocationState extends State<AppLocation> {
       await FirebaseFirestore.instance
           .collection('locationTEM')
           .doc()
-          .set(model.toMap())
-          .then((value) => Navigator.push(
-              context, MaterialPageRoute(builder: (context) => MyService())));
+          .set(model.toMap());
+      Navigator.pop(context);
     });
   }
 

@@ -1104,7 +1104,7 @@ class _EditSickState extends State<EditSick> {
   Row titlePhone() {
     return Row(
       children: [
-        Text('ที่อยู่ปัจจุบัน :',
+        Text('เบอร์โทรศัพท์ :',
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
       ],
     );
