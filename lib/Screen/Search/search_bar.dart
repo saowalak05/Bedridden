@@ -21,14 +21,9 @@ class _SearchBarState extends State<SearchBar> {
   final secondary = Color(0xfff29a94);
   get padding => null;
   List<SickModel> sickmodels = [];
-  List<SickModel> sickmodelsLevel1 = [];
-  List<SickModel> sickmodelsLevel2 = [];
-  List<SickModel> sickmodelsLevel3 = [];
-  List<String> docIds = [];
+  List<SickModel> sickmodelsread = [];
 
-  List<HealthModel> healthModel = [];
-  List<EnvironmentModel> environmentModel = [];
-  List<FamilyModel> familyModel = [];
+
   @override
   void initState() {
     super.initState();
@@ -39,13 +34,6 @@ class _SearchBarState extends State<SearchBar> {
     Future.delayed(Duration(seconds: 1));
     if (sickmodels.length != 0) {
       sickmodels.clear();
-      sickmodelsLevel1.clear();
-      sickmodelsLevel2.clear();
-      sickmodelsLevel3.clear();
-      docIds.clear();
-      healthModel.clear();
-      environmentModel.clear();
-      familyModel.clear();
     }
     await Firebase.initializeApp().then((value) async {
       FirebaseFirestore.instance.collection('sick').snapshots().listen((event) {
@@ -54,18 +42,7 @@ class _SearchBarState extends State<SearchBar> {
           print('## name ==> ${model.name}');
           setState(() {
             sickmodels.add(model);
-            if (model.level == '1') {
-              sickmodelsLevel1.add(model);
-              docIds.add(item.id);
-            }
-            if (model.level == '2') {
-              sickmodelsLevel2.add(model);
-              docIds.add(item.id);
-            }
-            if (model.level == '3') {
-              sickmodelsLevel3.add(model);
-              docIds.add(item.id);
-            }
+            sickmodelsread.add(model);
           });
         }
       });
@@ -230,7 +207,7 @@ class _SearchBarState extends State<SearchBar> {
   }
 
   void searchName(String query) {
-    final sickmodelsAll = sickmodels.where((sickmodels) {
+    final sickmodelsAll = sickmodelsread.where((sickmodels) {
       final titleLower = sickmodels.name.toLowerCase();
       final authorLower = sickmodels.name.toLowerCase();
       final searchLower = query.toLowerCase();
