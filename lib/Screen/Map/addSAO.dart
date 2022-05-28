@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:bedridden/Screen/my_service.dart';
 import 'package:bedridden/models/location_model_SAO.dart';
 import 'package:bedridden/utility/dialog.dart';
 import 'package:bedridden/widgets/show_progess.dart';
