@@ -12,7 +12,6 @@ import 'package:bedridden/models/location_model_SAO.dart';
 import 'package:bedridden/models/location_model_SCH.dart';
 import 'package:bedridden/models/location_model_ST.dart';
 import 'package:bedridden/models/sick_model.dart';
-import 'package:bedridden/widgets/show_progess.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +22,6 @@ import 'dart:ui' as ui;
 
 import 'package:simple_speed_dial/simple_speed_dial.dart';
 
-import '../Addbedridden/add.dart';
 import 'calculate.dart';
 
 Future<Uint8List> getBytesFromAsset(String path, int width) async {

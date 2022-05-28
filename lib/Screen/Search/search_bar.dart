@@ -1,7 +1,4 @@
 import 'package:bedridden/Screen/Home/listledit.dart';
-import 'package:bedridden/models/environment_model.dart';
-import 'package:bedridden/models/family_model.dart';
-import 'package:bedridden/models/health_model.dart';
 import 'package:bedridden/models/sick_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -22,7 +19,6 @@ class _SearchBarState extends State<SearchBar> {
   get padding => null;
   List<SickModel> sickmodels = [];
   List<SickModel> sickmodelsread = [];
-
 
   @override
   void initState() {
@@ -98,14 +94,6 @@ class _SearchBarState extends State<SearchBar> {
                   labelText: "ค้นหา",
                   hintText: "ค้นหา",
                   prefixIcon: Icon(Icons.search),
-                  // suffixIcon: IconButton(
-                  //   icon: Icon(Icons.close),
-                  //   onPressed: () {
-                  //     setState(() {
-                  //       query = "";
-                  //     });
-                  //   },
-                  // ),
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(20.0)))),
             ),

@@ -92,7 +92,6 @@ String? colorName;
 Color? color;
 
 class _LitlEditState extends State<LitlEdit> {
-  String _text = '';
   ValueNotifier<bool> isDialOpen = ValueNotifier(false);
 
   @override
