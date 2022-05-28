@@ -122,8 +122,14 @@ class _AddfamilyState extends State<Addfamily> {
             '${widget.idCard}',
           )
           .set(model.toMap())
-          .then((value) => Navigator.push(
-              context, MaterialPageRoute(builder: (context) => Home())));
+          .then((value) {
+        Navigator.pop(context);
+        Navigator.pop(context);
+        Navigator.pop(context);
+        Navigator.pop(context);
+      });
+      // .then((value) => Navigator.push(
+      //     context, MaterialPageRoute(builder: (context) => Home())));
     });
   }
 
