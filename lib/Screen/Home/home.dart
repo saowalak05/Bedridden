@@ -25,7 +25,6 @@ class _HomeState extends State<Home> {
   final primary = Color(0xffdfad98);
   final secondary = Color(0xfff29a94);
 
-
   List<SickModel> sickmodels = [];
   List<SickModel> sickmodelsLevel1 = [];
   List<SickModel> sickmodelsLevel2 = [];
@@ -47,17 +46,19 @@ class _HomeState extends State<Home> {
   }
 
   Future<Null> readAllSick() async {
-    Future.delayed(Duration(seconds: 1));
-    if (sickmodels.length != 0) {
-      sickmodels.clear();
-      sickmodelsLevel1.clear();
-      sickmodelsLevel2.clear();
-      sickmodelsLevel3.clear();
-      docIds.clear();
-    }
+    // Future.delayed(Duration(seconds: 1));
 
     await Firebase.initializeApp().then((value) async {
       FirebaseFirestore.instance.collection('sick').snapshots().listen((event) {
+        print(sickmodels.length);
+        if (sickmodels.length != 0) {
+          sickmodels.clear();
+          sickmodelsLevel1.clear();
+          sickmodelsLevel2.clear();
+          sickmodelsLevel3.clear();
+          docIds.clear();
+        }
+
         for (var item in event.docs) {
           SickModel model = SickModel.fromMap(item.data());
           print('## name ==> ${model.name}');

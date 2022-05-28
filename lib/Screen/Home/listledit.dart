@@ -900,7 +900,6 @@ class _LitlEditState extends State<LitlEdit> {
             backgroundColor: Colors.red,
             label: 'ลบ',
             onPressed: () {
-              Navigator.pop(context);
               confirmDelete();
             },
           ),
@@ -938,27 +937,24 @@ class _LitlEditState extends State<LitlEdit> {
         actions: [
           TextButton(
             onPressed: () async {
-              Navigator.pop(context);
-              FirebaseFirestore.instance
+              await FirebaseFirestore.instance
                   .collection('sick')
                   .doc(widget.idcard)
-                  .delete()
-                  .then((value) => readAlldata());
-              FirebaseFirestore.instance
+                  .delete();
+              await FirebaseFirestore.instance
                   .collection('Health')
                   .doc(widget.idcard)
-                  .delete()
-                  .then((value) => readAlldata());
-              FirebaseFirestore.instance
+                  .delete();
+              await FirebaseFirestore.instance
                   .collection('environment')
                   .doc(widget.idcard)
-                  .delete()
-                  .then((value) => readAlldata());
-              FirebaseFirestore.instance
+                  .delete();
+              await FirebaseFirestore.instance
                   .collection('Family')
                   .doc(widget.idcard)
-                  .delete()
-                  .then((value) => readAlldata());
+                  .delete();
+              Navigator.pop(context);
+              Navigator.pop(context);
             },
             child: Text(
               'Delete',
@@ -967,6 +963,7 @@ class _LitlEditState extends State<LitlEdit> {
           ),
           TextButton(
             onPressed: () {
+              print(sickmodels.length);
               Navigator.pop(context);
             },
             child: Text('Cancel'),
