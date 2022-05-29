@@ -1,3 +1,4 @@
+import 'package:bedridden/Screen/Addbedridden/add_curator.dart';
 import 'package:bedridden/models/family_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -121,14 +122,13 @@ class _AddfamilyState extends State<Addfamily> {
             '${widget.idCard}',
           )
           .set(model.toMap())
-          .then((value) {
-        Navigator.pop(context);
-        Navigator.pop(context);
-        Navigator.pop(context);
-        Navigator.pop(context);
-      });
-      // .then((value) => Navigator.push(
-      //     context, MaterialPageRoute(builder: (context) => Home())));
+           .then((value) => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => Addcurator(
+                          idCard: '${widget.idCard}',
+                        ))));
+     
     });
   }
 

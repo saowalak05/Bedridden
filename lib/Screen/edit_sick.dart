@@ -1159,12 +1159,12 @@ class _EditSickState extends State<EditSick> {
         map['name'] = value;
       },
       validator: (value) {
-        if (value!.isEmpty) {
-          return 'Name Not Empty';
-        } else {
-          return null;
-        }
-      },
+            if (value!.isEmpty) {
+              return 'กรุณากรอก ชื่อ-นามสกุล';
+            } else {
+              return null;
+            }
+          },
       controller: nameController,
       decoration: InputDecoration(border: OutlineInputBorder()),
     );
@@ -1178,13 +1178,18 @@ class _EditSickState extends State<EditSick> {
       maxLength: 13,
       validator: (value) {
         if (value!.isEmpty) {
-          return 'IdCard Not Empty';
+          return 'กรุณากรอก เลขบัตรประจำตัวชาชน';
         } else {
-          return null;
+          if (value.length != 13) {
+            return 'กรุณากรอกเลขบัตรประจำตัวชาชน 13 หลัก';
+          } else {
+            return null;
+          }
         }
       },
       controller: idcardController,
       decoration: InputDecoration(border: OutlineInputBorder()),
+      keyboardType: TextInputType.number,
     );
   }
 
@@ -1195,12 +1200,12 @@ class _EditSickState extends State<EditSick> {
       },
       maxLines: 3,
       validator: (value) {
-        if (value!.isEmpty) {
-          return 'Address Not Empty';
-        } else {
-          return null;
-        }
-      },
+            if (value!.isEmpty) {
+              return 'กรุณากรอก ที่อยู่ปัจจุบัน';
+            } else {
+              return null;
+            }
+          },
       controller: addressController,
       decoration: InputDecoration(border: OutlineInputBorder()),
     );
@@ -1213,13 +1218,18 @@ class _EditSickState extends State<EditSick> {
       },
       validator: (value) {
         if (value!.isEmpty) {
-          return 'Phone Not Empty';
+          return 'กรุณากรอก เบอร์โทรศัพท์';
         } else {
-          return null;
+          if (value.length != 10) {
+            return 'เบอร์โทรศัพท์ ไม่ครบ 10 หลัก';
+          } else {
+            return null;
+          }
         }
       },
       controller: phoneController,
       decoration: InputDecoration(border: OutlineInputBorder()),
+      keyboardType: TextInputType.number,
     );
   }
 }

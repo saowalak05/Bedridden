@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:bedridden/Screen/edit_curator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -83,6 +84,9 @@ String? occupationoneFamily;
 String? occupationthreeFamily;
 String? occupationtwoFamily;
 String? occupationfourFamily;
+
+String? curatorName;
+String? curatorAddress;
 
 double? lat;
 double? lng;
@@ -254,6 +258,19 @@ class _LitlEditState extends State<LitlEdit> {
             occupationtwoFamily = event['occupationtwo'];
             occupationthreeFamily = event['occupationthree'];
             occupationfourFamily = event['occupationfour'];
+          });
+        });
+      });
+
+      FirebaseFirestore.instance
+          .collection('Curator')
+          .doc('${widget.idcard}')
+          .snapshots()
+          .listen((event) {
+        Future.delayed(const Duration(seconds: 1), () {
+          setState(() {
+            curatorName = event['curatorname'];
+            curatorAddress = event['curatoraddress'];
           });
         });
       });
@@ -829,6 +846,36 @@ class _LitlEditState extends State<LitlEdit> {
                 ),
               ],
             ),
+            Row(children: <Widget>[
+              Expanded(
+                child: new Container(
+                    margin: const EdgeInsets.only(left: 10.0, right: 15.0),
+                    child: Divider(
+                      color: Colors.black,
+                      height: 50,
+                    )),
+              ),
+              Text("ส่วนที่ 5 ข้อมูลผู้ดูแลผู้ป่วย",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              Expanded(
+                child: new Container(
+                    margin: const EdgeInsets.only(left: 15.0, right: 10.0),
+                    child: Divider(
+                      color: Colors.black,
+                      height: 70,
+                    )),
+              ),
+            ]),
+            SizedBox(height: 10),
+            Text('ชื่อ-นามสุกล',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            SizedBox(height: 10),
+            Text('$curatorName', style: TextStyle(fontSize: 16)),
+            SizedBox(height: 10),
+            Text('ข้อมูลที่สามารถติดต่อได้',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            SizedBox(height: 10),
+            Text('$curatorAddress', style: TextStyle(fontSize: 16)),
           ],
         ),
       )),
@@ -890,6 +937,20 @@ class _LitlEditState extends State<LitlEdit> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => EditFamily(idcard: idcard),
+                  ));
+            },
+          ),
+          SpeedDialChild(
+            child: const Icon(Icons.edit),
+            foregroundColor: Colors.white,
+            backgroundColor: Color.fromARGB(255, 231, 172, 11),
+            label: 'แก้ไข ข้อมูลผู้ดูแลผู้ป่วย',
+            onPressed: () {
+              var idcard = widget.idcard;
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EditCurator(idcard: idcard),
                   ));
             },
           ),
