@@ -2,6 +2,7 @@ import 'package:bedridden/utility/dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'dart:developer' as dev;
 
 class EditFamily extends StatefulWidget {
   final String idcard;
@@ -57,28 +58,70 @@ class _EditFamilyState extends State<EditFamily> {
   String? occupationfourFamily;
 
   Future<Null> processEditData() async {
-    if (map.isEmpty) {
-      normalDialog(context, 'ไม่มีการเปลี่ยนแปลง');
-    } else {
-      await Firebase.initializeApp().then((value) async {
-        await FirebaseFirestore.instance
-            .collection('Family')
-            .doc(widget.idcard)
-            .update(map)
-            .then((value) => Navigator.pop(context));
-      });
-    }
+    map['familynameone'] = familynameControllerone.text;
+    map['familyrelationshipone'] = familyrelationshipControllerone.text;
+    map['occupationone'] = occupationContorllerone.text;
+    map['familynametwo'] = familynameControllertwo.text;
+    map['familyrelationshiptwo'] = familyrelationshipControllertwo.text;
+    map['occupationtwo'] = occupationContorllertwo.text;
+    map['familynamethree'] = familynameControllerthree.text;
+    map['familyrelationshipthree'] = familyrelationshipControllerthree.text;
+    map['occupationthree'] = occupationContorllerthree.text;
+    map['familynamefour'] = familynameControllerfour.text;
+    map['familyrelationshipfour'] = familyrelationshipControllerfour.text;
+    map['occupationfour'] = occupationContorllerfour.text;
+
+    // save sub collection
+    String timeStamp = DateTime.now().millisecondsSinceEpoch.toString();
+    // add field timestamp to your map data
+    map['timestamp'] = timeStamp;
+
+    await Firebase.initializeApp().then((value) async {
+      // add to log data
+      saveData(map: map, timeStamp: timeStamp);
+    });
+  }
+
+  // save data to firestore
+  saveData(
+      {required Map<String, dynamic> map, required String timeStamp}) async {
+    await Firebase.initializeApp().then((value) async {
+      // add to log data
+      await FirebaseFirestore.instance
+          .collection('Family')
+          .doc(widget.idcard)
+          .collection('logs')
+          .doc(timeStamp)
+          .set(map)
+          .then((value) => Navigator.pop(context));
+    });
   }
 
   Future<Null> readAlldata() async {
+    // init firebase
     await Firebase.initializeApp().then((value) async {
-      FirebaseFirestore.instance
+      // TODO : let's check log exist ?
+      QuerySnapshot lastLog = await FirebaseFirestore.instance
           .collection('Family')
-          .doc('${widget.idcard}')
-          .snapshots()
-          .listen((event) {
-        Future.delayed(const Duration(seconds: 1), () {
+          .doc(widget.idcard)
+          .collection('logs')
+          .orderBy('timestamp', descending: true)
+          .get();
+
+      dev.log('found log data = ${lastLog.docs.length} items');
+      if (lastLog.docs.length == 0) {
+        dev.log("read master data");
+        // read master data
+        dev.log('read from docId - ${widget.idcard}');
+        FirebaseFirestore.instance
+            .collection('Family')
+            .doc(widget.idcard)
+            .get()
+            .then((DocumentSnapshot event) {
+          // TODO : set data
+          // set screen state
           setState(() {
+            // set default data in some field
             familynameoneFamily = event['familynameone'];
             familynamethreeFamily = event['familynamethree'];
             familynametwoFamily = event['familynametwo'];
@@ -93,9 +136,65 @@ class _EditFamilyState extends State<EditFamily> {
             occupationtwoFamily = event['occupationtwo'];
             occupationthreeFamily = event['occupationthree'];
             occupationfourFamily = event['occupationfour'];
+
+            // set data to text controller field
+            familynameControllerone.text = event["familynameone"];
+            familyrelationshipControllerone.text =
+                event["familyrelationshipone"];
+            occupationContorllerone.text = event["occupationone"];
+            familynameControllertwo.text = event["familynametwo"];
+            familyrelationshipControllertwo.text =
+                event["familyrelationshiptwo"];
+            occupationContorllertwo.text = event["occupationtwo"];
+            familynameControllerthree.text = event["familynamethree"];
+            familyrelationshipControllerthree.text =
+                event["familyrelationshipthree"];
+            occupationContorllerthree.text = event["occupationthree"];
+            familynameControllerfour.text = event["familynamefour"];
+            familyrelationshipControllerfour.text =
+                event["familyrelationshipfour"];
+            occupationContorllerfour.text = event["occupationfour"];
           });
         });
-      });
+      } else {
+        // has log data
+        QueryDocumentSnapshot event = lastLog.docs.first;
+        // TODO : set data
+        // set screen state
+        setState(() {
+          // set default data in some field
+          familynameoneFamily = event['familynameControllertwo'];
+          familynamethreeFamily = event['familynamethree'];
+          familynametwoFamily = event['familynametwo'];
+          familynamefourFamily = event['familynamefour'];
+
+          familyrelationshiponeFamily = event['familyrelationshipone'];
+          familyrelationshipthreeFamily = event['familyrelationshipthree'];
+          familyrelationshiptwoFamily = event['familyrelationshiptwo'];
+          familyrelationshipfourFamily = event['familyrelationshipfour'];
+
+          occupationoneFamily = event['occupationone'];
+          occupationtwoFamily = event['occupationtwo'];
+          occupationthreeFamily = event['occupationthree'];
+          occupationfourFamily = event['occupationfour'];
+
+          // set data to text controller field
+          familynameControllerone.text = event["familynameControllertwo"];
+          familyrelationshipControllerone.text = event["familyrelationshipone"];
+          occupationContorllerone.text = event["occupationone"];
+          familynameControllertwo.text = event["familynametwo"];
+          familyrelationshipControllertwo.text = event["familyrelationshiptwo"];
+          occupationContorllertwo.text = event["occupationtwo"];
+          familynameControllerthree.text = event["familynamethree"];
+          familyrelationshipControllerthree.text =
+              event["familyrelationshipthree"];
+          occupationContorllerthree.text = event["occupationthree"];
+          familynameControllerfour.text = event["familynamefour"];
+          familyrelationshipControllerfour.text =
+              event["familyrelationshipfour"];
+          occupationContorllerfour.text = event["occupationfour"];
+        });
+      }
     });
   }
 

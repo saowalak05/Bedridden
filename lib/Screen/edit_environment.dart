@@ -6,6 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'dart:developer' as dev;
 
 class EditEnvironment extends StatefulWidget {
   final String idcard;
@@ -35,7 +36,6 @@ class _EditEnvironmentState extends State<EditEnvironment> {
   bool typeaccommodation = true;
   bool statusImage = false;
 
-  
   Future<Null> confirmImageDialog() async {
     showDialog(
       context: context,
@@ -70,62 +70,100 @@ class _EditEnvironmentState extends State<EditEnvironment> {
   }
 
   Future<Null> processEditData() async {
-    String environmentImage = 'environment${Random().nextInt(1000000)}.jpg';
-    FirebaseStorage storage = FirebaseStorage.instance;
-    Reference reference = storage.ref().child('environment/$environmentImage');
-    UploadTask task = reference.putFile(files!);
-    await task.whenComplete(() async {
-      await reference.getDownloadURL().then((value) async {
-        String urlImage = value.toString();
+    // prepare data to your map so this should change to model
+    // var data = {
+    //   'name': nameController.text,
+    //    ...
+    // }
+    map['typeHouse'] = typeHouseenvironment;
+    map['typeHomeEnvironment'] = typeHomeEnvironmentenvironment;
+    map['typeHousingSafety'] = typeHousingSafetyenvironment;
+    map['typefacilities'] = typefacilitiesenvironment;
+    map['accommodation'] = accommodationenvironment;
+    map['urlenvironmentImage'] = urlenvironmentImageenvironment;
 
-        if (typeHouse) {
-          map['typeHouse'] = typeHouseenvironment;
-        }
+    // save sub collection
+    String timeStamp = DateTime.now().millisecondsSinceEpoch.toString();
+    // add field timestamp to your map data
+    map['timestamp'] = timeStamp;
 
-        if (typeHomeEnvironment) {
-          map['typeHomeEnvironment'] = typeHomeEnvironmentenvironment;
-        }
+    if (files == null) {
+      dev.log("file is null so, don't upload image just save data only");
 
-        if (typeHousingSafety) {
-          map['typeHousingSafety'] = typeHousingSafetyenvironment;
-        }
+      dev.log('### map ==>> $map');
 
-        if (typefacilities) {
-          map['typefacilities'] = typefacilitiesenvironment;
-        }
-
-        if (typeaccommodation) {
-          map['accommodation'] = accommodationenvironment;
-        }
-
-        if (files != null) {
-          map['urlenvironmentImage'] = urlImage;
-        }
-
-        if (map.isEmpty) {
-          normalDialog(context, 'ไม่มีการเปลี่ยนแปลง');
-        } else {
-          await Firebase.initializeApp().then((value) async {
-            await FirebaseFirestore.instance
-                .collection('environment')
-                .doc(widget.idcard)
-                .update(map)
-                .then((value) => Navigator.pop(context));
-          });
-        }
+      // save data to firestore
+      await Firebase.initializeApp().then((value) async {
+        // add to log data
+        saveData(map: map, timeStamp: timeStamp);
       });
+    } else {
+      dev.log("file is not null so, upload image and save data");
+      // upload file then add data to firesore
+      String environmentImage = 'environment${Random().nextInt(1000000)}.jpg';
+      FirebaseStorage storage = FirebaseStorage.instance;
+      Reference reference =
+          storage.ref().child('environment/$environmentImage');
+      UploadTask task = reference.putFile(files!);
+      await task.whenComplete(() async {
+        await reference.getDownloadURL().then((value) async {
+          String urlImage = value.toString();
+
+          // set map data with new url image
+          if (files != null) {
+            map['urlImage'] = urlImage;
+          }
+
+          dev.log('### map ==>> $map');
+          // add to log data
+          saveData(map: map, timeStamp: timeStamp);
+        });
+      });
+    }
+  }
+
+  // save data to firestore
+  saveData(
+      {required Map<String, dynamic> map, required String timeStamp}) async {
+    await Firebase.initializeApp().then((value) async {
+      // add to log data
+      await FirebaseFirestore.instance
+          .collection('environment')
+          .doc(widget.idcard)
+          .collection('logs')
+          .doc(timeStamp)
+          .set(map)
+          .then((value) => Navigator.pop(context));
     });
   }
 
   Future<Null> readAlldata() async {
+    // init firebase
     await Firebase.initializeApp().then((value) async {
-      FirebaseFirestore.instance
+      // TODO : let's check log exist ?
+      QuerySnapshot lastLog = await FirebaseFirestore.instance
           .collection('environment')
-          .doc('${widget.idcard}')
-          .snapshots()
-          .listen((event) {
-        Future.delayed(const Duration(seconds: 1), () {
+          .doc(widget.idcard)
+          .collection('logs')
+          .orderBy('timestamp', descending: true)
+          .get();
+      dev.log('found log data = ${lastLog.docs.length} items');
+
+      if (lastLog.docs.length == 0) {
+        dev.log("read master data");
+        // read master data
+        dev.log('read from docId - ${widget.idcard}');
+        FirebaseFirestore.instance
+            .collection('environment')
+            .doc(widget.idcard)
+            .get()
+            .then((DocumentSnapshot event) {
+          dev.log('read master data');
+
+          // TODO : set data
+          // set screen state
           setState(() {
+            // set default data in some field
             accommodationenvironment = event['accommodation'];
             typeHomeEnvironmentenvironment = event['typeHomeEnvironment'];
             typeHouseenvironment = event['typeHouse'];
@@ -134,7 +172,22 @@ class _EditEnvironmentState extends State<EditEnvironment> {
             urlenvironmentImageenvironment = event['urlenvironmentImage'];
           });
         });
-      });
+      } else {
+        // has log data
+        QueryDocumentSnapshot event = lastLog.docs.first;
+
+        // TODO : set data
+        // set screen state
+        setState(() {
+          // set default data in some field
+          accommodationenvironment = event['accommodation'];
+          typeHomeEnvironmentenvironment = event['typeHomeEnvironment'];
+          typeHouseenvironment = event['typeHouse'];
+          typeHousingSafetyenvironment = event['typeHousingSafety'];
+          typefacilitiesenvironment = event['typefacilities'];
+          urlenvironmentImageenvironment = event['urlenvironmentImage'];
+        });
+      }
     });
   }
 

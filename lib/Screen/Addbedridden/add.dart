@@ -234,7 +234,7 @@ class _AddState extends State<Add> {
                   });
                 },
                 initialCameraPosition: CameraPosition(
-                target: LatLng(19.030864682775583, 99.92628236822989),
+                  target: LatLng(19.030864682775583, 99.92628236822989),
                   zoom: 16,
                 ),
                 onMapCreated: (controller) {},

@@ -2,6 +2,7 @@ import 'package:bedridden/utility/dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'dart:developer' as dev;
 
 class EditHealth extends StatefulWidget {
   final String idcard;
@@ -35,45 +36,101 @@ class _EditHealthState extends State<EditHealth> {
       TextEditingController(); // 'อาหารเสริมและอื่นๆ'
 
   Future<Null> processEditData() async {
-    if (groupA) {
-      map['groupA'] = groupAHealth;
-    }
+    map['disease'] = diseaseController.text;
+    map['foodsupplement'] = foodsupplementController.text;
+    map['medicine'] = medicineController.text;
+    map['herb'] = herbController.text;
+    map['groupA'] = groupAHealth;
+    map['groupB'] = groupBHealth;
 
-    if (groupB) {
-      map['groupB'] = groupBHealth;
-    }
+    // save sub collection
+    String timeStamp = DateTime.now().millisecondsSinceEpoch.toString();
+    // add field timestamp to your map data
+    map['timestamp'] = timeStamp;
 
-    if (map.isEmpty) {
-      normalDialog(context, 'ไม่มีการเปลี่ยนแปลง');
-    } else {
-      await Firebase.initializeApp().then((value) async {
-        await FirebaseFirestore.instance
-            .collection('Health')
-            .doc(widget.idcard)
-            .update(map)
-            .then((value) => Navigator.pop(context));
-      });
-    }
+    await Firebase.initializeApp().then((value) async {
+      // add to log data
+      saveData(map: map, timeStamp: timeStamp);
+    });
+  }
+
+  // save data to firestore
+  saveData(
+      {required Map<String, dynamic> map, required String timeStamp}) async {
+    await Firebase.initializeApp().then((value) async {
+      // add to log data
+      await FirebaseFirestore.instance
+          .collection('Health')
+          .doc(widget.idcard)
+          .collection('logs')
+          .doc(timeStamp)
+          .set(map)
+          .then((value) => Navigator.pop(context));
+    });
   }
 
   Future<Null> readAlldata() async {
+    // init firebase
     await Firebase.initializeApp().then((value) async {
-      FirebaseFirestore.instance
+      // TODO : let's check log exist ?
+      QuerySnapshot lastLog = await FirebaseFirestore.instance
           .collection('Health')
           .doc(widget.idcard)
-          .snapshots()
-          .listen((event) {
-        Future.delayed(const Duration(seconds: 1), () {
+          .collection('logs')
+          .orderBy('timestamp', descending: true)
+          .get();
+
+      dev.log('found log data = ${lastLog.docs.length} items');
+
+      if (lastLog.docs.length == 0) {
+        dev.log("read master data");
+        // read master data
+        dev.log('read from docId - ${widget.idcard}');
+        FirebaseFirestore.instance
+            .collection('Health')
+            .doc(widget.idcard)
+            .get()
+            .then((DocumentSnapshot event) {
+          // TODO : set data
+          // set screen state
           setState(() {
+            // set default data in some field
+
             diseaseHealth = event['disease'];
             foodsupplementHealth = event['foodsupplement'];
             groupAHealth = event['groupA'];
             groupBHealth = event['groupB'];
             herbHealth = event['herb'];
             medicineHealth = event['medicine'];
+
+            // set data to text controller field
+            diseaseController.text = event["disease"];
+            medicineController.text = event["medicine"];
+            herbController.text = event["herb"];
+            foodsupplementController.text = event["foodsupplement"];
           });
         });
-      });
+      } else {
+        // has log data
+        QueryDocumentSnapshot event = lastLog.docs.first;
+        // TODO : set data
+        // set screen state
+        setState(() {
+          // set default data in some field
+          diseaseHealth = event['disease'];
+          foodsupplementHealth = event['foodsupplement'];
+          groupAHealth = event['groupA'];
+          groupBHealth = event['groupB'];
+          herbHealth = event['herb'];
+          medicineHealth = event['medicine'];
+
+          // set data to text controller field
+          diseaseController.text = event["disease"];
+          medicineController.text = event["medicine"];
+          herbController.text = event["herb"];
+          foodsupplementController.text = event["foodsupplement"];
+        });
+      }
     });
   }
 
@@ -101,7 +158,9 @@ class _EditHealthState extends State<EditHealth> {
           ),
         ),
         actions: [
-          IconButton(onPressed: () => processEditData(), icon: Icon(Icons.save_as_rounded))
+          IconButton(
+              onPressed: () => processEditData(),
+              icon: Icon(Icons.save_as_rounded))
         ],
       ),
       body: Container(
