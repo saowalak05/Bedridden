@@ -44,8 +44,6 @@ class _EditCuratorState extends State<EditCurator> {
       await FirebaseFirestore.instance
           .collection('Curator')
           .doc(widget.idcard)
-          .collection('logs')
-          .doc(timeStamp)
           .set(map)
           .then((value) => Navigator.pop(context));
     });
@@ -54,44 +52,18 @@ class _EditCuratorState extends State<EditCurator> {
   Future<Null> readAlldata() async {
     await Firebase.initializeApp().then((value) async {
       // TODO : let's check log exist ?
-      QuerySnapshot lastLog = await FirebaseFirestore.instance
+
+      dev.log('read from docId - ${widget.idcard}');
+      FirebaseFirestore.instance
           .collection('Curator')
           .doc(widget.idcard)
-          .collection('logs')
-          .orderBy('timestamp', descending: true)
-          .get();
-
-      dev.log('found log data = ${lastLog.docs.length} items');
-
-      if (lastLog.docs.length == 0) {
-        dev.log("read master data");
-        // read master data
-        dev.log('read from docId - ${widget.idcard}');
-        FirebaseFirestore.instance
-            .collection('Curator')
-            .doc(widget.idcard)
-            .get()
-            .then((DocumentSnapshot event) {
-          // TODO : set data
-          // set screen state
-          setState(() {
-            // set default data in some field
-
-            curatorName = event['curatorname'];
-            curatorAddress = event['curatoraddress'];
-
-            // set data to text controller field
-            curatornameControllerone.text = event["curatorname"];
-            curatoraddressControllerone.text = event["curatoraddress"];
-          });
-        });
-      } else {
-        // has log data
-        QueryDocumentSnapshot event = lastLog.docs.first;
+          .get()
+          .then((DocumentSnapshot event) {
         // TODO : set data
         // set screen state
         setState(() {
           // set default data in some field
+
           curatorName = event['curatorname'];
           curatorAddress = event['curatoraddress'];
 
@@ -99,7 +71,7 @@ class _EditCuratorState extends State<EditCurator> {
           curatornameControllerone.text = event["curatorname"];
           curatoraddressControllerone.text = event["curatoraddress"];
         });
-      }
+      });
     });
   }
 

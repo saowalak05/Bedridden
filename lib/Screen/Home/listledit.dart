@@ -20,6 +20,8 @@ import 'package:bedridden/models/family_model.dart';
 import 'package:bedridden/models/health_model.dart';
 import 'package:bedridden/models/sick_model.dart';
 
+import 'dart:developer' as dev;
+
 class LitlEdit extends StatefulWidget {
   final String idcard;
 
@@ -29,6 +31,9 @@ class LitlEdit extends StatefulWidget {
   _LitlEditState createState() => _LitlEditState();
 }
 
+String dropdownValue = timestampsick.first;
+bool date = true;
+
 List<SickModel> sickmodels = [];
 List<SickModel> sickmodelsLevel1 = [];
 List<SickModel> sickmodelsLevel2 = [];
@@ -36,6 +41,7 @@ List<SickModel> sickmodelsLevel3 = [];
 List<HealthModel> healthModel = [];
 List<EnvironmentModel> environmentModel = [];
 List<FamilyModel> familyModel = [];
+List<String> timestampsick = [];
 
 //sick
 String? addressSick;
@@ -102,6 +108,8 @@ class _LitlEditState extends State<LitlEdit> {
   void initState() {
     super.initState();
     readAlldata();
+    getData();
+    getDocs();
   }
 
   _launchMap() async {
@@ -162,28 +170,163 @@ class _LitlEditState extends State<LitlEdit> {
     } catch (e) {}
   }
 
+  Future getDocs() async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('Health')
+        .doc(widget.idcard)
+        .collection('logs')
+        .get();
+    dev.log(querySnapshot.toString());
+
+    for (int i = 0; i < querySnapshot.docs.length; i++) {
+      timestampsick = [...timestampsick, querySnapshot.docs[i].id];
+      var dt =
+          DateTime.fromMillisecondsSinceEpoch(querySnapshot.docs[i].id as int);
+      String d24 =
+          DateFormat('dd/MM/yyyy, HH:mm').format(dt); // 31/12/2000, 22:00
+      var a = querySnapshot.docs[i];
+
+      print('#######${a.id}');
+    }
+    for (var i = 0; i < timestampsick.length; i++) {
+      int timeStampdate = int.parse(timestampsick[i]);
+      DateTime date = DateTime.fromMillisecondsSinceEpoch(timeStampdate);
+      String time = DateFormat('dd/MM/yyyy, HH:mm').format(date);
+      dev.log('found log time = ${time}');
+    }
+    print('>>>>>>>>##$timestampsick');
+  }
+
+  Future<void> getData() async {
+    // Get docs from collection reference
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('Health')
+        .doc(widget.idcard)
+        .collection('logs')
+        .get();
+
+    // Get data from docs and convert map to List
+    final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
+    dev.log(querySnapshot.docs.length.toString());
+
+    dev.log(allData.toString());
+    print('>>>>>>>>>>>$allData');
+  }
+
   Future<Null> readAlldata() async {
-    setState(() {
-      if (sickmodels.length != 0) {
-        sickmodels.clear();
-        healthModel.clear();
-        environmentModel.clear();
-        familyModel.clear();
-        sickmodelsLevel1.clear();
-        sickmodelsLevel2.clear();
-        sickmodelsLevel3.clear();
-      }
-    });
     await Firebase.initializeApp().then((value) async {
-      FirebaseFirestore.instance
-          .collection('sick')
+      QuerySnapshot lastLog = await FirebaseFirestore.instance
+          .collection('Health')
           .doc(widget.idcard)
-          .snapshots()
-          .listen((event) {
-        DateTime dateTime = event['bond'].toDate();
-        DateFormat dateFormat = DateFormat('dd-MMMM-yyyy', 'th');
-        String bondStr = dateFormat.format(dateTime);
-        Future.delayed(const Duration(seconds: 1), () {
+          .collection('logs')
+          .get();
+      for (var item in lastLog.docs) {
+        // timestampsick.add(lastLog.docs.length);
+      }
+
+      dev.log('found log data = ${lastLog.docs.length} items');
+
+      if (lastLog.docs.length == 0 && date == true) {
+        await Firebase.initializeApp().then((value) async {
+          FirebaseFirestore.instance
+              .collection('sick')
+              .doc(widget.idcard)
+              .snapshots()
+              .listen((event) {
+            DateTime dateTime = event['bond'].toDate();
+            DateFormat dateFormat = DateFormat('dd-MMMM-yyyy', 'th');
+            String bondStr = dateFormat.format(dateTime);
+            setState(() {
+              addressSick = event['address'];
+              bondSick = bondStr;
+              idCardSick = event['idCard'];
+              latSick = event['lat'].toString();
+              lngSick = event['lng'].toString();
+              levelSick = event['level'];
+              nameSick = event['name'];
+              nationalitySick = event['nationality'];
+              patientoccupationSick = event['patientoccupation'];
+              phoneSick = event['phone'];
+              raceSick = event['race'];
+              religionSick = event['religion'];
+              talentSick = event['talent'];
+              typeSexSick = event['typeSex'];
+              typeStatusSick = event['typeStatus'];
+              typeeducationlevelSick = event['typeeducation_level'].toString();
+              typepositionSick = event['typeposition'].toString();
+              urlImageSick = event['urlImage'];
+            });
+          });
+          FirebaseFirestore.instance
+              .collection('Health')
+              .doc(widget.idcard)
+              .snapshots()
+              .listen((event) {
+            setState(() {
+              diseaseHealth = event['disease'];
+              foodsupplementHealth = event['foodsupplement'];
+              groupAHealth = event['groupA'];
+              groupBHealth = event['groupB'];
+              herbHealth = event['herb'];
+              medicineHealth = event['medicine'];
+            });
+          });
+          FirebaseFirestore.instance
+              .collection('environment')
+              .doc('${widget.idcard}')
+              .snapshots()
+              .listen((event) {
+            setState(() {
+              accommodationenvironment = event['accommodation'];
+              typeHomeEnvironmentenvironment = event['typeHomeEnvironment'];
+              typeHouseenvironment = event['typeHouse'];
+              typeHousingSafetyenvironment = event['typeHousingSafety'];
+              typefacilitiesenvironment = event['typefacilities'];
+              urlenvironmentImageenvironment = event['urlenvironmentImage'];
+            });
+          });
+
+          FirebaseFirestore.instance
+              .collection('Family')
+              .doc('${widget.idcard}')
+              .snapshots()
+              .listen((event) {
+            setState(() {
+              familynameoneFamily = event['familynameone'];
+              familynamethreeFamily = event['familynamethree'];
+              familynametwoFamily = event['familynametwo'];
+              familynamefourFamily = event['familynamefour'];
+              familyrelationshiponeFamily = event['familyrelationshipone'];
+              familyrelationshipthreeFamily = event['familyrelationshipthree'];
+              familyrelationshiptwoFamily = event['familyrelationshiptwo'];
+              familyrelationshipfourFamily = event['familyrelationshipfour'];
+              occupationoneFamily = event['occupationone'];
+              occupationtwoFamily = event['occupationtwo'];
+              occupationthreeFamily = event['occupationthree'];
+              occupationfourFamily = event['occupationfour'];
+            });
+          });
+
+          FirebaseFirestore.instance
+              .collection('Curator')
+              .doc('${widget.idcard}')
+              .snapshots()
+              .listen((event) {
+            setState(() {
+              curatorName = event['curatorname'];
+              curatorAddress = event['curatoraddress'];
+            });
+          });
+        });
+      } else if(lastLog.docs.length != 0 && date == true) {
+        FirebaseFirestore.instance
+            .collection('sick')
+            .doc(widget.idcard)
+            .snapshots()
+            .listen((event) {
+          DateTime dateTime = event['bond'].toDate();
+          DateFormat dateFormat = DateFormat('dd-MMMM-yyyy', 'th');
+          String bondStr = dateFormat.format(dateTime);
           setState(() {
             addressSick = event['address'];
             bondSick = bondStr;
@@ -205,13 +348,13 @@ class _LitlEditState extends State<LitlEdit> {
             urlImageSick = event['urlImage'];
           });
         });
-      });
-      FirebaseFirestore.instance
-          .collection('Health')
-          .doc(widget.idcard)
-          .snapshots()
-          .listen((event) {
-        Future.delayed(const Duration(seconds: 1), () {
+        FirebaseFirestore.instance
+            .collection('Health')
+            .doc(widget.idcard)
+            .collection('logs')
+            .doc(dropdownValue)
+            .get()
+            .then((DocumentSnapshot event) {
           setState(() {
             diseaseHealth = event['disease'];
             foodsupplementHealth = event['foodsupplement'];
@@ -221,13 +364,12 @@ class _LitlEditState extends State<LitlEdit> {
             medicineHealth = event['medicine'];
           });
         });
-      });
-      FirebaseFirestore.instance
-          .collection('environment')
-          .doc('${widget.idcard}')
-          .snapshots()
-          .listen((event) {
-        Future.delayed(const Duration(seconds: 1), () {
+
+        FirebaseFirestore.instance
+            .collection('environment')
+            .doc('${widget.idcard}')
+            .snapshots()
+            .listen((event) {
           setState(() {
             accommodationenvironment = event['accommodation'];
             typeHomeEnvironmentenvironment = event['typeHomeEnvironment'];
@@ -237,14 +379,12 @@ class _LitlEditState extends State<LitlEdit> {
             urlenvironmentImageenvironment = event['urlenvironmentImage'];
           });
         });
-      });
 
-      FirebaseFirestore.instance
-          .collection('Family')
-          .doc('${widget.idcard}')
-          .snapshots()
-          .listen((event) {
-        Future.delayed(const Duration(seconds: 1), () {
+        FirebaseFirestore.instance
+            .collection('Family')
+            .doc('${widget.idcard}')
+            .snapshots()
+            .listen((event) {
           setState(() {
             familynameoneFamily = event['familynameone'];
             familynamethreeFamily = event['familynamethree'];
@@ -260,20 +400,18 @@ class _LitlEditState extends State<LitlEdit> {
             occupationfourFamily = event['occupationfour'];
           });
         });
-      });
 
-      FirebaseFirestore.instance
-          .collection('Curator')
-          .doc('${widget.idcard}')
-          .snapshots()
-          .listen((event) {
-        Future.delayed(const Duration(seconds: 1), () {
+        FirebaseFirestore.instance
+            .collection('Curator')
+            .doc('${widget.idcard}')
+            .snapshots()
+            .listen((event) {
           setState(() {
             curatorName = event['curatorname'];
             curatorAddress = event['curatoraddress'];
           });
         });
-      });
+      }
     });
   }
 
@@ -876,6 +1014,67 @@ class _LitlEditState extends State<LitlEdit> {
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             SizedBox(height: 10),
             Text('$curatorAddress', style: TextStyle(fontSize: 16)),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: new Container(
+                      child: Divider(
+                    color: Colors.black,
+                    height: 70,
+                  )),
+                ),
+              ],
+            ),
+            Center(
+              child: Container(
+                padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(50.0),
+                    color: const Color(0xffdfad98),
+                    border: Border.all()),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton(
+                      hint: Text('ประวัติการบันทึกข้อมูล'),
+                      value: dropdownValue,
+                      items: timestampsick
+                          .map<DropdownMenuItem<String>>((String value) {
+                        int timeStampdate = int.parse(value);
+                        DateTime date =
+                            DateTime.fromMillisecondsSinceEpoch(timeStampdate);
+                        String time =
+                            DateFormat('dd/MM/yyyy, HH:mm').format(date);
+                        dev.log('log value = ${value}');
+
+                        dev.log('log time = ${time}');
+
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(time),
+                        );
+                      }).toList(),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          dropdownValue = newValue!;
+                          date = true;
+                        });
+                      }),
+                ),
+              ),
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: new Container(
+                      child: Divider(
+                    color: Colors.black,
+                    height: 70,
+                  )),
+                ),
+              ],
+            ),
           ],
         ),
       )),

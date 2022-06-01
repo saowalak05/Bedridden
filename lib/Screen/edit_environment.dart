@@ -130,8 +130,6 @@ class _EditEnvironmentState extends State<EditEnvironment> {
       await FirebaseFirestore.instance
           .collection('environment')
           .doc(widget.idcard)
-          .collection('logs')
-          .doc(timeStamp)
           .set(map)
           .then((value) => Navigator.pop(context));
     });
@@ -141,40 +139,14 @@ class _EditEnvironmentState extends State<EditEnvironment> {
     // init firebase
     await Firebase.initializeApp().then((value) async {
       // TODO : let's check log exist ?
-      QuerySnapshot lastLog = await FirebaseFirestore.instance
+
+      dev.log('read from docId - ${widget.idcard}');
+      FirebaseFirestore.instance
           .collection('environment')
           .doc(widget.idcard)
-          .collection('logs')
-          .orderBy('timestamp', descending: true)
-          .get();
-      dev.log('found log data = ${lastLog.docs.length} items');
-
-      if (lastLog.docs.length == 0) {
-        dev.log("read master data");
-        // read master data
-        dev.log('read from docId - ${widget.idcard}');
-        FirebaseFirestore.instance
-            .collection('environment')
-            .doc(widget.idcard)
-            .get()
-            .then((DocumentSnapshot event) {
-          dev.log('read master data');
-
-          // TODO : set data
-          // set screen state
-          setState(() {
-            // set default data in some field
-            accommodationenvironment = event['accommodation'];
-            typeHomeEnvironmentenvironment = event['typeHomeEnvironment'];
-            typeHouseenvironment = event['typeHouse'];
-            typeHousingSafetyenvironment = event['typeHousingSafety'];
-            typefacilitiesenvironment = event['typefacilities'];
-            urlenvironmentImageenvironment = event['urlenvironmentImage'];
-          });
-        });
-      } else {
-        // has log data
-        QueryDocumentSnapshot event = lastLog.docs.first;
+          .get()
+          .then((DocumentSnapshot event) {
+        dev.log('read master data');
 
         // TODO : set data
         // set screen state
@@ -187,7 +159,7 @@ class _EditEnvironmentState extends State<EditEnvironment> {
           typefacilitiesenvironment = event['typefacilities'];
           urlenvironmentImageenvironment = event['urlenvironmentImage'];
         });
-      }
+      });
     });
   }
 

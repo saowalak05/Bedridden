@@ -4,6 +4,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'dart:developer' as dev;
 
+import 'package:intl/intl.dart';
+
 class EditHealth extends StatefulWidget {
   final String idcard;
   const EditHealth({Key? key, required this.idcard});
@@ -45,8 +47,13 @@ class _EditHealthState extends State<EditHealth> {
 
     // save sub collection
     String timeStamp = DateTime.now().millisecondsSinceEpoch.toString();
+    int timeStampdate = int.parse(timeStamp);
+    DateTime date = DateTime.fromMillisecondsSinceEpoch(timeStampdate);
+    String time = DateFormat('dd/MM/yyyy, HH:mm').format(date);
+    dev.log('found log time = ${time}');
+
     // add field timestamp to your map data
-    map['timestamp'] = timeStamp;
+    map['timestamp'] = time;
 
     await Firebase.initializeApp().then((value) async {
       // add to log data

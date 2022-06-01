@@ -90,8 +90,6 @@ class _EditFamilyState extends State<EditFamily> {
       await FirebaseFirestore.instance
           .collection('Family')
           .doc(widget.idcard)
-          .collection('logs')
-          .doc(timeStamp)
           .set(map)
           .then((value) => Navigator.pop(context));
     });
@@ -101,69 +99,19 @@ class _EditFamilyState extends State<EditFamily> {
     // init firebase
     await Firebase.initializeApp().then((value) async {
       // TODO : let's check log exist ?
-      QuerySnapshot lastLog = await FirebaseFirestore.instance
+    
+      // read master data
+      dev.log('read from docId - ${widget.idcard}');
+      FirebaseFirestore.instance
           .collection('Family')
           .doc(widget.idcard)
-          .collection('logs')
-          .orderBy('timestamp', descending: true)
-          .get();
-
-      dev.log('found log data = ${lastLog.docs.length} items');
-      if (lastLog.docs.length == 0) {
-        dev.log("read master data");
-        // read master data
-        dev.log('read from docId - ${widget.idcard}');
-        FirebaseFirestore.instance
-            .collection('Family')
-            .doc(widget.idcard)
-            .get()
-            .then((DocumentSnapshot event) {
-          // TODO : set data
-          // set screen state
-          setState(() {
-            // set default data in some field
-            familynameoneFamily = event['familynameone'];
-            familynamethreeFamily = event['familynamethree'];
-            familynametwoFamily = event['familynametwo'];
-            familynamefourFamily = event['familynamefour'];
-
-            familyrelationshiponeFamily = event['familyrelationshipone'];
-            familyrelationshipthreeFamily = event['familyrelationshipthree'];
-            familyrelationshiptwoFamily = event['familyrelationshiptwo'];
-            familyrelationshipfourFamily = event['familyrelationshipfour'];
-
-            occupationoneFamily = event['occupationone'];
-            occupationtwoFamily = event['occupationtwo'];
-            occupationthreeFamily = event['occupationthree'];
-            occupationfourFamily = event['occupationfour'];
-
-            // set data to text controller field
-            familynameControllerone.text = event["familynameone"];
-            familyrelationshipControllerone.text =
-                event["familyrelationshipone"];
-            occupationContorllerone.text = event["occupationone"];
-            familynameControllertwo.text = event["familynametwo"];
-            familyrelationshipControllertwo.text =
-                event["familyrelationshiptwo"];
-            occupationContorllertwo.text = event["occupationtwo"];
-            familynameControllerthree.text = event["familynamethree"];
-            familyrelationshipControllerthree.text =
-                event["familyrelationshipthree"];
-            occupationContorllerthree.text = event["occupationthree"];
-            familynameControllerfour.text = event["familynamefour"];
-            familyrelationshipControllerfour.text =
-                event["familyrelationshipfour"];
-            occupationContorllerfour.text = event["occupationfour"];
-          });
-        });
-      } else {
-        // has log data
-        QueryDocumentSnapshot event = lastLog.docs.first;
+          .get()
+          .then((DocumentSnapshot event) {
         // TODO : set data
         // set screen state
         setState(() {
           // set default data in some field
-          familynameoneFamily = event['familynameControllertwo'];
+          familynameoneFamily = event['familynameone'];
           familynamethreeFamily = event['familynamethree'];
           familynametwoFamily = event['familynametwo'];
           familynamefourFamily = event['familynamefour'];
@@ -179,7 +127,7 @@ class _EditFamilyState extends State<EditFamily> {
           occupationfourFamily = event['occupationfour'];
 
           // set data to text controller field
-          familynameControllerone.text = event["familynameControllertwo"];
+          familynameControllerone.text = event["familynameone"];
           familyrelationshipControllerone.text = event["familyrelationshipone"];
           occupationContorllerone.text = event["occupationone"];
           familynameControllertwo.text = event["familynametwo"];
@@ -194,7 +142,7 @@ class _EditFamilyState extends State<EditFamily> {
               event["familyrelationshipfour"];
           occupationContorllerfour.text = event["occupationfour"];
         });
-      }
+      });
     });
   }
 
