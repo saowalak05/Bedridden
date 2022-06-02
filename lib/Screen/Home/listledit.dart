@@ -32,8 +32,7 @@ class LitlEdit extends StatefulWidget {
   _LitlEditState createState() => _LitlEditState();
 }
 
-String dropdownValue = timestampsick.first;
-bool date = true;
+String dropdownValue = '';
 
 List<SickModel> sickmodels = [];
 List<SickModel> sickmodelsLevel1 = [];
@@ -42,7 +41,6 @@ List<SickModel> sickmodelsLevel3 = [];
 List<HealthModel> healthModel = [];
 List<EnvironmentModel> environmentModel = [];
 List<FamilyModel> familyModel = [];
-List<String> timestampsick = [];
 
 //sick
 String? addressSick;
@@ -1003,54 +1001,48 @@ class _LitlEditState extends State<LitlEdit> {
                     color: const Color(0xffdfad98),
                     border: Border.all()),
                 child: StreamBuilder<QuerySnapshot>(
-                    stream: FirebaseFirestore.instance
-                        .collection('Health')
-                        .doc(widget.idcard)
-                        .collection('logs')
-                        .snapshots(),
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData) {
-                        return Container(
-                          padding: EdgeInsets.only(bottom: 16.0),
-                          child: Row(
-                            children: <Widget>[
-                              Container(
-                                padding:
-                                    EdgeInsets.fromLTRB(12.0, 10.0, 10.0, 10.0),
-                                child: Text(
-                                  "ประวัติการแก้ไข",
-                                ),
-                              ),
-                              DropdownButton(
-                                value: dropdownValue,
-                                isDense: true,
-                                onChanged: (String? value) {
-                                  dropdownValue = value!;
-                                },
-                                hint: Text('วัน/เดือน/ปี'),
-                                items: snapshot.data!.docs
-                                    .map((DocumentSnapshot document) {
-                                  int timeStampdate = int.parse(document.id);
-                                  DateTime date =
-                                      DateTime.fromMillisecondsSinceEpoch(
-                                          timeStampdate);
-                                  String time = DateFormat('dd/MM/yyyy, HH:mm')
-                                      .format(date);
-                                  return DropdownMenuItem<String>(
-                                    value: document.id,
-                                    child: Text(document.id),
-                                  );
-                                }).toList(),
-                              ),
-                            ],
-                          ),
+                  stream: FirebaseFirestore.instance
+                      .collection('Health')
+                      .doc(widget.idcard)
+                      .collection('logs')
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    // (1) has error or snapshot no data, show loading
+                    if (snapshot.hasError) {
+                      return const Center(
+                        child: Text('Error, cannot load data'),
+                      );
+                    }
+
+                    // (2) snapshot has data
+                    if (snapshot.hasData) {
+                      // (3) check if data is empty show no data
+                      if (snapshot.data!.docs.isEmpty) {
+                        return const Center(
+                          child: Text('no history data'),
                         );
-                      } else if (snapshot.hasError) {
-                        return const Center(child: Text('ไม่พบประวัติ'));
                       } else {
-                        return CircularProgressIndicator();
+                        // (4) if data is not empty, show dropdown
+                        final doc = snapshot.data!.docs;
+                        return DropdownButton(
+                            hint: Text('เลือกประวัติ'),
+                            items: doc.map((e) {
+                              // (5) format your datetime here
+                              return DropdownMenuItem(
+                                child: Text(e["timestamp"]),
+                                value: e["timestamp"],
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              // (6) set value to drop down here
+                              dev.log('goto page with docId = $value');
+                            });
                       }
-                    }),
+                    }
+
+                    return const Center(child: Text('loading...'));
+                  },
+                ),
               ),
             ),
             Row(
