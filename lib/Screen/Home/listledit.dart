@@ -5,6 +5,7 @@ import 'package:bedridden/Screen/edit_curator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -108,7 +109,6 @@ class _LitlEditState extends State<LitlEdit> {
   void initState() {
     super.initState();
     readAlldata();
-    getData();
     getDocs();
   }
 
@@ -176,41 +176,7 @@ class _LitlEditState extends State<LitlEdit> {
         .doc(widget.idcard)
         .collection('logs')
         .get();
-    dev.log(querySnapshot.toString());
-
-    for (int i = 0; i < querySnapshot.docs.length; i++) {
-      timestampsick = [...timestampsick, querySnapshot.docs[i].id];
-      var dt =
-          DateTime.fromMillisecondsSinceEpoch(querySnapshot.docs[i].id as int);
-      String d24 =
-          DateFormat('dd/MM/yyyy, HH:mm').format(dt); // 31/12/2000, 22:00
-      var a = querySnapshot.docs[i];
-
-      print('#######${a.id}');
-    }
-    for (var i = 0; i < timestampsick.length; i++) {
-      int timeStampdate = int.parse(timestampsick[i]);
-      DateTime date = DateTime.fromMillisecondsSinceEpoch(timeStampdate);
-      String time = DateFormat('dd/MM/yyyy, HH:mm').format(date);
-      dev.log('found log time = ${time}');
-    }
-    print('>>>>>>>>##$timestampsick');
-  }
-
-  Future<void> getData() async {
-    // Get docs from collection reference
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection('Health')
-        .doc(widget.idcard)
-        .collection('logs')
-        .get();
-
-    // Get data from docs and convert map to List
-    final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
-    dev.log(querySnapshot.docs.length.toString());
-
-    dev.log(allData.toString());
-    print('>>>>>>>>>>>$allData');
+    return querySnapshot.docs.length;
   }
 
   Future<Null> readAlldata() async {
@@ -226,7 +192,7 @@ class _LitlEditState extends State<LitlEdit> {
 
       dev.log('found log data = ${lastLog.docs.length} items');
 
-      if (lastLog.docs.length == 0 && date == true) {
+      if (lastLog.docs.length == 0) {
         await Firebase.initializeApp().then((value) async {
           FirebaseFirestore.instance
               .collection('sick')
@@ -318,7 +284,7 @@ class _LitlEditState extends State<LitlEdit> {
             });
           });
         });
-      } else if(lastLog.docs.length != 0 && date == true) {
+      } else {
         FirebaseFirestore.instance
             .collection('sick')
             .doc(widget.idcard)
@@ -1030,38 +996,61 @@ class _LitlEditState extends State<LitlEdit> {
             ),
             Center(
               child: Container(
+                height: 50,
                 padding: const EdgeInsets.only(left: 10.0, right: 10.0),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(50.0),
                     color: const Color(0xffdfad98),
                     border: Border.all()),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton(
-                      hint: Text('ประวัติการบันทึกข้อมูล'),
-                      value: dropdownValue,
-                      items: timestampsick
-                          .map<DropdownMenuItem<String>>((String value) {
-                        int timeStampdate = int.parse(value);
-                        DateTime date =
-                            DateTime.fromMillisecondsSinceEpoch(timeStampdate);
-                        String time =
-                            DateFormat('dd/MM/yyyy, HH:mm').format(date);
-                        dev.log('log value = ${value}');
-
-                        dev.log('log time = ${time}');
-
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(time),
+                child: StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection('Health')
+                        .doc(widget.idcard)
+                        .collection('logs')
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return Container(
+                          padding: EdgeInsets.only(bottom: 16.0),
+                          child: Row(
+                            children: <Widget>[
+                              Container(
+                                padding:
+                                    EdgeInsets.fromLTRB(12.0, 10.0, 10.0, 10.0),
+                                child: Text(
+                                  "ประวัติการแก้ไข",
+                                ),
+                              ),
+                              DropdownButton(
+                                value: dropdownValue,
+                                isDense: true,
+                                onChanged: (String? value) {
+                                  dropdownValue = value!;
+                                },
+                                hint: Text('วัน/เดือน/ปี'),
+                                items: snapshot.data!.docs
+                                    .map((DocumentSnapshot document) {
+                                  int timeStampdate = int.parse(document.id);
+                                  DateTime date =
+                                      DateTime.fromMillisecondsSinceEpoch(
+                                          timeStampdate);
+                                  String time = DateFormat('dd/MM/yyyy, HH:mm')
+                                      .format(date);
+                                  return DropdownMenuItem<String>(
+                                    value: document.id,
+                                    child: Text(document.id),
+                                  );
+                                }).toList(),
+                              ),
+                            ],
+                          ),
                         );
-                      }).toList(),
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          dropdownValue = newValue!;
-                          date = true;
-                        });
-                      }),
-                ),
+                      } else if (snapshot.hasError) {
+                        return const Center(child: Text('ไม่พบประวัติ'));
+                      } else {
+                        return CircularProgressIndicator();
+                      }
+                    }),
               ),
             ),
             Row(
