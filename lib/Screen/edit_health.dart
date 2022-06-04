@@ -55,10 +55,8 @@ class _EditHealthState extends State<EditHealth> {
     // add field timestamp to your map data
     map['timestamp'] = time;
 
-    await Firebase.initializeApp().then((value) async {
-      // add to log data
-      saveData(map: map, timeStamp: timeStamp);
-    });
+    // add to log data
+    saveData(map: map, timeStamp: timeStamp);
   }
 
   // save data to firestore

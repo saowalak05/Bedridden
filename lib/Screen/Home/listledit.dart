@@ -107,7 +107,6 @@ class _LitlEditState extends State<LitlEdit> {
   void initState() {
     super.initState();
     readAlldata();
-    getDocs();
   }
 
   _launchMap() async {
@@ -168,15 +167,6 @@ class _LitlEditState extends State<LitlEdit> {
     } catch (e) {}
   }
 
-  Future getDocs() async {
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection('Health')
-        .doc(widget.idcard)
-        .collection('logs')
-        .get();
-    return querySnapshot.docs.length;
-  }
-
   Future<Null> readAlldata() async {
     await Firebase.initializeApp().then((value) async {
       QuerySnapshot lastLog = await FirebaseFirestore.instance
@@ -184,11 +174,12 @@ class _LitlEditState extends State<LitlEdit> {
           .doc(widget.idcard)
           .collection('logs')
           .get();
-      for (var item in lastLog.docs) {
-        // timestampsick.add(lastLog.docs.length);
-      }
+      setState(() {
+        dropdownValue = lastLog.docs.last.id;
+      });
 
       dev.log('found log data = ${lastLog.docs.length} items');
+      dev.log('found log last = ${lastLog.docs.last.id} items');
 
       if (lastLog.docs.length == 0) {
         await Firebase.initializeApp().then((value) async {
@@ -582,7 +573,89 @@ class _LitlEditState extends State<LitlEdit> {
                     )),
               ),
             ]),
-            SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                 Text("ประวัติการแก้ไขข้อมูล",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                Center(
+                  child: Container(
+                    height: 35,
+                    padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50.0),
+                        color: const Color(0xffdfad98),
+                        border: Border.all()),
+                    child: StreamBuilder<QuerySnapshot>(
+                      stream: FirebaseFirestore.instance
+                          .collection('Health')
+                          .doc(widget.idcard)
+                          .collection('logs')
+                          .snapshots(),
+                      builder: (context, snapshot) {
+                        // (1) has error or snapshot no data, show loading
+                        if (snapshot.hasError) {
+                          return const Center(
+                            child: Text('Error, cannot load data'),
+                          );
+                        }
+
+                        // (2) snapshot has data
+                        if (snapshot.hasData) {
+                          // (3) check if data is empty show no data
+                          if (snapshot.data!.docs.isEmpty) {
+                            return const Center(
+                              child: Text('no history data'),
+                            );
+                          } else {
+                            // (4) if data is not empty, show dropdown
+                            final doc = snapshot.data!.docs;
+                            return DropdownButtonHideUnderline(
+                              child: DropdownButton(
+                                hint: Text('เลือกประวัติ'),
+                                items: doc.map((e) {
+                                  // (5) format your datetime here
+                                  return DropdownMenuItem<String>(
+                                    child: Text(e["timestamp"]),
+                                    value: e.id,
+                                  );
+                                }).toList(),
+                                onChanged: (String? value) {
+                                  // (6) set value to drop down here
+                                  dev.log('goto page with docId = $value');
+                                  snapshot.data!.docs
+                                      .where((e) => e.id == value)
+                                      .forEach((e) {
+                                    dev.log('${e.data()}');
+                                    setState(() {
+                                      dropdownValue = value.toString();
+                                      // set your value here
+                                      diseaseHealth = e['disease'];
+                                      medicineHealth = e['medicine'];
+                                      groupAHealth = e['groupA'];
+                                      groupBHealth = e['groupB'];
+                                      herbHealth = e['herb'];
+                                      foodsupplementHealth = e['foodsupplement'];
+                                      dev.log(e["timestamp"]);
+                                    });
+                                  });
+                                  dev.log('goto page with docId = $value');
+                                },
+                                value: (dropdownValue == '')
+                                    ? '${doc.last.id}'
+                                    : dropdownValue,
+                              ),
+                            );
+                          }
+                        }
+                        return const Center(child: Text('loading...'));
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 15),
             Text('โรคประจำตัวหรือปัญหาสุขภาพ',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             SizedBox(height: 10),
@@ -980,81 +1053,6 @@ class _LitlEditState extends State<LitlEdit> {
             Text('$curatorAddress', style: TextStyle(fontSize: 16)),
             SizedBox(
               height: 10,
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: new Container(
-                      child: Divider(
-                    color: Colors.black,
-                    height: 70,
-                  )),
-                ),
-              ],
-            ),
-            Center(
-              child: Container(
-                height: 50,
-                padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(50.0),
-                    color: const Color(0xffdfad98),
-                    border: Border.all()),
-                child: StreamBuilder<QuerySnapshot>(
-                  stream: FirebaseFirestore.instance
-                      .collection('Health')
-                      .doc(widget.idcard)
-                      .collection('logs')
-                      .snapshots(),
-                  builder: (context, snapshot) {
-                    // (1) has error or snapshot no data, show loading
-                    if (snapshot.hasError) {
-                      return const Center(
-                        child: Text('Error, cannot load data'),
-                      );
-                    }
-
-                    // (2) snapshot has data
-                    if (snapshot.hasData) {
-                      // (3) check if data is empty show no data
-                      if (snapshot.data!.docs.isEmpty) {
-                        return const Center(
-                          child: Text('no history data'),
-                        );
-                      } else {
-                        // (4) if data is not empty, show dropdown
-                        final doc = snapshot.data!.docs;
-                        return DropdownButton(
-                            hint: Text('เลือกประวัติ'),
-                            items: doc.map((e) {
-                              // (5) format your datetime here
-                              return DropdownMenuItem(
-                                child: Text(e["timestamp"]),
-                                value: e["timestamp"],
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              // (6) set value to drop down here
-                              dev.log('goto page with docId = $value');
-                            });
-                      }
-                    }
-
-                    return const Center(child: Text('loading...'));
-                  },
-                ),
-              ),
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: new Container(
-                      child: Divider(
-                    color: Colors.black,
-                    height: 70,
-                  )),
-                ),
-              ],
             ),
           ],
         ),

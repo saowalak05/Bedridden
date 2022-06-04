@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:bedridden/Screen/Home/listledit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:location/location.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../models/sick_model.dart';
+import 'dart:developer' as dev;
 
 class CalculatePage extends StatefulWidget {
   const CalculatePage({Key? key}) : super(key: key);
@@ -15,12 +17,16 @@ class CalculatePage extends StatefulWidget {
 }
 
 class _CalculatePageState extends State<CalculatePage> {
-  double currentLat = 0.0;
-  double currentLng = 0.0;
-  double? lat1, lng1, lat2, lng2, distance;
+  double currentLat =
+      0.0; //ตัวแปรที่ประกาศค่ามาเก็บ lat ที่ได้จากการดึงตำแหน่งปัจุันของผู้ใช้
+  double currentLng =
+      0.0; //ตัวแปรที่ประกาศค่ามาเก็บ lng ที่ได้จากการดึงตำแหน่งปัจุันของผู้ใช้
+  double? lat1, lng1, lat2, lng2;
   String? distanceString;
+  late SickModel model;
 
   List<SickModel> sickmodels = [];
+  List<int> distancelist = [];
 
   @override
   void initState() {
@@ -28,7 +34,7 @@ class _CalculatePageState extends State<CalculatePage> {
     findLat1Lng1();
   }
 
-  _launchMap(double lat,double lng) async {
+  _launchMap(double lat, double lng) async {
     print('mapppp $lat $lng');
     final String googleMapsUrl =
         "https://www.google.com/maps/search/?api=1&query=$lat,$lng";
@@ -40,13 +46,13 @@ class _CalculatePageState extends State<CalculatePage> {
     }
   }
 
-
   Future<Null> readAllSick() async {
     Future.delayed(Duration(microseconds: 30));
     await Firebase.initializeApp().then((value) async {
       FirebaseFirestore.instance.collection('sick').snapshots().listen((event) {
+        //หาระยะทางทั้งหมดจากผู้ใช้กับผู้ป่วยทั้งหมด
         for (var item in event.docs) {
-          SickModel model = SickModel.fromMap(item.data());
+          model = SickModel.fromMap(item.data());
           print('## name ==> ${model.name}');
           print('## idCard ==> ${model.idCard}');
           var latdistance = model.lat;
@@ -57,15 +63,29 @@ class _CalculatePageState extends State<CalculatePage> {
             latdistance,
             lngdistance,
           );
-          print('lat1 =$lat1, lng1 = $lng1, lat2 =$lat2, lng2 = $lng2');
-          print('distance = $distance');
+          //ได้ระยะทางทั้งหมดแล้วนำมาเพิ่มใส่ model
           setState(() {
             if (sickmodels != null) {
               sickmodels.add(model);
             }
           });
         }
+        //หา distance
+        for (var i = 0; i < sickmodels.length -1; i++) {
+          double latfirst = sickmodels.first.lat;
+          double lngfirst = sickmodels.first.lng;
+          double lat = sickmodels[i].lng;
+          double lng = sickmodels[i].lng;
+          sickmodels[i].ditance = calculateDistance(
+            latfirst,
+            lngfirst,
+            lat,
+            lng,
+          );
+        }
+        //นำข้อมูลใน model ที่จะเรียกใช้ใน widget มาจัดลำดับจากน้อยไปมากด้วยข้อมูลระยะทาง ditance ที่ทำการเพิ่มเข้าไป
         sortDataSickModel();
+        //
       });
     });
   }
@@ -145,7 +165,7 @@ class _CalculatePageState extends State<CalculatePage> {
     return Expanded(
       child: GestureDetector(
         onTap: () {
-          _launchMap(sickmodels[index].lat,sickmodels[index].lng);
+          _launchMap(sickmodels[index].lat, sickmodels[index].lng);
         },
         child: Container(
           decoration: BoxDecoration(
