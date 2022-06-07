@@ -1,13 +1,14 @@
+import 'dart:developer' as dev;
 import 'dart:math';
-import 'package:bedridden/Screen/Home/listledit.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:location/location.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 import '../../models/sick_model.dart';
-import 'dart:developer' as dev;
 
 class CalculatePage extends StatefulWidget {
   const CalculatePage({Key? key}) : super(key: key);
@@ -17,16 +18,12 @@ class CalculatePage extends StatefulWidget {
 }
 
 class _CalculatePageState extends State<CalculatePage> {
-  double currentLat =
-      0.0; //ตัวแปรที่ประกาศค่ามาเก็บ lat ที่ได้จากการดึงตำแหน่งปัจุันของผู้ใช้
-  double currentLng =
-      0.0; //ตัวแปรที่ประกาศค่ามาเก็บ lng ที่ได้จากการดึงตำแหน่งปัจุันของผู้ใช้
-  double? lat1, lng1, lat2, lng2;
-  String? distanceString;
-  late SickModel model;
+  double currentLat = 0.0;
+  double currentLng = 0.0;
 
-  List<SickModel> sickmodels = [];
-  List<int> distancelist = [];
+  List<PatienPath> listPatientPathTmp = [];
+  List<PatienPath> listPatientPath = []; //list ใช้เก็บข้อมูลที่ได้จากการ
+  List<SickModel> listPatient = []; 
 
   @override
   void initState() {
@@ -34,77 +31,101 @@ class _CalculatePageState extends State<CalculatePage> {
     findLat1Lng1();
   }
 
-  _launchMap(double lat, double lng) async {
-    print('mapppp $lat $lng');
-    final String googleMapsUrl =
-        "https://www.google.com/maps/search/?api=1&query=$lat,$lng";
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
-    if (await canLaunch(googleMapsUrl)) {
-      await launch(googleMapsUrl);
-    } else {
-      throw 'could not open the map';
+  List<PatienPath> buildlistPatientPathTmp(
+      double currentLat, double currentLng) {
+    List<PatienPath> _listPatientPathTmp = [];
+    // calculate distance from current location คำนวณระยะทางจากตำแหน่งปัจจุบัน
+    dev.log('patient total = ${listPatient.length}');
+    for (int i = 0; i < listPatient.length; i++) {
+      var lat1 = currentLat;
+      var lng1 = currentLng;
+      var lat2 = listPatient[i].lat;
+      var lng2 = listPatient[i].lng;
+
+      // calculate distance คำนวณระยะทาง
+      var distance = calculateDistance(lat1, lng1, lat2, lng2);
+      dev.log('${listPatient[i].name} - ${listPatient[i].idCard} - $distance');
+      // add to temp path list เพิ่มในรายการ
+      _listPatientPathTmp
+          .add(PatienPath(docId: listPatient[i].idCard, distance: distance));
     }
+
+    return _listPatientPathTmp;
   }
 
-  Future<Null> readAllSick() async {
-    Future.delayed(Duration(microseconds: 30));
-    await Firebase.initializeApp().then((value) async {
-      FirebaseFirestore.instance.collection('sick').snapshots().listen((event) {
-        //หาระยะทางทั้งหมดจากผู้ใช้กับผู้ป่วยทั้งหมด
-        for (var item in event.docs) {
-          model = SickModel.fromMap(item.data());
-          print('## name ==> ${model.name}');
-          print('## idCard ==> ${model.idCard}');
-          var latdistance = model.lat;
-          var lngdistance = model.lng;
-          model.ditance = calculateDistance(
-            currentLat,
-            currentLng,
-            latdistance,
-            lngdistance,
-          );
-          //ได้ระยะทางทั้งหมดแล้วนำมาเพิ่มใส่ model
-          setState(() {
-            if (sickmodels != null) {
-              sickmodels.add(model);
-            }
-          });
-        }
-        //หา distance
-        for (var i = 0; i < sickmodels.length -1; i++) {
-          double latfirst = sickmodels.first.lat;
-          double lngfirst = sickmodels.first.lng;
-          double lat = sickmodels[i].lng;
-          double lng = sickmodels[i].lng;
-          sickmodels[i].ditance = calculateDistance(
-            latfirst,
-            lngfirst,
-            lat,
-            lng,
-          );
-        }
-        //นำข้อมูลใน model ที่จะเรียกใช้ใน widget มาจัดลำดับจากน้อยไปมากด้วยข้อมูลระยะทาง ditance ที่ทำการเพิ่มเข้าไป
-        sortDataSickModel();
-        //
-      });
-    });
-  }
+  List<SickModel> listPatientData = [];
 
-  sortDataSickModel() {
-    sickmodels.sort((a, b) {
-      var distanceA = a.ditance ?? 0.0;
-      var distanceB = b.ditance ?? 0.0;
-      return distanceA.compareTo(distanceB);
+  readAllSick() async {
+    // read all patient to list อ่านค่าทั้งหมดในรายการ
+    FirebaseFirestore.instance.collection('sick').get().then((value) {
+      // set data to patient list ตั้งค่าข้อมูล
+      for (var doc in value.docs) {
+        SickModel patient = SickModel.fromMap(doc.data());
+        //dev.log('name = ${patient.name}');
+        listPatient.add(patient);
+        listPatientData.add(patient);
+      }
+
+      dev.log('total patient ${listPatient.length}');
+
+      // calculate paths คำนวณเส้นทาง
+      while (listPatient.length > 0) {
+        // build pateint path list สร้างรายการเดินเส้น
+        if (listPatientPath.length <= 0) {
+          dev.log('currentLat = $currentLat, currentLng = $currentLng');
+          listPatientPathTmp = buildlistPatientPathTmp(currentLat, currentLng);
+        } else {
+          // get lat, lon from patial list 
+          // dev.log('total patient = ${listPatient.length}');
+          // dev.log('last patient path = ${listPatientPath.last.docId}');
+          final item = listPatientData.firstWhere(
+              (element) => element.idCard == listPatientPath.last.docId);
+          dev.log('currentLat = ${item.lat}, currentLng = ${item.lng}');
+          listPatientPathTmp = buildlistPatientPathTmp(item.lat, item.lng);
+        }
+
+        // sort tmp path list จัดลำดับระยะจากน้อยไปมาก
+        listPatientPathTmp.sort((a, b) => a.distance.compareTo(b.distance));
+        dev.log(
+            'shortes path is ${listPatientPathTmp.first.docId} , ${listPatientPathTmp.first.distance} ');
+
+        // set data to patient path list 
+        listPatientPath.add(PatienPath(
+            docId: listPatientPathTmp.first.docId,
+            distance: listPatientPathTmp.first.distance));
+
+        // remove patient in list patient
+        listPatient.removeWhere(
+            (element) => element.idCard == listPatientPathTmp.first.docId);
+
+        // remove first patient in temp
+        listPatientPathTmp.removeAt(0);
+
+        dev.log('list Patient Path Tmp length = ${listPatientPathTmp.length}');
+
+        // dev.log('list patient length = ${listPatient.length}');
+        // dev.log('list patient path length = ${listPatientPath.length}');
+      }
+
+      dev.log('list patient path = ${listPatientPath.length}');
+
+      setState(() {});
     });
   }
 
   Future<Null> findLat1Lng1() async {
     findLocationData().then((value) {
-      setState(() {
-        currentLat = value?.latitude ?? 0.0;
-        currentLng = value?.longitude ?? 0.0;
-        readAllSick();
-      });
+      // setState(() {
+      currentLat = value?.latitude ?? 0.0;
+      currentLng = value?.longitude ?? 0.0;
+      dev.log('currentLat = $currentLat, currentLng = $currentLng');
+      readAllSick();
+      //});
     });
   }
 
@@ -130,6 +151,18 @@ class _CalculatePageState extends State<CalculatePage> {
     }
   }
 
+  _launchMap(double lat, double lng) async {
+    print('mapppp $lat $lng');
+    final String googleMapsUrl =
+        "https://www.google.com/maps/search/?api=1&query=$lat,$lng";
+
+    if (await canLaunch(googleMapsUrl)) {
+      await launch(googleMapsUrl);
+    } else {
+      throw 'could not open the map';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -149,111 +182,103 @@ class _CalculatePageState extends State<CalculatePage> {
             borderRadius:
                 BorderRadius.vertical(bottom: Radius.elliptical(30.0, 30.0))),
       ),
-      body: ListView.builder(
-          shrinkWrap: true,
-          physics: ScrollPhysics(),
-          itemCount: sickmodels.length,
-          itemBuilder: (context, index) {
-            var myFormat = NumberFormat('#0.0#', 'en_US');
-            distanceString = myFormat.format(sickmodels[index].ditance);
-            return buildListview(index);
-          }),
+      body: (listPatientPath.isEmpty)
+          ? Center(child: CircularProgressIndicator())
+          : Container(
+              child: ListView.builder(
+                itemCount: listPatientPath.length,
+                itemBuilder: (context, index) {
+                  // get patient data
+                  final patient = listPatientData.firstWhere((element) =>
+                      element.idCard == listPatientPath[index].docId);
+                  return GestureDetector(
+                    child: GestureDetector(
+                      onTap: () {
+                        _launchMap(patient.lat, patient.lng);
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(25),
+                          color: Colors.white,
+                        ),
+                        width: double.infinity,
+                        margin:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                        padding:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Container(
+                              width: 50,
+                              height: 50,
+                              margin: EdgeInsets.only(right: 15),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(50),
+                                border:
+                                    Border.all(width: 3, color: Colors.grey),
+                                image: DecorationImage(
+                                    image: NetworkImage(patient.urlImage),
+                                    fit: BoxFit.fill),
+                              ),
+                            ),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(
+                                    patient.name,
+                                    style: TextStyle(
+                                        color: const Color(0xffdfad98),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18),
+                                  ),
+                                  SizedBox(
+                                    height: 6,
+                                  ),
+                                  Row(
+                                    children: <Widget>[
+                                      Icon(
+                                        Icons.location_on,
+                                        color: const Color(0xffdfad98),
+                                        size: 20,
+                                      ),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      Text(patient.address,
+                                          style: TextStyle(
+                                              color: const Color(0xffdfad98),
+                                              fontSize: 13,
+                                              letterSpacing: .3)),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                                child: Text('ลำดับ $index',
+                                    style: TextStyle(
+                                        color: const Color(0xffdfad98),
+                                        fontSize: 13,
+                                        letterSpacing: .3))),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
     );
   }
+}
 
-  Expanded buildListview(int index) {
-    return Expanded(
-      child: GestureDetector(
-        onTap: () {
-          _launchMap(sickmodels[index].lat, sickmodels[index].lng);
-        },
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(25),
-            color: Colors.white,
-          ),
-          width: double.infinity,
-          margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Container(
-                width: 50,
-                height: 50,
-                margin: EdgeInsets.only(right: 15),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(50),
-                  border: Border.all(width: 3, color: Colors.grey),
-                  image: DecorationImage(
-                      image: NetworkImage(sickmodels[index].urlImage),
-                      fit: BoxFit.fill),
-                ),
-              ),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      sickmodels[index].name,
-                      style: TextStyle(
-                          color: const Color(0xffdfad98),
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18),
-                    ),
-                    SizedBox(
-                      height: 6,
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Icon(
-                          Icons.location_on,
-                          color: const Color(0xffdfad98),
-                          size: 20,
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Text(sickmodels[index].address,
-                            style: TextStyle(
-                                color: const Color(0xffdfad98),
-                                fontSize: 13,
-                                letterSpacing: .3)),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 6,
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Icon(
-                          Icons.navigation,
-                          color: const Color(0xffdfad98),
-                          size: 20,
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Text('$distanceString กม.',
-                            style: TextStyle(
-                                color: const Color(0xffdfad98),
-                                fontSize: 13,
-                                letterSpacing: .3)),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                  child: Text('ลำดับ $index',
-                      style: TextStyle(
-                          color: const Color(0xffdfad98),
-                          fontSize: 13,
-                          letterSpacing: .3))),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+class PatienPath {
+  String docId;
+  double distance;
+  PatienPath({
+    required this.docId,
+    required this.distance,
+  });
 }

@@ -5,7 +5,6 @@ import 'package:bedridden/Screen/edit_curator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -576,7 +575,7 @@ class _LitlEditState extends State<LitlEdit> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                 Text("ประวัติการแก้ไขข้อมูล",
+                 Text("ประวัติข้อมูล",
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                 Center(
                   child: Container(
@@ -596,7 +595,7 @@ class _LitlEditState extends State<LitlEdit> {
                         // (1) has error or snapshot no data, show loading
                         if (snapshot.hasError) {
                           return const Center(
-                            child: Text('Error, cannot load data'),
+                            child: Text('ไม่พบข้อมูล'),
                           );
                         }
 
@@ -605,7 +604,7 @@ class _LitlEditState extends State<LitlEdit> {
                           // (3) check if data is empty show no data
                           if (snapshot.data!.docs.isEmpty) {
                             return const Center(
-                              child: Text('no history data'),
+                              child: Text('ไม่มีประวัติ'),
                             );
                           } else {
                             // (4) if data is not empty, show dropdown
